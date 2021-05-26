@@ -1,8 +1,16 @@
 import React from 'react';
 import './header.css';
 
-const ActionButton = ({ Icon, text }) => (
-    <div className="tool">
+const ActionButton = ({
+    Icon, text, action, active,
+}) => (
+    <div
+        role="button"
+        tabIndex={0}
+        className={`tool ${active ? 'active' : ''}`}
+        onClick={action}
+        onKeyDown={(ev) => ev.key === 13 && action()}
+    >
         <div className="icon"><Icon size="25" /></div>
         <div>{text}</div>
     </div>

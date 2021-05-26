@@ -1,6 +1,5 @@
 .header {
     background: #fff;
-    color: #333;
     user-select: none
 }
 
@@ -21,6 +20,10 @@
     cursor: pointer;
     justify-content: space-between;
     box-sizing: border-box;
+    color: rgba(0, 0, 0, 0.3);
+}
+.toolbar .tool.active{
+    color: #333;
 }
 
 .toolbar .tool-text-only {
@@ -30,7 +33,7 @@
     padding: 10px;
 }
 
-.toolbar .tool:hover {
+.toolbar .tool.active:hover {
     background: rgba(0, 0, 0, 0.05);
 }
 
