@@ -1,18 +1,39 @@
 import React from 'react';
 import './header.css';
 
-const Hsep = () => <div className="hsep sep" />;
+const ActionButton = ({ Icon, text }) => (
+    <div className="tool">
+        <div className="icon"><Icon size="25" /></div>
+        <div>{text}</div>
+    </div>
+);
 
-const Header = ({ title }) => (
+const TextBox = ({ children }) => (
+    <div className="tool" style={{ width: 'auto' }}>
+        <div className="middle tool-text-only" style={{ fontSize: 16, color: '#888', height: '100%' }}>
+            {children}
+        </div>
+    </div>
+);
+
+const Vsep = () => <div className="Vsep sep" />;
+const Hsep = () => <div className="hsep sep" />;
+const Space = () => <div className="space" />;
+
+const Header = ({ children, title }) => (
     <header className="header">
-        <section className="titlebar">
+        <section className="middle titlebar">
             {title}
             - LoopSim Editor
         </section>
-        <section className="toolbar" />
+        <section className="toolbar">
+            {children}
+        </section>
         <Hsep />
     </header>
 
 );
 
-export default Header;
+export {
+    Header, ActionButton, Vsep, Hsep, Space, TextBox,
+};

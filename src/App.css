@@ -1,16 +1,22 @@
-.site-layout-content {
-  min-height: 280px;
-  padding: 24px;
-  background: #fff;
+*{
+  font-family: 'Helvetica', 'Arial', sans-serif;
 }
-#components-layout-demo-top .logo {
-  float: left;
-  width: 120px;
-  height: 31px;
-  margin: 16px 24px 16px 0;
-  background: rgba(255, 255, 255, 0.3);
+.body{
+  width: 100%;
+  height: calc(100vh - 96px);
+  padding: 50px;
+  background-color: rgb(240, 242, 245);
+  box-sizing: border-box;
 }
-.ant-row-rtl #components-layout-demo-top .logo {
-  float: right;
-  margin: 16px 0 16px 24px;
+
+.graph-container{
+  background-color: #fff;
+  height: -webkit-fill-available;
+  box-sizing: border-box;
+}
+
+.middle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

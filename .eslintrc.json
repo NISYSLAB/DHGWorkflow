@@ -18,13 +18,42 @@
         "react"
     ],
     "rules": {
-        "indent": ["error", 4],
-        "react/jsx-indent": ["error", 4],
-        "react/jsx-indent-props": ["error", 4],
-        "max-len": ["error", { "code": 100, "ignoreUrls": true, "ignoreComments": true }],
+        "indent": [
+            "error",
+            4
+        ],
+        "react/jsx-indent": [
+            "error",
+            4
+        ],
+        "react/jsx-indent-props": [
+            "error",
+            4
+        ],
+        "max-len": [
+            "error",
+            {
+                "code": 120,
+                "ignoreUrls": true,
+                "ignoreComments": true
+            }
+        ],
         "keyword-spacing": "warn",
         "space-infix-ops": "error",
-        "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
-        "react/prop-types":"off"
+        "no-unused-vars": [
+            "warn",
+            {
+                "vars": "all",
+                "args": "after-used",
+                "ignoreRestSiblings": false
+            }
+        ],
+        "react/prop-types": "off"
+    },
+    "settings": {
+        "import/ignore": [
+            ".css$",
+            "node_modules/*"
+        ]
     }
 }

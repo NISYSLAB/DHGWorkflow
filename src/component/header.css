@@ -1,11 +1,51 @@
-.toolbar{
-    height: 64px;
-    padding: 0px 10px;
-    display: flex;
+.header {
+    background: #fff;
+    color: #333;
+    user-select: none
 }
 
+.toolbar {
+    height: 64px;
+    display: flex;
+    box-sizing: border-box;
+}
 
-.titlebar{
+.toolbar .tool {
+    padding: 10px;
+    padding-bottom: 5px;
+    display: inline-flex;
+    flex-direction: column;
+    width: 64px;
+    height: 100%;
+    align-items: center;
+    cursor: pointer;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.toolbar .tool-text-only {
+    font-size: 16px;
+    color: #888;
+    height: 100%;
+    padding: 10px;
+}
+
+.toolbar .tool:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.toolbar .icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.toolbar .space {
+    display: inline-flex;
+    flex: 1;
+}
+
+.titlebar {
     padding: 0px 10px;
     text-align: center;
     width: 100%;
@@ -13,32 +53,23 @@
     padding: 3px;
     background-color: #1e88e5;
     color: #fff;
-    padding-left:20px;
-
-
+    padding-left: 20px;
+    box-sizing: border-box;
 }
-.header{
-    background: #fff;
-    color: #333;
 
-}
-.sep{
-    background: rgba(255, 255, 255, 0.05);
+.sep {
     background: rgba(0, 0, 0, 0.1);
 }
-.hsep{
+
+.Vsep {
+    display: inline-flex;
+    height: 80%;
+    margin: auto;
+    width: 1px;
+    vertical-align: bottom;
+}
+
+.hsep {
     width: 100%;
     height: 1px;
-}
-
-
-.body{
-    width: 100%;
-    height: calc(100vh - 96px);
-    padding: 50px;
-    background-color: rgb(240, 242, 245);
-}
-.graph-container{
-    background-color: #fff;
-    height: -webkit-fill-available;
 }
