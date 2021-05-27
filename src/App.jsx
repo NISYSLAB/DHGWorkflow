@@ -11,7 +11,7 @@ import {
     Header, ActionButton, Vsep, Space, TextBox,
 } from './component/Header';
 // eslint-disable-next-line
-const dummyAction = (n) => n.action?CyFun.addNode(prompt(),{}):alert('Dummy Action activated.');
+const dummyAction = (n) => n.action?CyFun.addNode(prompt(),{},'ordin',{ x: 100, y: 100 }):alert('Dummy Action activated.');
 
 const app = () => (
     <div>

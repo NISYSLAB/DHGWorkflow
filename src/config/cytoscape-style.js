@@ -33,6 +33,14 @@ const style = [
             width: 15,
         },
     },
+    {
+        selector: 'node[type="special"]',
+        style: {
+            width: 10,
+            height: 10,
+            backgroundColor: 'red',
+        },
+    },
 
     // {
     //     selector: '.eh-ghost-edge',
