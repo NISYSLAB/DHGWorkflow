@@ -5,7 +5,7 @@ import {
     FaSave, FaUndo, FaRedo, FaTrash, FaFileExport, FaFileImport, FaPlus, FaDownload, FaEdit,
 } from 'react-icons/fa';
 import GraphComp from './graph';
-import CyFun from './functions/cytoscape-functions';
+import CyFun from './functions/graph-builder';
 
 import {
     Header, ActionButton, Vsep, Space, TextBox,

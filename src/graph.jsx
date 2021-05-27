@@ -4,7 +4,7 @@ import cytoscape from 'cytoscape';
 import edgehandles from 'cytoscape-edgehandles';
 import automove from 'cytoscape-automove';
 import cyOptions from './config/cytoscape-options';
-import cyFun from './functions/cytoscape-functions';
+import cyFun from './functions/graph-builder';
 
 class GraphComp extends React.Component {
     componentDidMount() {
@@ -21,9 +21,9 @@ class GraphComp extends React.Component {
             handlePosition() {
                 return 'none';
             },
-            complete: (a, b, c) => cyFun.addEdge(a, b, c),
+            complete: (a, b, c) => cyFun.modifyNewEdge(a, b, c),
         });
-        cyFun.addTestData();
+        // cyFun.addTestData();
     }
 
     render() {
