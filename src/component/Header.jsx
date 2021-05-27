@@ -31,8 +31,7 @@ const Space = () => <div className="space" />;
 const Header = ({ children, title }) => (
     <header className="header">
         <section className="middle titlebar">
-            {title}
-            - LoopSim Editor
+            {`${title} - DHGWorkflow Editor`}
         </section>
         <section className="toolbar">
             {children}
