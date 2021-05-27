@@ -24,7 +24,6 @@ class GraphComp extends React.Component {
             complete: (a, b, c) => cyFun.addEdge(a, b, c),
         });
         cyFun.addTestData();
-        // cyFun.addNode('B', {}, 'ordin', { x: 500, y: 100 });
     }
 
     render() {

@@ -1,3 +1,13 @@
+/* eslint-disable no-alert */
+/* eslint-disable no-console */
+function askColor() {
+    function c() {
+        const hex = Math.floor(Math.random() * 256).toString(16);
+        return (`0${String(hex)}`).substr(-2); // pad with zero
+    }
+    return `#${c()}${c()}${c()}`;
+}
+
 class CyFun {
     setCy(cy) {
         this.cy = cy;
@@ -5,28 +15,30 @@ class CyFun {
     }
 
     addTestData() {
-        this.addNode('A', {}, 'ordin', { x: 100, y: 100 });
-        this.addNode('B', {}, 'ordin', { x: 500, y: 100 });
+        return this;
+        // this.addNode('A', {}, 'ordin', { x: 100, y: 100 }, 1);
+        // this.addNode('B', {}, 'ordin', { x: 500, y: 100 }, 2);
+        // this.adE2(1, 2, 'ordin', '#f0f');
     }
 
-    addNode(name, style, type, position, sid) {
+    addNode(name, style, type, position, sid, data) {
         const id = sid || (new Date()).getTime();
         console.log(name, type, id);
         this.cy.add({
             group: 'nodes',
             data: {
-                id, name, type,
+                id, name, type, ...data,
             },
             style,
             position,
         });
     }
 
-    adE2(source, target, style = {}) {
+    adE2(source, target, name, color, style = {}) {
         this.cy.add({
             group: 'edges',
-            data: { source, target },
-            style,
+            data: { source, target, label: name },
+            style: { ...style, 'line-color': color, 'target-arrow-color': color },
         });
     }
 
@@ -68,16 +80,23 @@ class CyFun {
         const position = edge.sourceEndpoint();
         const destid = dest.data('id');
         let srcid = src.data('id');
+        let edgeName;
+        let edgeColor;
         if (src.data('type') !== 'special') {
             const tid = (new Date()).getTime();
-            this.addNode('', {}, 'special', position, tid);
-            this.adE2(srcid, tid, { 'target-arrow-shape': 'none' });
+            edgeName = prompt();
+            edgeColor = askColor();
+            this.addNode('', { 'background-color': edgeColor }, 'special', position, tid, { edgeName, edgeColor });
+            this.adE2(srcid, tid, edgeName, edgeColor, { 'target-arrow-shape': 'none' });
             this.addAutoMove(this.cy.$(`#${tid}`), this.cy.$(`#${srcid}`));
             srcid = tid;
             this.getRealNode(tid);
+        } else {
+            edgeName = src.data('edgeName');
+            edgeColor = src.data('edgeColor');
         }
         edge.remove();
-        this.adE2(srcid, destid);
+        this.adE2(srcid, destid, edgeName, edgeColor);
     }
 }
 const cyFun = new CyFun();

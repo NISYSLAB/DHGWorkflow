@@ -13,6 +13,7 @@ const style = [
             'text-halign': 'center',
         },
     },
+
     {
         selector: 'edge',
         style: {
@@ -26,11 +27,21 @@ const style = [
         },
     },
     {
+        selector: 'edge[label]',
+        style: {
+            label: 'data(label)',
+            width: 3,
+            'edge-text-rotation': 'autorotate',
+            'text-margin-y': '10px',
+        },
+    },
+    {
         selector: '.eh-handle',
         style: {
             'background-color': '#f00',
-            height: 15,
-            width: 15,
+            height: 20,
+            width: 20,
+            opacity: 0.5,
         },
     },
     {
