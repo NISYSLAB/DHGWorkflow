@@ -1,21 +1,22 @@
 import React from 'react';
-import './App.css';
+import './App.css'; import { BiReset } from 'react-icons/bi';
+import { ImZoomOut, ImZoomIn } from 'react-icons/im';
 import {
     FaSave, FaUndo, FaRedo, FaTrash, FaFileExport, FaFileImport, FaPlus, FaDownload, FaEdit,
 } from 'react-icons/fa';
-import { BiReset } from 'react-icons/bi';
-import { ImZoomOut, ImZoomIn } from 'react-icons/im';
+import GraphComp from './graph';
+import CyFun from './functions/cytoscape-functions';
+
 import {
     Header, ActionButton, Vsep, Space, TextBox,
 } from './component/Header';
-
 // eslint-disable-next-line
-const dummyAction = () => alert('Dummy Action activated.');
+const dummyAction = (n) => n.action?CyFun.addNode(prompt(),{}):alert('Dummy Action activated.');
 
 const app = () => (
     <div>
         <Header title="MyGraph">
-            <ActionButton Icon={FaPlus} text="Node" active action={dummyAction} />
+            <ActionButton Icon={FaPlus} text="Node" active action={() => dummyAction({ action: 1 })} />
             <ActionButton Icon={FaEdit} text="Edit" active action={dummyAction} />
             <Vsep />
             <ActionButton Icon={FaFileImport} text="Open" active action={dummyAction} />
@@ -37,7 +38,9 @@ const app = () => (
             <ActionButton Icon={FaFileExport} text="Export" />
         </Header>
         <section className="body">
-            <div className="graph-container" />
+            <div className="graph-container">
+                <GraphComp />
+            </div>
         </section>
     </div>
 );

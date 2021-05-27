@@ -141,7 +141,7 @@ dmypy.json
 /build
 
 # Temporary 
-__temp
+__temp*
 
 # misc
 .DS_Store
