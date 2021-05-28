@@ -2,6 +2,7 @@
 
 import askColor from './helpers';
 import CoreGraph from './core-graph-builder';
+import { actionType as T } from '../reducer';
 
 class TailoredGraph extends CoreGraph {
     addTestData() {
@@ -53,19 +54,27 @@ class TailoredGraph extends CoreGraph {
         let edgeColor;
         if (src.data('type') !== 'special') {
             const tid = (new Date()).getTime();
-            edgeName = prompt();
-            edgeColor = askColor();
-            this.addNode('', { 'background-color': edgeColor }, 'special', position, tid, { edgeName, edgeColor });
-            this.addEdge(srcid, tid, edgeName, edgeColor, { 'target-arrow-shape': 'none' });
-            this.addAutoMove(this.cy.$(`#${tid}`), this.cy.$(`#${srcid}`));
-            srcid = tid;
-            this.getRealNode(tid);
+            this.dispatcher({
+                type: T.OpenModal,
+                modelCallback: (name) => {
+                    edgeName = name;
+                    edgeColor = askColor();
+                    this.addNode('', { 'background-color': edgeColor },
+                        'special', position, tid, { edgeName, edgeColor });
+                    this.addEdge(srcid, tid, edgeName, edgeColor, { 'target-arrow-shape': 'none' });
+                    this.addAutoMove(this.cy.$(`#${tid}`), this.cy.$(`#${srcid}`));
+                    srcid = tid;
+                    this.getRealNode(tid);
+                    edge.remove();
+                    this.addEdge(srcid, destid, edgeName, edgeColor);
+                },
+            });
         } else {
             edgeName = src.data('edgeName');
             edgeColor = src.data('edgeColor');
+            edge.remove();
+            this.addEdge(srcid, destid, edgeName, edgeColor);
         }
-        edge.remove();
-        this.addEdge(srcid, destid, edgeName, edgeColor);
     }
 }
 

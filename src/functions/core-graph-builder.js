@@ -6,6 +6,10 @@ class CoreGraph {
         window.cyx = cy;
     }
 
+    setDispatcher(dispatcher) {
+        this.dispatcher = dispatcher;
+    }
+
     addNode(name, style, type, position, sid, data) {
         const id = sid || (new Date()).getTime();
         console.log(name, type, id);

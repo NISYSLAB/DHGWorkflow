@@ -1,12 +1,13 @@
 import React from 'react';
 import './header.css';
+import toolbarList from '../toolbarActions/toolbarList';
 
 const ActionButton = ({
-    Icon, text, action, active,
+    Icon, text, action, active, tabIndex,
 }) => (
     <div
         role="button"
-        tabIndex={0}
+        tabIndex={tabIndex}
         className={`tool ${active ? 'active' : ''}`}
         onClick={action}
         onKeyDown={(ev) => ev.key === 13 && action()}
@@ -28,13 +29,28 @@ const Vsep = () => <div className="Vsep sep" />;
 const Hsep = () => <div className="hsep sep" />;
 const Space = () => <div className="space" />;
 
-const Header = ({ children, title }) => (
+const Header = ({ title, state, dispatcher }) => (
     <header className="header">
         <section className="middle titlebar">
             {`${title} - DHGWorkflow Editor`}
         </section>
         <section className="toolbar">
-            {children}
+            {
+                toolbarList(state, dispatcher).map((tool, i) => {
+                    if (tool.type === 'vsep') return <Vsep key={`${`v${i}`}`} />;
+                    if (tool.type === 'space') return <Space key={`${`s${i}`}`} />;
+                    return (
+                        <ActionButton
+                            Icon={tool.icon}
+                            text={tool.text}
+                            active={tool.active}
+                            action={() => tool.action(state, dispatcher)}
+                            key={tool.text}
+                            tabIndex={i + 1}
+                        />
+                    );
+                })
+            }
         </section>
         <Hsep />
     </header>

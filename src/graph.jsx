@@ -15,7 +15,9 @@ class GraphComp extends React.Component {
             cytoscape.use(automove);
         }
         this.cy = cytoscape({ ...cyOptions, container: document.getElementById('cy') });
+        const { dispatcher } = this.props;
         cyFun.setCy(this.cy);
+        cyFun.setDispatcher(dispatcher);
         window.cye = this.cy.edgehandles({
             preview: false,
             handlePosition() {
