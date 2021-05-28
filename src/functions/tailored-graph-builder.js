@@ -68,6 +68,7 @@ class TailoredGraph extends CoreGraph {
                     edge.remove();
                     this.addEdge(srcid, destid, edgeName, edgeColor);
                 },
+                isEdge: 1,
             });
         } else {
             edgeName = src.data('edgeName');

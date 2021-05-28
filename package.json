@@ -11,6 +11,7 @@
     "cytoscape-automove": "^1.10.2",
     "cytoscape-edgehandles": "^3.6.0",
     "react": "^17.0.2",
+    "react-color": "^2.19.3",
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",
     "react-modal": "^3.13.1",

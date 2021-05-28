@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import ReactModal from 'react-modal';
 import './modal.css';
+import NodeDetails from './NodeDetails';
+import { NodeStyle } from '../config/defaultStyles';
 
 ReactModal.setAppElement('#root');
 
-const Modal = ({ isOpen, closeModal, onSubmit }) => {
+const Modal = ({
+    isOpen, closeModal, onSubmit, isEdge,
+}) => {
     const [curClass, setCurClass] = useState('');
-    const [elName, setElName] = useState('');
+    const [data, setData] = useState({});
+
     useEffect(() => {
+        setData({ name: '', style: NodeStyle });
         if (isOpen === true) {
             setCurClass('closing');
             setTimeout(() => {
@@ -18,7 +24,6 @@ const Modal = ({ isOpen, closeModal, onSubmit }) => {
 
     const handleCloseModal = () => {
         setCurClass('closing');
-        setElName('');
         setTimeout(() => {
             closeModal();
         }, 400);
@@ -26,7 +31,7 @@ const Modal = ({ isOpen, closeModal, onSubmit }) => {
 
     const submit = (e) => {
         e.preventDefault();
-        onSubmit(elName);
+        onSubmit(data.name, data.style);
         handleCloseModal();
     };
 
@@ -47,12 +52,15 @@ const Modal = ({ isOpen, closeModal, onSubmit }) => {
                             <span className="sr-only">Close</span>
                         </button>
                     </div>
-                    <input
-                        type="text"
-                        value={elName}
-                        onChange={(e) => setElName(e.target.value)}
-                    />
-                    <div className="modal-body">Woohoo, you&apos;re reading this text in a modal!</div>
+                    <div className="modal-content-body">
+                        {(!isEdge) ? <NodeDetails data={data} setData={setData} /> : (
+                            <input
+                                type="text"
+                                value={data.name}
+                                onChange={(e) => setData({ ...data, name: e.target.value })}
+                            />
+                        )}
+                    </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary">Close</button>
                         <button type="submit" className="btn btn-primary">Save Changes</button>

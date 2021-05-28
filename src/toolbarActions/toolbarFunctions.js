@@ -4,8 +4,8 @@ import { actionType as T } from '../reducer';
 const createNode = (state, setState) => {
     setState({
         type: T.OpenModal,
-        modelCallback: (name) => {
-            CyFun.addNode(name, {}, 'ordin', { x: 100, y: 100 });
+        modelCallback: (name, style) => {
+            CyFun.addNode(name, style, 'ordin', { x: 100, y: 100 });
         },
     });
 };

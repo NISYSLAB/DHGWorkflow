@@ -13,6 +13,7 @@ const app = () => {
                 isOpen={state.ModelOpen}
                 closeModal={() => dispatcher({ type: T.CloseModal })}
                 onSubmit={state.modelCallback}
+                isEdge={state.isEdge}
             />
             <Header title="MyGraph" state={state} dispatcher={dispatcher} />
             <section className="body">
