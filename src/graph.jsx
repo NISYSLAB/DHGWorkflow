@@ -25,7 +25,7 @@ class GraphComp extends React.Component {
             },
             complete: (a, b, c) => cyFun.modifyNewEdge(a, b, c),
         });
-        // cyFun.addTestData();
+        cyFun.addTestData();
     }
 
     render() {

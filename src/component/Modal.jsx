@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ReactModal from 'react-modal';
 import './modal.css';
-import NodeDetails from './NodeDetails';
-import { NodeStyle } from '../config/defaultStyles';
+import EdgeDetails from './EdgeDetails';
+import { EdgeStyle } from '../config/defaultStyles';
 
 ReactModal.setAppElement('#root');
 
@@ -13,7 +13,7 @@ const Modal = ({
     const [data, setData] = useState({});
 
     useEffect(() => {
-        setData({ name: '', style: NodeStyle });
+        setData({ name: '', style: EdgeStyle });
         if (isOpen === true) {
             setCurClass('closing');
             setTimeout(() => {
@@ -53,7 +53,7 @@ const Modal = ({
                         </button>
                     </div>
                     <div className="modal-content-body">
-                        {(!isEdge) ? <NodeDetails data={data} setData={setData} /> : (
+                        {(!isEdge) ? <EdgeDetails data={data} setData={setData} /> : (
                             <input
                                 type="text"
                                 value={data.name}

@@ -11,9 +11,8 @@ const NodeStyle = {
 };
 
 const EdgeStyle = {
-    'curve-style': 'bezier',
     'target-arrow-shape': 'triangle',
-    width: 4,
+    width: '4px',
     'line-color': '#000',
     'target-arrow-color': '#000',
 };

@@ -1,15 +1,13 @@
 /* eslint-disable no-alert */
 
-import askColor from './helpers';
 import CoreGraph from './core-graph-builder';
 import { actionType as T } from '../reducer';
 
 class TailoredGraph extends CoreGraph {
     addTestData() {
+        this.addNode('A', {}, 'ordin', { x: 100, y: 100 }, 1);
+        this.addNode('B', {}, 'ordin', { x: 500, y: 100 }, 2);
         return this;
-        // this.addNode('A', {}, 'ordin', { x: 100, y: 100 }, 1);
-        // this.addNode('B', {}, 'ordin', { x: 500, y: 100 }, 2);
-        // this.adE2(1, 2, 'ordin', '#f0f');
     }
 
     getRealNode(juncNodeId) {
@@ -50,31 +48,29 @@ class TailoredGraph extends CoreGraph {
         const position = edge.sourceEndpoint();
         const destid = dest.data('id');
         let srcid = src.data('id');
-        let edgeName;
-        let edgeColor;
         if (src.data('type') !== 'special') {
             const tid = (new Date()).getTime();
             this.dispatcher({
                 type: T.OpenModal,
-                modelCallback: (name) => {
-                    edgeName = name;
-                    edgeColor = askColor();
-                    this.addNode('', { 'background-color': edgeColor },
-                        'special', position, tid, { edgeName, edgeColor });
-                    this.addEdge(srcid, tid, edgeName, edgeColor, { 'target-arrow-shape': 'none' });
+                modelCallback: (edgeName, style) => {
+                    this.addNode('', { 'background-color': style['line-color'] },
+                        'special', position, tid, { edgeName, style });
+                    this.addEdge(srcid, tid, edgeName, {
+                        ...style,
+                        'target-arrow-shape': 'none',
+                    });
                     this.addAutoMove(this.cy.$(`#${tid}`), this.cy.$(`#${srcid}`));
                     srcid = tid;
                     this.getRealNode(tid);
                     edge.remove();
-                    this.addEdge(srcid, destid, edgeName, edgeColor);
+                    this.addEdge(srcid, destid, edgeName, style);
                 },
-                isEdge: 1,
             });
         } else {
-            edgeName = src.data('edgeName');
-            edgeColor = src.data('edgeColor');
+            const edgeName = src.data('edgeName');
+            const style = src.data('style');
             edge.remove();
-            this.addEdge(srcid, destid, edgeName, edgeColor);
+            this.addEdge(srcid, destid, edgeName, style);
         }
     }
 }

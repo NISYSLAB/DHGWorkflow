@@ -23,11 +23,11 @@ class CoreGraph {
         });
     }
 
-    addEdge(source, target, name, color, style = {}) {
+    addEdge(source, target, name, style = {}) {
         this.cy.add({
             group: 'edges',
             data: { source, target, label: name },
-            style: { ...style, 'line-color': color, 'target-arrow-color': color },
+            style,
         });
     }
 

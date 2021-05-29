@@ -2,8 +2,8 @@ import style from './cytoscape-style';
 
 const options = {
     style: [...style],
-    zoomingEnabled: false,
-    userZoomingEnabled: false,
+    zoomingEnabled: true,
+    userZoomingEnabled: true,
 };
 
 export default options;
