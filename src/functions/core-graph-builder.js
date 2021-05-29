@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 class CoreGraph {
     setCy(cy) {
         this.cy = cy;
@@ -12,7 +10,6 @@ class CoreGraph {
 
     addNode(name, style, type, position, sid, data) {
         const id = sid || (new Date()).getTime();
-        console.log(name, type, id);
         this.cy.add({
             group: 'nodes',
             data: {

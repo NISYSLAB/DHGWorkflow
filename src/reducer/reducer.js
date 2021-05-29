@@ -1,14 +1,38 @@
 import T from './actionType';
+import NodeDetails from '../component/NodeDetails';
+import EdgeDetails from '../component/EdgeDetails';
+import { NodeStyle, EdgeStyle } from '../config/defaultStyles';
 
 const reducer = (state, action) => {
-    if (action.type === T.OpenModal) {
+    switch (action.type) {
+    case T.Model_Open_Create_Node:
         return {
-            ...state, ModelOpen: true, modelCallback: action.modelCallback, isEdge: action.isEdge,
+            ...state,
+            ModelOpen: true,
+            modalPayload: {
+                title: 'Create Node',
+                submitText: 'Create Node',
+                Children: NodeDetails,
+                defaultStyle: NodeStyle,
+                cb: action.cb,
+            },
         };
-    }
-    if (action.type === T.CloseModal) {
+    case T.Model_Open_Create_Edge:
+        return {
+            ...state,
+            ModelOpen: true,
+            modalPayload: {
+                title: 'Create Edge',
+                submitText: 'Create Edge',
+                Children: EdgeDetails,
+                defaultStyle: EdgeStyle,
+                cb: action.cb,
+            },
+        };
+    case T.Model_Close:
         return { ...state, ModelOpen: false };
+    default:
+        return state;
     }
-    return state;
 };
 export default reducer;

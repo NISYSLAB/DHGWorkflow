@@ -1,5 +1,3 @@
-/* eslint-disable no-alert */
-
 import CoreGraph from './core-graph-builder';
 import { actionType as T } from '../reducer';
 
@@ -51,26 +49,26 @@ class TailoredGraph extends CoreGraph {
         if (src.data('type') !== 'special') {
             const tid = (new Date()).getTime();
             this.dispatcher({
-                type: T.OpenModal,
-                modelCallback: (edgeName, style) => {
-                    this.addNode('', { 'background-color': style['line-color'] },
-                        'special', position, tid, { edgeName, style });
+                type: T.Model_Open_Create_Edge,
+                cb: (edgeName, edgeStyle) => {
+                    this.addNode('', { 'background-color': edgeStyle['line-color'] },
+                        'special', position, tid, { edgeName, edgeStyle });
                     this.addEdge(srcid, tid, edgeName, {
-                        ...style,
+                        ...edgeStyle,
                         'target-arrow-shape': 'none',
                     });
                     this.addAutoMove(this.cy.$(`#${tid}`), this.cy.$(`#${srcid}`));
                     srcid = tid;
                     this.getRealNode(tid);
                     edge.remove();
-                    this.addEdge(srcid, destid, edgeName, style);
+                    this.addEdge(srcid, destid, edgeName, edgeStyle);
                 },
             });
         } else {
             const edgeName = src.data('edgeName');
-            const style = src.data('style');
+            const edgeStyle = src.data('edgeStyle');
             edge.remove();
-            this.addEdge(srcid, destid, edgeName, style);
+            this.addEdge(srcid, destid, edgeName, edgeStyle);
         }
     }
 }

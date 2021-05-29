@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import ReactModal from 'react-modal';
 import './modal.css';
-import EdgeDetails from './EdgeDetails';
-import { EdgeStyle } from '../config/defaultStyles';
 
 ReactModal.setAppElement('#root');
 
-const Modal = ({
-    isOpen, closeModal, onSubmit, isEdge,
-}) => {
+const Modal = ({ closeModal, superState }) => {
     const [curClass, setCurClass] = useState('');
     const [data, setData] = useState({});
+    const { modalPayload, ModelOpen } = superState;
+    const {
+        cb, title, submitText, Children, defaultStyle,
+    } = modalPayload;
 
     useEffect(() => {
-        setData({ name: '', style: EdgeStyle });
-        if (isOpen === true) {
+        setData({ name: '', style: defaultStyle });
+        if (ModelOpen === true) {
             setCurClass('closing');
             setTimeout(() => {
                 setCurClass('');
             }, 20);
         }
-    }, [isOpen]);
+    }, [ModelOpen]);
 
     const handleCloseModal = () => {
         setCurClass('closing');
@@ -31,13 +31,13 @@ const Modal = ({
 
     const submit = (e) => {
         e.preventDefault();
-        onSubmit(data.name, data.style);
+        cb(data.name, data.style);
         handleCloseModal();
     };
 
     return (
         <ReactModal
-            isOpen={isOpen}
+            isOpen={ModelOpen}
             contentLabel="onRequestClose Example"
             onRequestClose={handleCloseModal}
             className="Modal"
@@ -46,24 +46,17 @@ const Modal = ({
             <form onSubmit={submit}>
                 <div className={`modal-content ${curClass}`}>
                     <div className="modal-header">
-                        <div className="modal-title h4">Modal heading</div>
+                        <div className="modal-title h4">{title}</div>
                         <button type="button" className="close" onClick={handleCloseModal}>
                             <span aria-hidden="true">×</span>
                             <span className="sr-only">Close</span>
                         </button>
                     </div>
                     <div className="modal-content-body">
-                        {(!isEdge) ? <EdgeDetails data={data} setData={setData} /> : (
-                            <input
-                                type="text"
-                                value={data.name}
-                                onChange={(e) => setData({ ...data, name: e.target.value })}
-                            />
-                        )}
+                        <Children data={data} setData={setData} />
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary">Close</button>
-                        <button type="submit" className="btn btn-primary">Save Changes</button>
+                        <button type="submit" className="btn btn-primary">{submitText}</button>
                     </div>
                 </div>
             </form>
