@@ -31,7 +31,14 @@ const editElement = (state, setState) => {
         });
     }
 };
+
+const toggleDrawMode = (state, setState) => {
+    CyFun.enableDraw(!state.drawModeOn);
+    setState({ type: T.TURN_DRAW, payload: !state.drawModeOn });
+};
 // eslint-disable-next-line no-alert
 const dummyAction = (x) => alert(x);
 
-export { createNode, dummyAction, editElement };
+export {
+    createNode, dummyAction, editElement, toggleDrawMode,
+};

@@ -66,6 +66,7 @@ const reducer = (state, action) => {
     case T.Model_Close: return { ...state, ModelOpen: false };
     case T.ELE_SELECTED: return { ...state, eleSelected: true, eleSelectedPayload: action.payload };
     case T.ELE_UNSELECTED: return { ...state, eleSelected: false };
+    case T.TURN_DRAW: return { ...state, drawModeOn: action.payload };
     default:
         return state;
     }

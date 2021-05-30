@@ -86,6 +86,12 @@ class CoreGraph {
     }
 
     modifyNewEdge() { return this; }
+
+    enableDraw(enable) {
+        if (enable) window.cye.enable();
+        else window.cye.disable();
+        return this;
+    }
 }
 
 export default CoreGraph;

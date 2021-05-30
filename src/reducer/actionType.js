@@ -9,5 +9,6 @@ const actionType = {
     Model_Close: 'CloseModal',
     ELE_UNSELECTED: 'ELE_UNSELECTED',
     ELE_SELECTED: 'ELE_SELECTED',
+    TURN_DRAW: 'TURN_DRAW',
 };
 export default zealit(actionType);
