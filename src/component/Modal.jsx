@@ -9,11 +9,11 @@ const Modal = ({ closeModal, superState }) => {
     const [data, setData] = useState({});
     const { modalPayload, ModelOpen } = superState;
     const {
-        cb, title, submitText, Children, defaultStyle,
+        cb, title, submitText, Children, defaultStyle, defaultName, nameAllowed,
     } = modalPayload;
 
     useEffect(() => {
-        setData({ name: '', style: defaultStyle });
+        setData({ name: defaultName || '', style: defaultStyle });
         if (ModelOpen === true) {
             setCurClass('closing');
             setTimeout(() => {
@@ -53,7 +53,7 @@ const Modal = ({ closeModal, superState }) => {
                         </button>
                     </div>
                     <div className="modal-content-body">
-                        <Children data={data} setData={setData} />
+                        <Children data={data} setData={setData} nameAllowed={nameAllowed} />
                     </div>
                     <div className="modal-footer">
                         <button type="submit" className="btn btn-primary">{submitText}</button>

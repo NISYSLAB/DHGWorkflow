@@ -29,7 +29,7 @@
 /* .form > *:nth-child(11) {
     grid-column: 2 / span 3;
 } */
-.nodeform .form > *:nth-child(2) {
+.nodeform .nodeLabel {
     grid-column: 2 / span 3;
 }
 

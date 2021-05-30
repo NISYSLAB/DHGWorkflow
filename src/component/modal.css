@@ -1,7 +1,7 @@
-*{
+.ReactModalPortal *{
     transition: all 200ms ease-out
 }
-.Modal {
+.ReactModalPortal .Modal {
     position: absolute;
     top: 30%;
     left: 50%;
@@ -13,7 +13,7 @@
     background-color: rgba(255, 255, 255, 0);
 }
 
-.Overlay {
+.ReactModalPortal .Overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -22,7 +22,7 @@
     background-color: rgba(0, 0, 0, 0.541);
 }
 
-.Modal .header {
+.ReactModalPortal .Modal .header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -32,13 +32,13 @@
     border-top-right-radius: calc(.3rem - 1px)
 }
 
-.heading{
+.ReactModalPortal .heading{
     margin-bottom: 0;
     line-height: 1.5;
 }
 
 
-.modal-content {
+.ReactModalPortal .modal-content {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -51,7 +51,7 @@
     outline: 0;
 }
 
-.modal-header {
+.ReactModalPortal .modal-header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -60,14 +60,14 @@
     border-top-left-radius: calc(.3rem - 1px);
     border-top-right-radius: calc(.3rem - 1px);
 }
-.modal-title {
+.ReactModalPortal .modal-title {
     margin-bottom: 0;
     line-height: 1.5;
     font-size: 25px;
     font-weight: 500;
 }
 
-.modal-header .close {
+.ReactModalPortal .modal-header .close {
     padding: 1rem;
     margin: -1rem -1rem -1rem auto;
     font-size: 30px;
@@ -75,7 +75,7 @@
     background: transparent;
     color: #666
 }
-.sr-only {
+.ReactModalPortal .sr-only {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -87,13 +87,13 @@
     border: 0;
 }
 
-.modal-body {
+.ReactModalPortal .modal-body {
     position: relative;
     flex: 1 1 auto;
     padding: 1rem;
 }
 
-.modal-footer {
+.ReactModalPortal .modal-footer {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -104,20 +104,20 @@
     border-bottom-left-radius: calc(.3rem - 1px);
 }
 
-.btn-secondary {
+.ReactModalPortal .btn-secondary {
     color: #fff;
     background-color: #6c757d;
     border-color: #6c757d;
 }
-.modal-footer>* {
+.ReactModalPortal .modal-footer>* {
     margin: .25rem;
 }
 
-.btn:not(:disabled):not(.disabled) {
+.ReactModalPortal .btn:not(:disabled):not(.disabled) {
     cursor: pointer;
 }
 
-.btn {
+.ReactModalPortal .btn {
     display: inline-block;
     font-weight: 400;
     color: #212529;
@@ -132,19 +132,18 @@
     /* font-size: 1rem; */
     line-height: 1.5;
     border-radius: .25rem;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
-.btn-primary {
+.ReactModalPortal .btn-primary {
     color: #fff;
     background-color: #007bff;
     border-color: #007bff;
 }
 
-.modal-content.closing{
+.ReactModalPortal .modal-content.closing{
     transform: translateY(-70%);
     opacity: 0;
 }
-.Overlay.closing{
+.ReactModalPortal .Overlay.closing{
     opacity: 0;
 }

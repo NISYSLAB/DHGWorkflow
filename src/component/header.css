@@ -21,6 +21,7 @@
     justify-content: space-between;
     box-sizing: border-box;
     color: rgba(0, 0, 0, 0.3);
+    transition: none;
 }
 .toolbar .tool.active{
     color: #333;
