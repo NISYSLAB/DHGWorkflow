@@ -14,8 +14,8 @@ const reducer = (state, action) => {
                 submitText: 'Create Node',
                 Children: NodeDetails,
                 defaultStyle: NodeStyle,
-                defaultName: '',
-                nameAllowed: true,
+                defaultLabel: '',
+                labelAllowed: true,
                 cb: action.cb,
             },
         };
@@ -28,8 +28,8 @@ const reducer = (state, action) => {
                 submitText: 'Create Edge',
                 Children: EdgeDetails,
                 defaultStyle: EdgeStyle,
-                defaultName: '',
-                nameAllowed: true,
+                defaultLabel: '',
+                labelAllowed: true,
                 cb: action.cb,
             },
         };
@@ -42,8 +42,8 @@ const reducer = (state, action) => {
                 submitText: 'Edit Node',
                 Children: NodeDetails,
                 defaultStyle: action.style,
-                defaultName: action.name,
-                nameAllowed: action.nameAllowed,
+                defaultLabel: action.label,
+                labelAllowed: action.nameAllowed,
                 cb: action.cb,
             },
         };
@@ -57,8 +57,8 @@ const reducer = (state, action) => {
                 submitText: 'Edit Edge',
                 Children: EdgeDetails,
                 defaultStyle: action.style,
-                defaultName: action.name,
-                nameAllowed: action.nameAllowed,
+                defaultLabel: action.label,
+                labelAllowed: action.nameAllowed,
                 cb: action.cb,
             },
         };

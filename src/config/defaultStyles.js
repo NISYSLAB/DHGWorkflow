@@ -3,16 +3,16 @@ const NodeStyle = {
     height: '50px',
     shape: 'rectangle',
     opacity: 1,
-    'background-color': '#fff',
+    'background-color': '#e0f2f1',
     'border-color': '#000',
-    'border-width': '3px',
+    'border-width': '2px',
     'text-valign': 'center',
     'text-halign': 'center',
 };
 
 const EdgeStyle = {
     'target-arrow-shape': 'triangle',
-    width: '4px',
+    width: '2px',
     'line-color': '#000',
     'target-arrow-color': '#000',
 };

@@ -2,8 +2,8 @@ import { NodeStyle, EdgeStyle } from '../config/defaultStyles';
 import { actionType as T } from '../reducer';
 
 class CoreGraph {
-    $(X) {
-        return this.cy.$(X);
+    getById(x) {
+        return this.cy.getElementById(x);
     }
 
     setCy(cy) {
@@ -32,56 +32,50 @@ class CoreGraph {
         this.dispatcher = dispatcher;
     }
 
-    addNode(name, style, type, position, sid, data) {
+    addNode(label, style, type, position, sid, data) {
         const id = sid || (new Date()).getTime();
         this.cy.add({
             group: 'nodes',
             data: {
-                id, name, type, ...data,
+                id, label, type, ...data,
             },
             style,
             position,
         });
     }
 
-    addEdge(source, target, name, style = {}) {
+    addEdge(source, target, label, style = {}) {
         this.cy.add({
             group: 'edges',
-            data: { source, target, label: name },
+            data: { source, target, label },
             style,
         });
     }
 
     getStyle(id) {
-        const allStyles = this.cy.$(`#${id}`).style();
+        const allStyles = this.getById(id).style();
         const styles = {};
         Object.entries(NodeStyle).forEach((p) => { styles[p[0]] = allStyles[p[0]]; });
         Object.entries(EdgeStyle).forEach((p) => { styles[p[0]] = allStyles[p[0]]; });
         return styles;
     }
 
-    getName(id) {
-        return this.cy.$(`#${id}`).data('name') || this.cy.$(`#${id}`).data('label');
+    getLabel(id) {
+        return this.getById(id).data('label') || this.getById(id).data('label');
     }
 
-    updateNode(ids, style, name, shouldUpdateName) {
-        ids.forEach((id) => {
-            if (shouldUpdateName) this.cy.$(`#${id}`).data('name', name);
-            this.cy.$(`#${id}`).style(style);
-        });
-        return this;
+    updateNode(id, style, label, shouldUpdateLabel) {
+        if (shouldUpdateLabel) this.getById(id).data('label', label);
+        this.getById(id).style(style);
     }
 
-    updateEdge(ids, style, label, shouldUpdateLabel) {
-        ids.forEach((id) => {
-            if (shouldUpdateLabel) this.cy.$(`#${id}`).data('label', label);
-            this.cy.$(`#${id}`).style(style);
-        });
-        return this;
+    updateEdge(id, style, label, shouldUpdateLabel) {
+        if (shouldUpdateLabel) this.getById(id).data('label', label);
+        this.getById(id).style(style);
     }
 
     updateData(id, key, val) {
-        this.$(`#${id}`).data(key, val);
+        this.getById(id).data(key, val);
         return this;
     }
 
@@ -94,17 +88,17 @@ class CoreGraph {
     }
 
     deleteNode(id) {
-        const el = this.$(`#${id}`);
+        const el = this.getById(id);
         el.connectedEdges().forEach((edge) => this.deleteEdge(edge.id()));
         el.remove();
     }
 
     deleteEdge(id) {
-        this.$(`#${id}`).remove();
+        this.getById(id).remove();
     }
 
     deleteElem(id) {
-        if (this.$(`#${id}`).isNode()) return this.deleteNode(id);
+        if (this.getById(id).isNode()) return this.deleteNode(id);
         return this.deleteEdge(id);
     }
 }

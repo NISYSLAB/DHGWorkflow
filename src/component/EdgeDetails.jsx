@@ -35,7 +35,7 @@ const Triangle = ({ size, color }) => {
 };
 
 const EdgeDetails = ({
-    data, setData, submit, nameAllowed,
+    data, setData, submit, labelAllowed,
 }) => {
     const EdgeStyle = {
         ...DefEdgeStyle,
@@ -55,19 +55,19 @@ const EdgeDetails = ({
             <div style={ParentStyle}>
                 <div style={EdgeStyle} />
                 <Triangle size={data.style.width.slice(0, -2)} color={data.style['line-color']} />
-                <div className="label">{data.name}</div>
+                <div className="label">{data.label}</div>
             </div>
             <div className="form" style={{ padding: 20 }}>
-                {nameAllowed ? <div> Label</div> : ''}
-                {nameAllowed ? (
+                {labelAllowed ? <div> Label</div> : ''}
+                {labelAllowed ? (
                     <input
                         className="edgeLabel"
                         type="text"
                         required
-                        name="Edge Name"
-                        value={data.name}
-                        placeholder="Enter Edge Name"
-                        onChange={(e) => setData({ ...data, name: `${e.target.value}` })}
+                        label="Edge Label"
+                        value={data.label}
+                        placeholder="Enter Edge Label"
+                        onChange={(e) => setData({ ...data, label: `${e.target.value}` })}
                     />
                 ) : ''}
                 <div> Width</div>

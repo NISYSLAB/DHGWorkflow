@@ -9,7 +9,7 @@ class TailoredGraph extends CoreGraph {
     }
 
     getRealNode(juncNodeId) {
-        return this.cy.$(`#${juncNodeId}`).incomers().filter('node')[0];
+        return this.getById(juncNodeId).incomers().filter('node')[0];
     }
 
     addAutoMove(juncNode, parNode) {
@@ -50,44 +50,41 @@ class TailoredGraph extends CoreGraph {
             const tid = (new Date()).getTime();
             this.dispatcher({
                 type: T.Model_Open_Create_Edge,
-                cb: (edgeName, edgeStyle) => {
+                cb: (edgeLabel, edgeStyle) => {
                     this.addNode('', { 'background-color': edgeStyle['line-color'] },
-                        'special', position, tid, { edgeName, edgeStyle });
-                    this.addEdge(srcid, tid, edgeName, {
+                        'special', position, tid, { edgeLabel, edgeStyle });
+                    this.addEdge(srcid, tid, edgeLabel, {
                         ...edgeStyle,
                         'target-arrow-shape': 'none',
                     });
-                    this.addAutoMove(this.cy.$(`#${tid}`), this.cy.$(`#${srcid}`));
+                    this.addAutoMove(this.getById(tid), this.getById(srcid));
                     srcid = tid;
                     this.getRealNode(tid);
                     edge.remove();
-                    this.addEdge(srcid, destid, edgeName, edgeStyle);
+                    this.addEdge(srcid, destid, edgeLabel, edgeStyle);
                 },
             });
         } else {
-            const edgeName = src.data('edgeName');
+            const edgeLabel = src.data('edgeLabel');
             const edgeStyle = src.data('edgeStyle');
             edge.remove();
-            this.addEdge(srcid, destid, edgeName, edgeStyle);
+            this.addEdge(srcid, destid, edgeLabel, edgeStyle);
         }
     }
 
-    updateEdge(ids, style, label, shouldUpdateLabel) {
-        const allIds = [];
-        ids.forEach((id) => {
-            const junctionNode = this.cy.getElementById(id).source();
-            if (shouldUpdateLabel) this.updateData(junctionNode.data('id'), 'edgeName', label);
-            this.updateData(junctionNode.data('id'), 'edgeStyle', style);
-            this.updateNode([junctionNode.data('id')], { 'background-color': style['line-color'] }, 'de', false);
-            junctionNode.connectedEdges().forEach((edge) => {
-                if (edge.target() !== junctionNode) allIds.push(edge.data('id'));
-            });
-        });
-        super.updateEdge(allIds, style, label, shouldUpdateLabel);
+    updateEdge(id, style, label, shouldUpdateLabel) {
+        const junctionNode = this.getById(id).source();
+        if (shouldUpdateLabel) this.updateData(junctionNode.data('id'), 'edgeLabel', label);
+        this.updateData(junctionNode.data('id'), 'edgeStyle', style);
+        this.updateNode([junctionNode.data('id')], { 'background-color': style['line-color'] }, '', false);
+
+        junctionNode
+            .outgoers('edge')
+            .forEach((edge) => super.updateEdge(edge.data('id'), style, label, shouldUpdateLabel));
     }
 
     deleteElem(id) {
-        const el = this.$(`#${id}`);
+        const el = this.getById(id);
         if (el.isNode()) {
             el.outgoers().forEach((x) => super.deleteElem(x.id()));
             el.connectedEdges().forEach((x) => this.deleteElem(x.id()));

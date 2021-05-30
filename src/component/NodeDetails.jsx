@@ -25,7 +25,7 @@ const DefNodeStyle = {
 };
 
 const NodeDetails = ({
-    data, setData, submit, nameAllowed,
+    data, setData, submit, labelAllowed,
 }) => {
     const NodeStyle = {
         ...DefNodeStyle,
@@ -48,19 +48,19 @@ const NodeDetails = ({
     };
     return (
         <div className="nodeform" onSubmit={submit}>
-            <div style={ParentStyle}><div style={NodeStyle}>{nameAllowed ? data.name : ''}</div></div>
+            <div style={ParentStyle}><div style={NodeStyle}>{labelAllowed ? data.label : ''}</div></div>
             <div className="form" style={{ padding: 20 }}>
 
-                {nameAllowed ? <div> Label</div> : ''}
-                {nameAllowed ? (
+                {labelAllowed ? <div> Label</div> : ''}
+                {labelAllowed ? (
                     <input
                         className="nodeLabel"
                         type="text"
                         required
-                        name="Node Name"
-                        value={data.name}
-                        placeholder="Enter Node Name"
-                        onChange={(e) => setData({ ...data, name: `${e.target.value}` })}
+                        label="Node Label"
+                        value={data.label}
+                        placeholder="Enter Node Label"
+                        onChange={(e) => setData({ ...data, label: `${e.target.value}` })}
                     />
                 ) : ''}
                 <div> Width</div>
