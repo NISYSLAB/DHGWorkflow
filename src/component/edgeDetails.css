@@ -18,7 +18,7 @@
     margin: auto;
 }
 
-.edgeform .form > *:nth-child(2) {
+.edgeform .edgeLabel {
     grid-column: 2 / span 3;
 }
 

@@ -2,6 +2,10 @@ import { NodeStyle, EdgeStyle } from '../config/defaultStyles';
 import { actionType as T } from '../reducer';
 
 class CoreGraph {
+    $(X) {
+        return this.cy.$(X);
+    }
+
     setCy(cy) {
         this.cy = cy;
         window.cyx = cy;
@@ -60,14 +64,24 @@ class CoreGraph {
         return this.cy.$(`#${id}`).data('name') || this.cy.$(`#${id}`).data('label');
     }
 
-    updateEl(ids, style, name) {
-        if (ids.length === 1) {
-            this.cy.$(`#${ids[0]}`).data('name', name);
-            this.cy.$(`#${ids[0]}`).data('label', name);
-        }
+    updateNode(ids, style, name, shouldUpdateName) {
         ids.forEach((id) => {
+            if (shouldUpdateName) this.cy.$(`#${id}`).data('name', name);
             this.cy.$(`#${id}`).style(style);
         });
+        return this;
+    }
+
+    updateEdge(ids, style, label, shouldUpdateLabel) {
+        ids.forEach((id) => {
+            if (shouldUpdateLabel) this.cy.$(`#${id}`).data('label', label);
+            this.cy.$(`#${id}`).style(style);
+        });
+        return this;
+    }
+
+    updateData(id, key, val) {
+        this.$(`#${id}`).data(key, val);
         return this;
     }
 

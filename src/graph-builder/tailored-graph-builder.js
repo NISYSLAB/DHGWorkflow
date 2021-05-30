@@ -71,6 +71,20 @@ class TailoredGraph extends CoreGraph {
             this.addEdge(srcid, destid, edgeName, edgeStyle);
         }
     }
+
+    updateEdge(ids, style, label, shouldUpdateLabel) {
+        const allIds = [];
+        ids.forEach((id) => {
+            const junctionNode = this.cy.getElementById(id).source();
+            if (shouldUpdateLabel) this.updateData(junctionNode.data('id'), 'edgeName', label);
+            this.updateData(junctionNode.data('id'), 'edgeStyle', style);
+            this.updateNode([junctionNode.data('id')], { 'background-color': style['line-color'] }, 'de', false);
+            junctionNode.connectedEdges().forEach((edge) => {
+                if (edge.target() !== junctionNode) allIds.push(edge.data('id'));
+            });
+        });
+        super.updateEdge(allIds, style, label, shouldUpdateLabel);
+    }
 }
 
 export default TailoredGraph;

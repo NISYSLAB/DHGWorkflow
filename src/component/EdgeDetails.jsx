@@ -34,7 +34,9 @@ const Triangle = ({ size, color }) => {
     );
 };
 
-const EdgeDetails = ({ data, setData, submit }) => {
+const EdgeDetails = ({
+    data, setData, submit, nameAllowed,
+}) => {
     const EdgeStyle = {
         ...DefEdgeStyle,
         backgroundColor: data.style['line-color'],
@@ -56,15 +58,18 @@ const EdgeDetails = ({ data, setData, submit }) => {
                 <div className="label">{data.name}</div>
             </div>
             <div className="form" style={{ padding: 20 }}>
-                <div> Label</div>
-                <input
-                    type="text"
-                    required
-                    name="Edge Name"
-                    value={data.name}
-                    placeholder="Enter Edge Name"
-                    onChange={(e) => setData({ ...data, name: `${e.target.value}` })}
-                />
+                {nameAllowed ? <div> Label</div> : ''}
+                {nameAllowed ? (
+                    <input
+                        className="edgeLabel"
+                        type="text"
+                        required
+                        name="Edge Name"
+                        value={data.name}
+                        placeholder="Enter Edge Name"
+                        onChange={(e) => setData({ ...data, name: `${e.target.value}` })}
+                    />
+                ) : ''}
                 <div> Width</div>
                 <input
                     type="number"
