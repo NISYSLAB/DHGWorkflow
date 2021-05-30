@@ -3,7 +3,7 @@ import cytoscape from 'cytoscape';
 import edgehandles from 'cytoscape-edgehandles';
 import automove from 'cytoscape-automove';
 import cyOptions from './config/cytoscape-options';
-import cyFun from './functions/graph-builder';
+import cyFun from './graph-builder';
 
 class GraphComp extends React.Component {
     componentDidMount() {

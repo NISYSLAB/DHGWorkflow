@@ -1,4 +1,4 @@
-import CyFun from '../functions/graph-builder';
+import CyFun from '../graph-builder';
 import { actionType as T } from '../reducer';
 
 const createNode = (state, setState) => {
