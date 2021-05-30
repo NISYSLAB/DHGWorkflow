@@ -4,7 +4,7 @@ import { ImZoomOut, ImZoomIn } from 'react-icons/im';
 import {
     FaSave, FaUndo, FaRedo, FaTrash, FaFileExport, FaFileImport, FaPlus, FaDownload, FaEdit,
 } from 'react-icons/fa';
-import { dummyAction, createNode, editElement, toggleDrawMode } from './toolbarFunctions';
+import { dummyAction, createNode, editElement, toggleDrawMode, deleteElem } from './toolbarFunctions';
 
 const toolbarList = (state) => [
     { type: 'action', text: 'Node', icon: FaPlus, action: createNode, active: true },
@@ -21,7 +21,7 @@ const toolbarList = (state) => [
     { type: 'action', text: 'Undo', icon: FaUndo, action: dummyAction, active: false },
     { type: 'action', text: 'Redo', icon: FaRedo, action: dummyAction, active: false },
     { type: 'vsep' },
-    { type: 'action', text: 'Delete', icon: FaTrash, action: dummyAction, active: false },
+    { type: 'action', text: 'Delete', icon: FaTrash, action: deleteElem, active: state.eleSelected },
     { type: 'vsep' },
     { type: 'action', text: 'In', icon: ImZoomOut, action: dummyAction, active: false },
     { type: 'action', text: 'Out', icon: ImZoomIn, action: dummyAction, active: false },

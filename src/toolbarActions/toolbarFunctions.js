@@ -36,9 +36,14 @@ const toggleDrawMode = (state, setState) => {
     CyFun.enableDraw(!state.drawModeOn);
     setState({ type: T.TURN_DRAW, payload: !state.drawModeOn });
 };
+
+const deleteElem = (state) => {
+    state.eleSelectedPayload.ids.forEach((id) => CyFun.deleteElem(id));
+};
+
 // eslint-disable-next-line no-alert
 const dummyAction = (x) => alert(x);
 
 export {
-    createNode, dummyAction, editElement, toggleDrawMode,
+    createNode, dummyAction, editElement, toggleDrawMode, deleteElem,
 };

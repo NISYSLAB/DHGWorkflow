@@ -92,6 +92,21 @@ class CoreGraph {
         else window.cye.disable();
         return this;
     }
+
+    deleteNode(id) {
+        const el = this.$(`#${id}`);
+        el.connectedEdges().forEach((edge) => this.deleteEdge(edge.id()));
+        el.remove();
+    }
+
+    deleteEdge(id) {
+        this.$(`#${id}`).remove();
+    }
+
+    deleteElem(id) {
+        if (this.$(`#${id}`).isNode()) return this.deleteNode(id);
+        return this.deleteEdge(id);
+    }
 }
 
 export default CoreGraph;

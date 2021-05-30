@@ -85,6 +85,19 @@ class TailoredGraph extends CoreGraph {
         });
         super.updateEdge(allIds, style, label, shouldUpdateLabel);
     }
+
+    deleteElem(id) {
+        const el = this.$(`#${id}`);
+        if (el.isNode()) {
+            el.outgoers().forEach((x) => super.deleteElem(x.id()));
+            el.connectedEdges().forEach((x) => this.deleteElem(x.id()));
+            super.deleteNode(id);
+        } else {
+            const junctionNode = el.source();
+            super.deleteEdge(id);
+            if (junctionNode.outgoers().length === 0) this.deleteNode(junctionNode.id());
+        }
+    }
 }
 
 export default TailoredGraph;
