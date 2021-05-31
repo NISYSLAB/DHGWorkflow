@@ -1,6 +1,31 @@
 import React from 'react';
+import Switch from 'rc-switch';
+
+import 'rc-switch/assets/index.css';
 import './header.css';
 import toolbarList from '../toolbarActions/toolbarList';
+
+const Switcher = ({
+    text, action, active, tabIndex,
+}) => (
+    <div
+        role="button"
+        tabIndex={tabIndex}
+        className={`tool ${active ? 'active' : ''}`}
+        onClick={action}
+        onKeyDown={(ev) => ev.key === 13 && action()}
+    >
+        <Switch
+            onChange={action}
+            checked={active}
+            className="react-switch"
+            uncheckedHandleIcon="on"
+        />
+        <div>
+            {text}
+        </div>
+    </div>
+);
 
 const ActionButton = ({
     Icon, text, action, active, tabIndex,
@@ -9,7 +34,7 @@ const ActionButton = ({
         role="button"
         tabIndex={tabIndex}
         className={`tool ${active ? 'active' : ''}`}
-        onClick={action}
+        onClick={() => (active && action())}
         onKeyDown={(ev) => ev.key === 13 && action()}
     >
         <div className="icon"><Icon size="25" /></div>
@@ -39,6 +64,17 @@ const Header = ({ title, state, dispatcher }) => (
                 toolbarList(state, dispatcher).map((tool, i) => {
                     if (tool.type === 'vsep') return <Vsep key={`${`v${i}`}`} />;
                     if (tool.type === 'space') return <Space key={`${`s${i}`}`} />;
+                    if (tool.type === 'switch') {
+                        return (
+                            <Switcher
+                                text={tool.text}
+                                active={tool.active}
+                                action={() => tool.action(state, dispatcher)}
+                                key={tool.text}
+                                tabIndex={i + 1}
+                            />
+                        );
+                    }
                     return (
                         <ActionButton
                             Icon={tool.icon}
