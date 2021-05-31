@@ -19,7 +19,6 @@ const Switcher = ({
             onChange={action}
             checked={active}
             className="react-switch"
-            uncheckedHandleIcon="on"
         />
         <div>
             {text}

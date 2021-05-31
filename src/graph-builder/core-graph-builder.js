@@ -6,6 +6,8 @@ class CoreGraph {
         return this.cy.getElementById(x);
     }
 
+    addTestData() { return this; }
+
     setCy(cy) {
         this.cy = cy;
         window.cyx = cy;

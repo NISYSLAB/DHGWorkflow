@@ -16,10 +16,13 @@
     row-gap: 15px;
     width: 500px;
     margin: auto;
+    column-gap: 10px;
+    padding: 20px;
 }
 
 .edgeform .edgeLabel {
     grid-column: 2 / span 3;
+    width: 80%;
 }
 
 .edgeform .color-box{
@@ -61,4 +64,14 @@
 .edgeform .label{
     position: absolute;
     margin-top: 30px;
+}
+
+@media screen and (max-width: 650px) {
+    .edgeform .form  {
+        grid-template-columns: auto auto;
+        width: auto
+    }
+    .edgeform .edgeLabel {
+        grid-column: 2;
+    }
 }

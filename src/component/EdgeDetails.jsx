@@ -57,7 +57,7 @@ const EdgeDetails = ({
                 <Triangle size={data.style.width.slice(0, -2)} color={data.style['line-color']} />
                 <div className="label">{data.label}</div>
             </div>
-            <div className="form" style={{ padding: 20 }}>
+            <div className="form">
                 {labelAllowed ? <div> Label</div> : ''}
                 {labelAllowed ? (
                     <input

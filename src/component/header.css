@@ -11,6 +11,7 @@
 }
 
 .toolbar .tool {
+    text-align: center;
     padding: 10px;
     padding-bottom: 5px;
     display: inline-flex;
@@ -22,6 +23,7 @@
     box-sizing: border-box;
     color: rgba(0, 0, 0, 0.3);
     transition: none;
+    height: 64px;
 }
 .toolbar .tool.active{
     color: #333;
@@ -71,6 +73,7 @@
     margin: auto;
     width: 1px;
     vertical-align: bottom;
+    height: 50px;
 }
 
 .hsep {

@@ -19,7 +19,7 @@ const editElement = (state, setState) => {
                 (id) => CyFun.updateNode(id, style, label, shouldUpdateLabel),
             ),
             labelAllowed: shouldUpdateLabel,
-            label: CyFun.getName(state.eleSelectedPayload.ids[0]),
+            label: CyFun.getLabel(state.eleSelectedPayload.ids[0]),
             style: CyFun.getStyle(state.eleSelectedPayload.ids[0]),
         });
     }
@@ -30,7 +30,7 @@ const editElement = (state, setState) => {
                 (id) => CyFun.updateEdge(id, style, label, shouldUpdateLabel),
             ),
             labelAllowed: shouldUpdateLabel,
-            label: CyFun.getName(state.eleSelectedPayload.ids[0]),
+            label: CyFun.getLabel(state.eleSelectedPayload.ids[0]),
             style: CyFun.getStyle(state.eleSelectedPayload.ids[0]),
         });
     }

@@ -24,6 +24,8 @@
     row-gap: 15px;
     width: 500px;
     margin: auto;
+    column-gap: 10px;
+    padding: 20px;
 }
 
 /* .form > *:nth-child(11) {
@@ -66,4 +68,14 @@
     position: absolute;
     position: fixed;
     cursor: initial;
+}
+
+@media screen and (max-width: 650px) {
+    .nodeform .form  {
+        grid-template-columns: auto auto;
+        width: auto
+    }
+    .nodeform .nodeLabel {
+        grid-column: 2;
+    }
 }
