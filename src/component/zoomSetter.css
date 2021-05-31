@@ -3,7 +3,7 @@
     bottom: 0px;
     right: 0px;
     height: auto;
-    z-index: 1000;
+    z-index: 2;
     background: white;
     display: flex;
     padding: 0 5px;

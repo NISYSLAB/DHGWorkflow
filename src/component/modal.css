@@ -1,5 +1,6 @@
 .ReactModalPortal *{
-    transition: all 200ms ease-out
+    transition: all 200ms ease-out;
+    z-index: 3
 }
 .ReactModalPortal .Modal {
     position: absolute;

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import cytoscape from 'cytoscape';
 import edgehandles from 'cytoscape-edgehandles';
@@ -37,7 +38,7 @@ class GraphComp extends React.Component {
         const { dispatcher, superState } = this.props;
         return (
             <div style={{ height: '100%', width: '100%', position: '' }}>
-                <div style={{ height: '100%', width: '100%', zIndex: 999 }} id="cy" />
+                <div style={{ height: '100%', width: '100%', zIndex: 1 }} id="cy" />
                 <ZoomComp dispatcher={dispatcher} superState={superState} />
             </div>
         );

@@ -8,7 +8,7 @@ import { reducer, initialState, actionType as T } from './reducer';
 const app = () => {
     const [superState, dispatcher] = useReducer(reducer, initialState);
     return (
-        <div>
+        <div className="container">
             {superState.ModelOpen ? (
                 <Modal
                     closeModal={() => dispatcher({ type: T.Model_Close })}
