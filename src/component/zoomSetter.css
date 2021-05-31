@@ -1,0 +1,43 @@
+.zoom-comp {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    height: auto;
+    z-index: 1000;
+    background: white;
+    display: flex;
+    padding: 0 5px;
+    border: 1px solid #ddd;
+    border-right: none;
+    border-bottom: none;
+    border-top-left-radius: 3px;
+}
+.zoom-comp > *{
+    padding: 2px 5px;
+}
+
+.zoom-comp .slider {
+    flex: 1;
+    line-height: initial;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.zoom-comp .zoom-box {
+    text-align: center;
+    border-right: 1px solid #ddd;
+    user-select: none;
+}
+
+.zoom-comp .zoom-btn{
+    cursor: pointer;
+}
+.zoom-comp .zoom-btn:hover{
+    background: #eee;
+}
+
+.zoom-comp .zoom-value {
+    width: 40px;
+}

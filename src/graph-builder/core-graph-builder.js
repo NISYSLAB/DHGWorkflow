@@ -26,6 +26,9 @@ class CoreGraph {
         };
         this.cy.on('select', selectDeselect);
         this.cy.on('unselect', selectDeselect);
+        this.cy.on('zoom', (e) => {
+            this.dispatcher({ type: T.SET_ZOOM, payload: Math.round(100 * e.target.zoom()) });
+        });
     }
 
     setDispatcher(dispatcher) {
@@ -100,6 +103,18 @@ class CoreGraph {
     deleteElem(id) {
         if (this.getById(id).isNode()) return this.deleteNode(id);
         return this.deleteEdge(id);
+    }
+
+    resetZoom() {
+        this.cy.reset();
+    }
+
+    fitZoom() {
+        this.cy.fit();
+    }
+
+    setZoom(v) {
+        this.cy.zoom(v / 100);
     }
 }
 

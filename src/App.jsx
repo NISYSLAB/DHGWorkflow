@@ -18,7 +18,7 @@ const app = () => {
             <Header title="MyGraph" state={superState} dispatcher={dispatcher} />
             <section className="body">
                 <div className="graph-container">
-                    <GraphComp dispatcher={dispatcher} />
+                    <GraphComp dispatcher={dispatcher} superState={superState} />
                 </div>
             </section>
         </div>

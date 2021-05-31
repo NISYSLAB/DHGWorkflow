@@ -67,6 +67,8 @@ const reducer = (state, action) => {
     case T.ELE_SELECTED: return { ...state, eleSelected: true, eleSelectedPayload: action.payload };
     case T.ELE_UNSELECTED: return { ...state, eleSelected: false };
     case T.TURN_DRAW: return { ...state, drawModeOn: action.payload };
+
+    case T.SET_ZOOM: return { ...state, zoomValue: action.payload };
     default:
         return state;
     }

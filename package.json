@@ -11,6 +11,7 @@
     "cytoscape-automove": "^1.10.2",
     "cytoscape-edgehandles": "^3.6.0",
     "cytoscape-grid-guide": "^2.3.2",
+    "rc-slider": "^9.7.2",
     "react": "^17.0.2",
     "react-color": "^2.19.3",
     "react-dom": "^17.0.2",

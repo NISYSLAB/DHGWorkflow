@@ -4,9 +4,10 @@
 }
 
 .toolbar {
-    height: 64px;
+    height: auto;
     display: flex;
     box-sizing: border-box;
+    overflow: auto;
 }
 
 .toolbar .tool {

@@ -5,6 +5,7 @@ import automove from 'cytoscape-automove';
 import gridGuide from 'cytoscape-grid-guide';
 import cyOptions from './config/cytoscape-options';
 import cyFun from './graph-builder';
+import ZoomComp from './component/ZoomSetter';
 
 class GraphComp extends React.Component {
     componentDidMount() {
@@ -33,8 +34,12 @@ class GraphComp extends React.Component {
     }
 
     render() {
+        const { dispatcher, superState } = this.props;
         return (
-            <div style={{ height: '100%', width: '100%', zIndex: 999 }} id="cy" />
+            <div style={{ height: '100%', width: '100%', position: '' }}>
+                <div style={{ height: '100%', width: '100%', zIndex: 999 }} id="cy" />
+                <ZoomComp dispatcher={dispatcher} superState={superState} />
+            </div>
         );
     }
 }
