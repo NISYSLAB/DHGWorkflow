@@ -1,6 +1,6 @@
 /* eslint-disable object-curly-newline */
 import {
-    FaSave, FaUndo, FaRedo, FaTrash, FaFileExport, FaFileImport, FaPlus, FaDownload, FaEdit,
+    FaSave, FaUndo, FaRedo, FaTrash, FaFileImport, FaPlus, FaDownload, FaEdit,
 } from 'react-icons/fa';
 import { dummyAction, createNode, editElement, toggleDrawMode, deleteElem, downloadImg } from './toolbarFunctions';
 
@@ -13,7 +13,8 @@ const toolbarList = (state) => [
     { type: 'action', text: 'Undo', icon: FaUndo, action: dummyAction, active: false },
     { type: 'action', text: 'Redo', icon: FaRedo, action: dummyAction, active: false },
     { type: 'vsep' },
-    { type: 'action',
+    {
+        type: 'action',
         text: 'Edit',
         icon: FaEdit,
         action: editElement,
@@ -23,7 +24,7 @@ const toolbarList = (state) => [
     { type: 'vsep' },
     { type: 'switch', text: 'Draw', action: toggleDrawMode, active: state.drawModeOn },
     { type: 'space' },
-    { type: 'menu', text: 'Download', icon: FaDownload, action: downloadImg, active: false },
+    { type: 'menu', text: 'Download', icon: FaDownload, action: downloadImg, active: true },
     { type: 'vsep' },
     // { type: 'action', text: 'Export', icon: FaFileExport, action: dummyAction, active: false },
 ];
