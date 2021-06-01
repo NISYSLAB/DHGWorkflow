@@ -16,10 +16,8 @@ const app = () => {
                 />
             ) : ''}
             <Header title="MyGraph" state={superState} dispatcher={dispatcher} />
-            <section className="body">
-                <div className="graph-container">
-                    <GraphComp dispatcher={dispatcher} superState={superState} />
-                </div>
+            <section className="body" style={{ display: 'flex' }}>
+                <GraphComp dispatcher={dispatcher} superState={superState} />
             </section>
         </div>
     );
