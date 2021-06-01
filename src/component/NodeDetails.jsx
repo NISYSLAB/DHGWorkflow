@@ -37,6 +37,7 @@ const NodeDetails = ({
         width: data.style.width,
         height: data.style.height,
         opacity: data.style.opacity,
+        borderRadius: data.style.shape === 'ellipse' ? '100%' : 0,
     };
     const ParentStyle = { ...DefParentStyle, height: data.style.height };
     const setStyle = (prop) => {
@@ -50,6 +51,32 @@ const NodeDetails = ({
         <div className="nodeform" onSubmit={submit}>
             <div style={ParentStyle}><div style={NodeStyle}>{labelAllowed ? data.label : ''}</div></div>
             <div className="form" style={{ padding: 20 }}>
+                <div> Shape</div>
+                <div>
+                    <label htmlFor="rectangle">
+                        <input
+                            type="radio"
+                            name="shape"
+                            value="rectangle"
+                            checked={data.style.shape === 'rectangle'}
+                            onChange={() => setStyle({ shape: 'rectangle' })}
+                        />
+                        Rectangle
+                    </label>
+                </div>
+                <div>
+                    <label htmlFor="ellipse">
+                        <input
+                            type="radio"
+                            name="shape"
+                            value="ellipse"
+                            checked={data.style.shape === 'ellipse'}
+                            onChange={() => setStyle({ shape: 'ellipse' })}
+                        />
+                        Ellipse
+                    </label>
+                </div>
+                <div />
 
                 {labelAllowed ? <div> Label</div> : ''}
                 {labelAllowed ? (
@@ -67,40 +94,40 @@ const NodeDetails = ({
                 <input
                     type="number"
                     value={data.style.width.slice(0, -2)}
-                    onChange={(e) => setStyle({ ...data.style, width: `${Math.min(500, e.target.value)}px` })}
+                    onChange={(e) => setStyle({ width: `${Math.min(500, e.target.value)}px` })}
                 />
 
                 <div> Height</div>
                 <input
                     type="number"
                     value={data.style.height.slice(0, -2)}
-                    onChange={(e) => setStyle({ ...data.style, height: `${Math.min(200, e.target.value)}px` })}
+                    onChange={(e) => setStyle({ height: `${Math.min(200, e.target.value)}px` })}
                 />
 
                 <div> Background Color</div>
                 <ColorBox
                     color={data.style['background-color']}
-                    setColor={(color) => setStyle({ ...data.style, 'background-color': color })}
+                    setColor={(color) => setStyle({ 'background-color': color })}
                 />
 
                 <div> Border Color</div>
                 <ColorBox
                     color={data.style['border-color']}
-                    setColor={(color) => setStyle({ ...data.style, 'border-color': color })}
+                    setColor={(color) => setStyle({ 'border-color': color })}
                 />
 
                 <div> Border Width</div>
                 <input
                     type="number"
                     value={data.style['border-width'].slice(0, -2)}
-                    onChange={(e) => setStyle({ ...data.style, 'border-width': `${Math.min(30, e.target.value)}px` })}
+                    onChange={(e) => setStyle({ 'border-width': `${Math.min(30, e.target.value)}px` })}
                 />
                 <div> Opacity</div>
                 <input
                     type="number"
                     step=".01"
                     value={data.style.opacity}
-                    onChange={(e) => setStyle({ ...data.style, opacity: Math.min(1, Math.max(0, e.target.value)) })}
+                    onChange={(e) => setStyle({ opacity: Math.min(1, Math.max(0, e.target.value)) })}
                 />
             </div>
         </div>

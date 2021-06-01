@@ -43,7 +43,7 @@ const reducer = (state, action) => {
                 Children: NodeDetails,
                 defaultStyle: action.style,
                 defaultLabel: action.label,
-                labelAllowed: action.nameAllowed,
+                labelAllowed: action.labelAllowed,
                 cb: action.cb,
             },
         };
@@ -58,7 +58,7 @@ const reducer = (state, action) => {
                 Children: EdgeDetails,
                 defaultStyle: action.style,
                 defaultLabel: action.label,
-                labelAllowed: action.nameAllowed,
+                labelAllowed: action.labelAllowed,
                 cb: action.cb,
             },
         };

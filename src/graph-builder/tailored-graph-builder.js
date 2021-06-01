@@ -1,5 +1,6 @@
 import CoreGraph from './core-graph-builder';
 import { actionType as T } from '../reducer';
+import AutomoveFn from './automove';
 
 class TailoredGraph extends CoreGraph {
     addTestData() {
@@ -24,19 +25,8 @@ class TailoredGraph extends CoreGraph {
                 const pos = node.position();
                 const P = parNode.position();
                 const [h, w] = [parNode.height(), parNode.width()];
-                const A = { y: P.y + h / 2, x: P.x + w / 2 };
-                const B = { y: P.y - h / 2, x: P.x - w / 2 };
-                pos.x = Math.min(A.x, Math.max(pos.x, B.x));
-                pos.y = Math.min(A.y, Math.max(pos.y, B.y));
-                if (pos.x < A.x && pos.y < A.y && pos.x > B.x && pos.y > B.y) {
-                    const arr = [[Math.abs(pos.x - A.x), 'X', A.x],
-                        [Math.abs(pos.x - B.x), 'X', B.x],
-                        [Math.abs(pos.y - A.y), 'Y', A.y], [Math.abs(pos.y - B.y), 'Y', B.y]];
-                    arr.sort((a, b) => a[0] - b[0]);
-                    if (arr[0][1] === 'X') { [[, , pos.x]] = arr; }
-                    if (arr[0][1] === 'Y') { [[, , pos.y]] = arr; }
-                }
-                return pos;
+                const R = AutomoveFn.getClosest(P, pos, w / 2, h / 2, parNode.style().shape);
+                return { x: Math.round(R.x), y: Math.round(R.y) };
             },
             when: 'matching',
         });
@@ -53,7 +43,7 @@ class TailoredGraph extends CoreGraph {
                 cb: (edgeLabel, edgeStyle) => {
                     this.addNode('', { 'background-color': edgeStyle['line-color'] },
                         'special', position, tid, { edgeLabel, edgeStyle });
-                    this.addEdge(srcid, tid, edgeLabel, {
+                    this.addEdge(srcid, tid, '', {
                         ...edgeStyle,
                         'target-arrow-shape': 'none',
                     });
