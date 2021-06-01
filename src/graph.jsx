@@ -35,7 +35,7 @@ class GraphComp extends React.Component {
         this.cy = cytoscape({ ...cyOptions, container: this.graphRef.current });
         this.cy.nodeEditing({ resizeToContentCueEnabled: () => false });
 
-        this.cy.gridGuide();
+        this.cy.gridGuide({snapToGridOnRelease :false});
         const { dispatcher } = this.props;
         cyFun.setCy(this.cy);
         cyFun.setDispatcher(dispatcher);

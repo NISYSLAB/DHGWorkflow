@@ -32,6 +32,11 @@ class CoreGraph {
         this.cy.on('zoom', (e) => {
             this.dispatcher({ type: T.SET_ZOOM, payload: Math.round(100 * e.target.zoom()) });
         });
+        this.cy.on('nodeediting.resizeend', (e, type, node) => {
+            node.scratch('automove').forEach((x) => {
+                x.apply();
+            });
+        });
     }
 
     setDispatcher(dispatcher) {

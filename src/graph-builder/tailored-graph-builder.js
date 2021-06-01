@@ -19,7 +19,7 @@ class TailoredGraph extends CoreGraph {
             reposition: 'drag',
             dragWith: parNode,
         });
-        this.cy.automove({
+        const autoMoveAction = this.cy.automove({
             nodesMatching: juncNode,
             reposition(node) {
                 const pos = node.position();
@@ -30,6 +30,7 @@ class TailoredGraph extends CoreGraph {
             },
             when: 'matching',
         });
+        parNode.scratch('automove', [autoMoveAction]);
     }
 
     modifyNewEdge(src, dest, edge) {

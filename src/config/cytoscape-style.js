@@ -6,6 +6,7 @@ const style = [
         style: {
             content: 'data(label)',
             ...NodeStyle,
+            'z-index': 100,
         },
     },
 
@@ -22,6 +23,7 @@ const style = [
             label: 'data(label)',
             width: 3,
             'edge-text-rotation': 'autorotate',
+            'z-index': 999,
             'text-margin-y': '10px',
         },
     },
@@ -40,17 +42,17 @@ const style = [
             width: 10,
             height: 10,
             backgroundColor: 'red',
+            'z-index': 1000,
+        },
+    },
+    {
+        selector: ':selected',
+        style: {
+            'overlay-color': '#000',
+            'overlay-opacity': 0.1,
         },
     },
 
-    // {
-    //     selector: '.eh-ghost-edge',
-    //     style: {
-    //         'background-color': 'rgba(0,255,255,0.5)',
-    //         'line-color': '#0f0',
-    //         'target-arrow-color': '#0f0',
-    //     },
-    // },
 ];
 
 export default style;

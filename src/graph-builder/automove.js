@@ -32,21 +32,34 @@ const Automove = {
         if (d1 < d2) return { x: x1, y: y1 };
         return { x: x2, y: y2 };
     },
+    slope(x1, y1, x2, y2) {
+        return (x1 - x2) / (y1 - y2);
+    },
     getClosestRect(C, P, w, h) {
-        const A = { y: C.y + h, x: C.x + w };
-        const B = { y: C.y - h, x: C.x - w };
-        const pos = P;
-        pos.x = Math.min(A.x, Math.max(pos.x, B.x));
-        pos.y = Math.min(A.y, Math.max(pos.y, B.y));
-        if (pos.x < A.x && pos.y < A.y && pos.x > B.x && pos.y > B.y) {
-            const arr = [[Math.abs(pos.x - A.x), 'X', A.x],
-                [Math.abs(pos.x - B.x), 'X', B.x],
-                [Math.abs(pos.y - A.y), 'Y', A.y], [Math.abs(pos.y - B.y), 'Y', B.y]];
-            arr.sort((a, b) => a[0] - b[0]);
-            if (arr[0][1] === 'X') { [[, , pos.x]] = arr; }
-            if (arr[0][1] === 'Y') { [[, , pos.y]] = arr; }
-        }
-        return pos;
+        const [S1, S2] = [[C.x + w, C.y + h], [C.x + w, C.y - h]]
+            .map(([x, y]) => (C.x - x) * (P.y - y) - (C.y - y) * (P.x - x));
+        let x;
+        let y;
+        const [m, c] = this.getEq(P, C);
+        const D = [ // To point to center
+            [(C.y - h - c) / m, C.y - h],
+            [C.x + w, m * (C.x + w) + c],
+            [C.x - w, m * (C.x - w) + c],
+            [(C.y + h - c) / m, C.y + h],
+        ];
+        // const D = [
+        //     [Math.min(C.x + w, Math.max(C.x - w, P.x)), C.y - h],
+        //     [C.x + w, Math.min(C.y + h, Math.max(C.y - h, P.y))],
+        //     [C.x - w, Math.min(C.y + h, Math.max(C.y - h, P.y))],
+        //     [Math.min(C.x + w, Math.max(C.x - w, P.x)), C.y + h],
+        // ];
+
+        if (S1 <= 0 && S2 <= 0) [,,, [x, y]] = D;
+        else if (S1 >= 0 && S2 <= 0) [, [x, y]] = D;
+        else if (S1 >= 0 && S2 >= 0) [[x, y]] = D;
+        else if (S1 <= 0 && S2 >= 0) [,, [x, y]] = D;
+
+        return x && y ? { x, y } : P;
     },
     getClosest(C, P, w, h, type) {
         if (type === 'rectangle') return this.getClosestRect(C, P, w, h);
