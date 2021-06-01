@@ -2,8 +2,34 @@ import React from 'react';
 import Switch from 'rc-switch';
 
 import 'rc-switch/assets/index.css';
-import './header.css';
+import {
+    Menu,
+    MenuItem,
+    MenuButton,
+} from '@szhsin/react-menu';
 import toolbarList from '../toolbarActions/toolbarList';
+import '@szhsin/react-menu/dist/index.css';
+import './header.css';
+
+function DropDown({
+    Icon, text, action, active, tabIndex,
+}) {
+    return (
+        <Menu menuButton={(
+            <MenuButton>
+                <ActionButton {...{
+                    Icon, text, action, active, tabIndex,
+                }}
+                />
+
+            </MenuButton>
+        )}
+        >
+            <MenuItem onClick={() => action('JPG')}>JPG</MenuItem>
+            <MenuItem onClick={() => action('PNG')}>PNG</MenuItem>
+        </Menu>
+    );
+}
 
 const Switcher = ({
     text, action, active, tabIndex,
@@ -37,7 +63,7 @@ const ActionButton = ({
         onKeyDown={(ev) => ev.key === 13 && action()}
     >
         <div className="icon"><Icon size="25" /></div>
-        <div>{text}</div>
+        <div style={{ fontSize: 16 }}>{text}</div>
     </div>
 );
 
@@ -69,6 +95,18 @@ const Header = ({ title, state, dispatcher }) => (
                                 text={tool.text}
                                 active={tool.active}
                                 action={() => tool.action(state, dispatcher)}
+                                key={tool.text}
+                                tabIndex={i + 1}
+                            />
+                        );
+                    }
+                    if (tool.type === 'menu') {
+                        return (
+                            <DropDown
+                                Icon={tool.icon}
+                                text={tool.text}
+                                active={tool.active}
+                                action={(e) => tool.action(state, dispatcher, e)}
                                 key={tool.text}
                                 tabIndex={i + 1}
                             />

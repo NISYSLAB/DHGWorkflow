@@ -2,7 +2,7 @@
 import {
     FaSave, FaUndo, FaRedo, FaTrash, FaFileExport, FaFileImport, FaPlus, FaDownload, FaEdit,
 } from 'react-icons/fa';
-import { dummyAction, createNode, editElement, toggleDrawMode, deleteElem } from './toolbarFunctions';
+import { dummyAction, createNode, editElement, toggleDrawMode, deleteElem, downloadImg } from './toolbarFunctions';
 
 const toolbarList = (state) => [
     { type: 'action', text: 'Node', icon: FaPlus, action: createNode, active: true },
@@ -23,10 +23,9 @@ const toolbarList = (state) => [
     { type: 'vsep' },
     { type: 'switch', text: 'Draw', action: toggleDrawMode, active: state.drawModeOn },
     { type: 'space' },
-    { type: 'action', text: 'JPG', icon: FaDownload, action: dummyAction, active: false },
-    { type: 'action', text: 'PNG', icon: FaDownload, action: dummyAction, active: false },
+    { type: 'menu', text: 'Download', icon: FaDownload, action: downloadImg, active: false },
     { type: 'vsep' },
-    { type: 'action', text: 'Export', icon: FaFileExport, action: dummyAction, active: false },
+    // { type: 'action', text: 'Export', icon: FaFileExport, action: dummyAction, active: false },
 ];
 
 export default toolbarList;

@@ -45,9 +45,13 @@ const deleteElem = (state) => {
     state.eleSelectedPayload.ids.forEach((id) => CyFun.deleteElem(id));
 };
 
+const downloadImg = (state, setState, format) => {
+    CyFun.downloadImg(format);
+};
+
 // eslint-disable-next-line no-alert
 const dummyAction = (x) => alert(x);
 
 export {
-    createNode, dummyAction, editElement, toggleDrawMode, deleteElem,
+    createNode, dummyAction, editElement, toggleDrawMode, deleteElem, downloadImg,
 };

@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { NodeStyle, EdgeStyle } from '../config/defaultStyles';
 import { actionType as T } from '../reducer';
 
@@ -117,6 +118,11 @@ class CoreGraph {
 
     setZoom(v) {
         this.cy.zoom(v / 100);
+    }
+
+    downloadImg(format) {
+        if (format === 'PNG') saveAs(this.cy.png(), 'graph.png');
+        if (format === 'JPG') saveAs(this.cy.jpg(), 'graph.jpg');
     }
 }
 
