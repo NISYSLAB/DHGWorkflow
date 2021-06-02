@@ -5,7 +5,7 @@ const createNode = (_, setState) => {
     setState({
         type: T.Model_Open_Create_Node,
         cb: (label, style) => {
-            CyFun.addNode(label, style, 'ordin', { x: 100, y: 100 });
+            CyFun.addNode(label, style);
         },
     });
 };

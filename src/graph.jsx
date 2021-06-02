@@ -33,7 +33,17 @@ class GraphComp extends React.Component {
         this.graphRef.current.style.width = this.graphContainerRef.current.offsetWidth + "px"
         this.graphRef.current.style.height = this.graphContainerRef.current.offsetHeight + "px"
         this.cy = cytoscape({ ...cyOptions, container: this.graphRef.current });
-        this.cy.nodeEditing({ resizeToContentCueEnabled: () => false });
+        this.cy.nodeEditing({ 
+            resizeToContentCueEnabled: () => false, 
+            setWidth: function(node, width) { 
+                if(node.data('type')!='special') node.css('width', width);
+            },
+            setHeight: function(node, height) {
+                if(node.data('type')!='special') node.css('height', height);
+            }, 
+            isNoResizeMode: function (node) { return node.data('type')==='special' }, // no active grapples
+            isNoControlsMode: function (node) { return node.data('type')==='special' }, // no controls - do not draw grapples
+        });
 
         this.cy.gridGuide({snapToGridOnRelease :false});
         const { dispatcher } = this.props;

@@ -4,8 +4,8 @@ import AutomoveFn from './automove';
 
 class TailoredGraph extends CoreGraph {
     addTestData() {
-        this.addNode('A', {}, 'ordin', { x: 100, y: 100 }, 1);
-        this.addNode('B', {}, 'ordin', { x: 500, y: 100 }, 2);
+        this.addNode('A', {}, 'ordin', { x: 100, y: 100 });
+        this.addNode('B', {}, 'ordin', { x: 500, y: 100 });
         return this;
     }
 
@@ -31,34 +31,31 @@ class TailoredGraph extends CoreGraph {
             when: 'matching',
         });
         parNode.scratch('automove', [autoMoveAction]);
+        juncNode.unselectify();
     }
 
     modifyNewEdge(src, dest, edge) {
         const position = edge.sourceEndpoint();
         const destid = dest.data('id');
-        let srcid = src.data('id');
+        const srcid = src.data('id');
+        edge.remove();
         if (src.data('type') !== 'special') {
-            const tid = (new Date()).getTime();
             this.dispatcher({
                 type: T.Model_Open_Create_Edge,
                 cb: (edgeLabel, edgeStyle) => {
-                    this.addNode('', { 'background-color': edgeStyle['line-color'] },
-                        'special', position, tid, { edgeLabel, edgeStyle });
+                    const tid = this.addNode('', { 'background-color': edgeStyle['line-color'] },
+                        'special', position, { edgeLabel, edgeStyle }).id();
                     this.addEdge(srcid, tid, '', {
                         ...edgeStyle,
                         'target-arrow-shape': 'none',
                     });
                     this.addAutoMove(this.getById(tid), this.getById(srcid));
-                    srcid = tid;
-                    this.getRealNode(tid);
-                    edge.remove();
-                    this.addEdge(srcid, destid, edgeLabel, edgeStyle);
+                    this.addEdge(tid, destid, edgeLabel, edgeStyle);
                 },
             });
         } else {
             const edgeLabel = src.data('edgeLabel');
             const edgeStyle = src.data('edgeStyle');
-            edge.remove();
             this.addEdge(srcid, destid, edgeLabel, edgeStyle);
         }
     }

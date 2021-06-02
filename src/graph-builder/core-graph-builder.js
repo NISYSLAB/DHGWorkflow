@@ -33,9 +33,11 @@ class CoreGraph {
             this.dispatcher({ type: T.SET_ZOOM, payload: Math.round(100 * e.target.zoom()) });
         });
         this.cy.on('nodeediting.resizeend', (e, type, node) => {
-            node.scratch('automove').forEach((x) => {
-                x.apply();
-            });
+            if (node.scratch('automove')) {
+                node.scratch('automove').forEach((x) => {
+                    x.apply();
+                });
+            }
         });
     }
 
@@ -43,12 +45,29 @@ class CoreGraph {
         this.dispatcher = dispatcher;
     }
 
-    addNode(label, style, type, position, sid, data) {
-        const id = sid || (new Date()).getTime();
-        this.cy.add({
+    getPos() {
+        const start = { x: 100, y: 100 };
+        let found = true;
+        while (found) {
+            found = false;
+            const nodes = this.cy.$('node');
+            for (let i = 0; i < nodes.length; i += 1) {
+                const nodePos = nodes[i].position();
+                found = found || (nodePos.x === start.x && nodePos.y === start.y);
+            }
+            if (found) {
+                start.x += 10;
+                start.y += 10;
+            }
+        }
+        return start;
+    }
+
+    addNode(label, style, type = 'ordin', position = this.getPos(), data = {}) {
+        return this.cy.add({
             group: 'nodes',
             data: {
-                id, label, type, ...data,
+                label, type, ...data,
             },
             style,
             position,
