@@ -1,5 +1,5 @@
-import TailoredGraphBuilder from './tailored-graph-builder';
+import GraphBuilder from './core-graph-builder';
 
-const g = new TailoredGraphBuilder();
+const g = new GraphBuilder();
 
 export default g;
