@@ -11,7 +11,9 @@ class CoreGraph {
 
     setCy(cy) {
         this.cy = cy;
+        this.autoSaveIntervalId = null;
         window.cyx = cy;
+
         const selectDeselect = () => {
             const els = this.cy.$(':selected');
             if (els.length === 0) { return this.dispatcher({ type: T.ELE_UNSELECTED }); }
@@ -39,6 +41,7 @@ class CoreGraph {
                 });
             }
         });
+        this.cy.on('position', this.saveLocalStorage.bind(this));
     }
 
     setDispatcher(dispatcher) {
@@ -64,6 +67,7 @@ class CoreGraph {
     }
 
     addNode(label, style, type = 'ordin', position = this.getPos(), data = {}) {
+        this.saveLocalStorage();
         return this.cy.add({
             group: 'nodes',
             data: {
@@ -75,6 +79,7 @@ class CoreGraph {
     }
 
     addEdge(source, target, label, style = {}, type = 'ordin') {
+        this.saveLocalStorage();
         return this.cy.add({
             group: 'edges',
             data: {
@@ -98,16 +103,19 @@ class CoreGraph {
     }
 
     updateNode(id, style, label, shouldUpdateLabel) {
+        this.saveLocalStorage();
         if (shouldUpdateLabel) this.getById(id).data('label', label);
         this.getById(id).style(style);
     }
 
     updateEdge(id, style, label, shouldUpdateLabel) {
+        this.saveLocalStorage();
         if (shouldUpdateLabel) this.getById(id).data('label', label);
         this.getById(id).style(style);
     }
 
     updateData(id, key, val) {
+        this.saveLocalStorage();
         this.getById(id).data(key, val);
         return this;
     }
@@ -131,6 +139,7 @@ class CoreGraph {
     }
 
     deleteElem(id) {
+        this.saveLocalStorage();
         if (this.getById(id).isNode()) return this.deleteNode(id);
         return this.deleteEdge(id);
     }
@@ -201,6 +210,23 @@ class CoreGraph {
         content.edges.forEach((edge) => {
             this.addEdge(edge.data.source, edge.data.target, edge.data.label, edge.style);
         });
+    }
+
+    saveLocalStorage() {
+        if (this.autoSaveTimeoutId !== null) clearTimeout(this.autoSaveIntervalId);
+        this.autoSaveIntervalId = setTimeout(() => {
+            const graphJson = this.jsonifyGraph();
+            const serializedJson = JSON.stringify(graphJson);
+            window.localStorage.setItem('serializedGraph', serializedJson);
+            // eslint-disable-next-line no-console
+            console.log('Saving graph locally');
+        }, 1000);
+    }
+
+    loadGraphFromLocalStorage() {
+        if (window.localStorage.getItem('serializedGraph') === null) return false;
+        this.loadJson(JSON.parse(window.localStorage.getItem('serializedGraph')));
+        return true;
     }
 }
 

@@ -41,8 +41,8 @@ class GraphComp extends React.Component {
             setHeight: function(node, height) {
                 if(node.data('type')!='special') node.css('height', height);
             }, 
-            isNoResizeMode: function (node) { return node.data('type')==='special' }, // no active grapples
-            isNoControlsMode: function (node) { return node.data('type')==='special' }, // no controls - do not draw grapples
+            isNoResizeMode: function (node) { return node.data('type')==='special' }, 
+            isNoControlsMode: function (node) { return node.data('type')==='special' },
         });
 
         this.cy.gridGuide({snapToGridOnRelease :false});
@@ -56,7 +56,10 @@ class GraphComp extends React.Component {
             },
             complete: (a, b, c) => {c.remove() ; cyFun.addEdge(a.id(), b.id())},
         });
-        cyFun.addTestData();
+        if(!cyFun.loadGraphFromLocalStorage()){
+            cyFun.addTestData();
+        }
+        window.xxx=cyFun
     }
 
     render() {
