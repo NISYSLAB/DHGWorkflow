@@ -1,0 +1,81 @@
+.nodeform {
+    text-align: center;
+}
+
+.comp {
+    display: inline-block;
+}
+
+.comp>div {
+    display: inline-block;
+}
+
+.nodeform input[type="number"] {
+    width: 50px;
+}
+
+.nodeform input[type] {
+    padding: 5px;
+}
+
+.nodeform .form {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    row-gap: 15px;
+    width: 500px;
+    margin: auto;
+    column-gap: 10px;
+    padding: 20px;
+}
+
+/* .form > *:nth-child(11) {
+    grid-column: 2 / span 3;
+} */
+.nodeform .nodeLabel {
+    grid-column: 2 / span 3;
+}
+
+.nodeform .color-box{
+    width: 36px;
+    height: 14px;
+    border-radius: 2px;
+    background: rgb(241, 112, 19);
+    border: 1px solid gray
+}
+
+.color-box-par{
+    padding: 5px;
+    background: rgba(0, 0, 0, 0.384);
+    border-radius: 1px;
+    box-shadow: rgb(0 0 0 / 10%) 0px 0px 0px 1px;
+    display: inline-block;
+    cursor: pointer;
+    width: fit-content;
+    border: 1px solid gray
+}
+.color-picker{
+    display: inline-block;
+    margin: 13px 0px;
+    position: absolute;
+    background: transparent;
+}
+.color-picker .overlay{
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: transparent;
+    position: absolute;
+    position: fixed;
+    cursor: initial;
+}
+
+@media screen and (max-width: 650px) {
+    .nodeform .form  {
+        grid-template-columns: auto auto;
+        width: auto
+    }
+    .nodeform .nodeLabel {
+        grid-column: 2;
+    }
+}

@@ -2,8 +2,10 @@ import style from './cytoscape-style';
 
 const options = {
     style: [...style],
-    zoomingEnabled: false,
-    userZoomingEnabled: false,
+    zoomingEnabled: true,
+    userZoomingEnabled: true,
+    minZoom: 0.25,
+    maxZoom: 5,
 };
 
 export default options;
