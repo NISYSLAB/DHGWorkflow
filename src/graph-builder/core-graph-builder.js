@@ -152,8 +152,40 @@ class CoreGraph {
         if (format === 'JPG') saveAs(this.cy.jpg(), 'graph.jpg');
     }
 
+    shouldNodeBeSaved(nodeID) {
+        return this.getById(nodeID).data('type') === 'ordin';
+    }
+
+    shouldEdgeBeSaved(edgeID) {
+        return this.getById(edgeID).data('type') === 'ordin';
+    }
+
+    static getRealSourceId(nodeID) {
+        return nodeID;
+    }
+
+    jsonifyGraph() {
+        const graph = { nodes: [], edges: [] };
+        this.cy.nodes().forEach((node) => {
+            if (this.shouldNodeBeSaved(node.id())) {
+                const nodeJson = node.json();
+                nodeJson.style = this.getStyle(node.id());
+                graph.nodes.push(nodeJson);
+            }
+        });
+        this.cy.edges().forEach((edge) => {
+            if (this.shouldEdgeBeSaved(edge.id())) {
+                const edgeJson = edge.json();
+                edgeJson.style = this.getStyle(edge.id());
+                edgeJson.data.source = this.getRealSourceId(edge.source().id());
+                graph.edges.push(edgeJson);
+            }
+        });
+        return graph;
+    }
+
     saveToDisk() {
-        const str = JSON.stringify(this.cy.json(true));
+        const str = JSON.stringify(this.jsonifyGraph());
         const bytes = new TextEncoder().encode(str);
         const blob = new Blob([bytes], {
             type: 'application/json;charset=utf-8',
@@ -163,7 +195,12 @@ class CoreGraph {
 
     loadJson(content) {
         this.cy.elements().remove();
-        this.cy.json(content);
+        content.nodes.forEach((node) => {
+            this.addNode(node.data.label, node.style, 'ordin', node.position, node.data);
+        });
+        content.edges.forEach((edge) => {
+            this.addEdge(edge.data.source, edge.data.target, edge.data.label, edge.style);
+        });
     }
 }
 

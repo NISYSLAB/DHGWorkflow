@@ -96,6 +96,10 @@ class TailoredGraph extends CoreGraph {
             if (junctionNode.outgoers().length === 0) this.deleteNode(junctionNode.id());
         }
     }
+
+    getRealSourceId(nodeID) {
+        return this.getById(nodeID).incomers('node')[0].id();
+    }
 }
 
 export default TailoredGraph;
