@@ -74,10 +74,12 @@ class CoreGraph {
         });
     }
 
-    addEdge(source, target, label, style = {}) {
+    addEdge(source, target, label, style = {}, type = 'ordin') {
         return this.cy.add({
             group: 'edges',
-            data: { source, target, label },
+            data: {
+                source, target, label, type,
+            },
             style,
         });
     }

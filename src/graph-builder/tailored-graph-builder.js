@@ -34,30 +34,43 @@ class TailoredGraph extends CoreGraph {
         juncNode.unselectify();
     }
 
-    modifyNewEdge(src, dest, edge) {
-        const position = edge.sourceEndpoint();
-        const destid = dest.data('id');
-        const srcid = src.data('id');
-        edge.remove();
-        if (src.data('type') !== 'special') {
-            this.dispatcher({
-                type: T.Model_Open_Create_Edge,
-                cb: (edgeLabel, edgeStyle) => {
-                    const tid = this.addNode('', { 'background-color': edgeStyle['line-color'] },
-                        'special', position, { edgeLabel, edgeStyle }).id();
-                    this.addEdge(srcid, tid, '', {
-                        ...edgeStyle,
-                        'target-arrow-shape': 'none',
-                    });
-                    this.addAutoMove(this.getById(tid), this.getById(srcid));
-                    this.addEdge(tid, destid, edgeLabel, edgeStyle);
-                },
-            });
-        } else {
-            const edgeLabel = src.data('edgeLabel');
-            const edgeStyle = src.data('edgeStyle');
-            this.addEdge(srcid, destid, edgeLabel, edgeStyle);
-        }
+    addEdgeWithJuncNode(sourceID, targetID) {
+        const sourceNode = this.getById(sourceID);
+        return super.addEdge(sourceID, targetID, sourceNode.data('edgeLabel'), sourceNode.data('edgeStyle'));
+    }
+
+    addEdgeWithoutJuncNode(sourceID, targetID, label, style) {
+        const sourceNode = this.getById(sourceID);
+        const targetNode = this.getById(targetID);
+        const sourceNodeStyle = sourceNode.style();
+        const juncNodePos = AutomoveFn.getClosest(
+            sourceNode.position(),
+            targetNode.position(),
+            parseInt(sourceNodeStyle.width.slice(0, -2), 10) / 2,
+            parseInt(sourceNodeStyle.height.slice(0, -2), 10) / 2,
+            sourceNodeStyle['target-arrow-shape'],
+        );
+        const juncNode = super.addNode('', { 'background-color': style['line-color'] },
+            'special', juncNodePos, { edgeLabel: label, edgeStyle: style });
+        super.addEdge(sourceID, juncNode.id(), '', {
+            ...style,
+            'target-arrow-shape': 'none',
+        }, 'special');
+        this.addAutoMove(juncNode, sourceNode);
+        return this.addEdgeWithJuncNode(juncNode.id(), targetID);
+    }
+
+    addEdge(sourceID, targetID, label = '', style) {
+        const sourceNode = this.getById(sourceID);
+        if (sourceNode.data('type') === 'special') return this.addEdgeWithJuncNode(sourceID, targetID);
+        const juncNodes = sourceNode.outgoers('node').filter((node) => node.data('edgeLabel') === label);
+        if (juncNodes.length) return this.addEdgeWithJuncNode(juncNodes[0].id(), targetID);
+        if (label.length) return this.addEdgeWithoutJuncNode(sourceID, targetID, label, style);
+        this.dispatcher({
+            type: T.Model_Open_Create_Edge,
+            cb: (edgeLabel, edgeStyle) => this.addEdgeWithoutJuncNode(sourceID, targetID, edgeLabel, edgeStyle),
+        });
+        return this;
     }
 
     updateEdge(id, style, label, shouldUpdateLabel) {

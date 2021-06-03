@@ -54,7 +54,7 @@ class GraphComp extends React.Component {
             handlePosition() {
                 return 'none';
             },
-            complete: (a, b, c) => cyFun.modifyNewEdge(a, b, c),
+            complete: (a, b, c) => {c.remove() ; cyFun.addEdge(a.id(), b.id())},
         });
         cyFun.addTestData();
     }
