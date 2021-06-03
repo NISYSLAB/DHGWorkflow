@@ -75,7 +75,7 @@ class CoreGraph {
     }
 
     addEdge(source, target, label, style = {}) {
-        this.cy.add({
+        return this.cy.add({
             group: 'edges',
             data: { source, target, label },
             style,
@@ -83,10 +83,11 @@ class CoreGraph {
     }
 
     getStyle(id) {
-        const allStyles = this.getById(id).style();
+        const el = this.getById(id);
+        const allStyles = el.style();
         const styles = {};
-        Object.entries(NodeStyle).forEach((p) => { styles[p[0]] = allStyles[p[0]]; });
-        Object.entries(EdgeStyle).forEach((p) => { styles[p[0]] = allStyles[p[0]]; });
+        if (el.isNode) Object.entries(NodeStyle).forEach((p) => { styles[p[0]] = allStyles[p[0]]; });
+        if (el.isEdge) Object.entries(EdgeStyle).forEach((p) => { styles[p[0]] = allStyles[p[0]]; });
         return styles;
     }
 
@@ -147,6 +148,20 @@ class CoreGraph {
     downloadImg(format) {
         if (format === 'PNG') saveAs(this.cy.png(), 'graph.png');
         if (format === 'JPG') saveAs(this.cy.jpg(), 'graph.jpg');
+    }
+
+    saveToDisk() {
+        const str = JSON.stringify(this.cy.json(true));
+        const bytes = new TextEncoder().encode(str);
+        const blob = new Blob([bytes], {
+            type: 'application/json;charset=utf-8',
+        });
+        saveAs(blob, 'graph.json');
+    }
+
+    loadJson(content) {
+        this.cy.elements().remove();
+        this.cy.json(content);
     }
 }
 

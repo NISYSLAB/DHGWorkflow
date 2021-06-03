@@ -49,9 +49,22 @@ const downloadImg = (state, setState, format) => {
     CyFun.downloadImg(format);
 };
 
+const saveAction = () => {
+    CyFun.saveToDisk();
+};
+
+const readFile = (e) => {
+    if (e.target && e.target.files && e.target.files[0]) {
+        const fr = new FileReader();
+        fr.onload = (x) => {
+            CyFun.loadJson(JSON.parse(x.target.result));
+        };
+        fr.readAsText(e.target.files[0]);
+    }
+};
 // eslint-disable-next-line no-alert
 const dummyAction = (x) => alert(x);
 
 export {
-    createNode, dummyAction, editElement, toggleDrawMode, deleteElem, downloadImg,
+    createNode, dummyAction, editElement, toggleDrawMode, deleteElem, downloadImg, saveAction, readFile,
 };

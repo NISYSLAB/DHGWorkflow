@@ -2,13 +2,15 @@
 import {
     FaSave, FaUndo, FaRedo, FaTrash, FaFileImport, FaPlus, FaDownload, FaEdit,
 } from 'react-icons/fa';
-import { dummyAction, createNode, editElement, toggleDrawMode, deleteElem, downloadImg } from './toolbarFunctions';
+import {
+    dummyAction, createNode, editElement, toggleDrawMode, deleteElem, downloadImg, saveAction, readFile,
+} from './toolbarFunctions';
 
 const toolbarList = (state) => [
     { type: 'action', text: 'Node', icon: FaPlus, action: createNode, active: true },
     { type: 'vsep' },
-    { type: 'action', text: 'Open', icon: FaFileImport, action: dummyAction, active: false },
-    { type: 'action', text: 'Save', icon: FaSave, action: dummyAction, active: false },
+    { type: 'file-upload', text: 'Open', icon: FaFileImport, action: readFile, active: true },
+    { type: 'action', text: 'Save', icon: FaSave, action: saveAction, active: true },
     { type: 'vsep' },
     { type: 'action', text: 'Undo', icon: FaUndo, action: dummyAction, active: false },
     { type: 'action', text: 'Redo', icon: FaRedo, action: dummyAction, active: false },

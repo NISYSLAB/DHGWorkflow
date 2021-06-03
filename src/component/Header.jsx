@@ -21,7 +21,6 @@ function DropDown({
                     Icon, text, action, active, tabIndex,
                 }}
                 />
-
             </MenuButton>
         )}
         >
@@ -30,6 +29,21 @@ function DropDown({
         </Menu>
     );
 }
+
+const FileUploader = ({
+    Icon, text, action, active, tabIndex,
+}) => {
+    const fileRef = React.createRef();
+    return (
+        <>
+            <input type="file" ref={fileRef} style={{ display: 'none' }} onChange={action} />
+            <ActionButton {...{
+                Icon, text, active, tabIndex, action: () => fileRef.current.click(),
+            }}
+            />
+        </>
+    );
+};
 
 const Switcher = ({
     text, action, active, tabIndex,
@@ -112,6 +126,18 @@ const Header = ({ title, state, dispatcher }) => (
                             />
                         );
                     }
+                    if (tool.type === 'file-upload') {
+                        return (
+                            <FileUploader
+                                Icon={tool.icon}
+                                text={tool.text}
+                                active={tool.active}
+                                action={(e) => tool.action(e, state, dispatcher)}
+                                key={tool.text}
+                                tabIndex={i + 1}
+                            />
+                        );
+                    }
                     return (
                         <ActionButton
                             Icon={tool.icon}
@@ -124,12 +150,18 @@ const Header = ({ title, state, dispatcher }) => (
                     );
                 })
             }
+            <input type="file" id="fileUploader" style={{ display: 'none' }} accept=".jpg, .jpeg, .png" />
         </section>
         <Hsep />
     </header>
 
 );
 
+// var fr = new FileReader();
+// fr.onload = function(e) {
+//     console.log(e.target.result);
+// };
+// fr.readAsText(file);
 export {
     Header, ActionButton, Vsep, Hsep, Space, TextBox,
 };
