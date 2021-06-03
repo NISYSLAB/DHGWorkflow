@@ -169,7 +169,8 @@ class CoreGraph {
         return this.getById(edgeID).data('type') === 'ordin';
     }
 
-    static getRealSourceId(nodeID) {
+    // eslint-disable-next-line class-methods-use-this
+    getRealSourceId(nodeID) {
         return nodeID;
     }
 
