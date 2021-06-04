@@ -2,7 +2,6 @@
 import React from 'react';
 import cytoscape from 'cytoscape';
 import edgehandles from 'cytoscape-edgehandles';
-import automove from 'cytoscape-automove';
 import gridGuide from 'cytoscape-grid-guide';
 import cyOptions from './config/cytoscape-options';
 import cyFun from './graph-builder';
@@ -26,9 +25,6 @@ class GraphComp extends React.Component {
         }
         if (typeof cytoscape('core', 'gridGuide') !== 'function') {
             gridGuide(cytoscape);
-        }
-        if (typeof cytoscape('core', 'automove') !== 'function') {
-            cytoscape.use(automove);
         }
         this.graphRef.current.style.width = this.graphContainerRef.current.offsetWidth + "px"
         this.graphRef.current.style.height = this.graphContainerRef.current.offsetHeight + "px"

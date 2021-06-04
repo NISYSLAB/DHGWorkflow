@@ -13,30 +13,46 @@ class TailoredGraph extends CoreGraph {
         return this.getById(juncNodeId).incomers().filter('node')[0];
     }
 
-    addAutoMove(juncNode, parNode) {
-        this.cy.automove({
-            nodesMatching: juncNode,
-            reposition: 'drag',
-            dragWith: parNode,
+    static calcPos(juncNode) {
+        const parNode = juncNode.incomers('node')[0];
+        const meanNbrPosition = { x: 0, y: 0 };
+        const setOfPos = new Set();
+        juncNode.outgoers('node').forEach((node) => setOfPos.add(JSON.stringify(node.position())));
+        setOfPos.forEach((posStr) => {
+            const pos = JSON.parse(posStr);
+            meanNbrPosition.x += pos.x;
+            meanNbrPosition.y += pos.y;
         });
-        const autoMoveAction = this.cy.automove({
-            nodesMatching: juncNode,
-            reposition(node) {
-                const pos = node.position();
-                const P = parNode.position();
-                const [h, w] = [parNode.height(), parNode.width()];
-                const R = AutomoveFn.getClosest(P, pos, w / 2, h / 2, parNode.style().shape);
-                return { x: Math.round(R.x), y: Math.round(R.y) };
-            },
-            when: 'matching',
-        });
-        parNode.scratch('automove', [autoMoveAction]);
+        if (setOfPos.size === 0) return meanNbrPosition;
+        meanNbrPosition.x /= setOfPos.size;
+        meanNbrPosition.y /= setOfPos.size;
+        return AutomoveFn.getClosest(
+            parNode.position(), meanNbrPosition,
+            parseInt(parNode.style().width.slice(0, -2), 10) / 2,
+            parseInt(parNode.style().height.slice(0, -2), 10) / 2,
+            parNode.style().shape,
+        );
+    }
+
+    addAutoMove(juncNode) {
         juncNode.unselectify();
+        return this;
+    }
+
+    setNodeEvent(node) {
+        node.on('drag style', () => {
+            node.connectedEdges().connectedNodes('node[type="special"]').forEach((juncNode) => {
+                juncNode.position(TailoredGraph.calcPos(juncNode));
+            });
+        });
+        return this;
     }
 
     addEdgeWithJuncNode(sourceID, targetID) {
-        const sourceNode = this.getById(sourceID);
-        return super.addEdge(sourceID, targetID, sourceNode.data('edgeLabel'), sourceNode.data('edgeStyle'));
+        const juncNode = this.getById(sourceID);
+        const ed = super.addEdge(sourceID, targetID, juncNode.data('edgeLabel'), juncNode.data('edgeStyle'));
+        juncNode.position(TailoredGraph.calcPos(juncNode));
+        return ed;
     }
 
     addEdgeWithoutJuncNode(sourceID, targetID, label, style) {
@@ -48,7 +64,7 @@ class TailoredGraph extends CoreGraph {
             targetNode.position(),
             parseInt(sourceNodeStyle.width.slice(0, -2), 10) / 2,
             parseInt(sourceNodeStyle.height.slice(0, -2), 10) / 2,
-            sourceNodeStyle['target-arrow-shape'],
+            sourceNodeStyle.shape,
         );
         const juncNode = super.addNode('', { 'background-color': style['line-color'] },
             'special', juncNodePos, { edgeLabel: label, edgeStyle: style });

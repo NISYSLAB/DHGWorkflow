@@ -36,9 +36,7 @@ class CoreGraph {
         });
         this.cy.on('nodeediting.resizeend', (e, type, node) => {
             if (node.scratch('automove')) {
-                node.scratch('automove').forEach((x) => {
-                    x.apply();
-                });
+                node.scratch('automove').forEach((x) => x());
             }
         });
         this.cy.on('position', this.saveLocalStorage.bind(this));
@@ -67,8 +65,7 @@ class CoreGraph {
     }
 
     addNode(label, style, type = 'ordin', position = this.getPos(), data = {}) {
-        this.saveLocalStorage();
-        return this.cy.add({
+        const node = this.cy.add({
             group: 'nodes',
             data: {
                 label, type, ...data,
@@ -76,6 +73,9 @@ class CoreGraph {
             style,
             position,
         });
+        this.setNodeEvent(node);
+        this.saveLocalStorage();
+        return node;
     }
 
     addEdge(source, target, label, style = {}, type = 'ordin') {
