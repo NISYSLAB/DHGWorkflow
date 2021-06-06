@@ -96,7 +96,7 @@ const Space = () => <div className="space" />;
 const Header = ({ title, state, dispatcher }) => (
     <header className="header">
         <section className="middle titlebar">
-            {`${title} - DHGWorkflow Editor`}
+            {title ? `${title} - DHGWorkflow Editor` : ''}
         </section>
         <section className="toolbar">
             {

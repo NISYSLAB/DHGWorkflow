@@ -11,5 +11,6 @@ const actionType = {
     ELE_SELECTED: 'ELE_SELECTED',
     TURN_DRAW: 'TURN_DRAW',
     SET_ZOOM: 'SET_ZOOM',
+    SET_PROJECT_DETAILS: 'SET_PROJECT_DETAILS',
 };
 export default zealit(actionType);

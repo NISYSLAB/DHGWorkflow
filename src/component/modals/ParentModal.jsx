@@ -37,7 +37,7 @@ const Modal = ({
                 <div className="modal-header">
                     <div className="modal-title h4">{title}</div>
                     <button type="button" className="close" onClick={closeModal}>
-                        <span aria-hidden="true">×</span>
+                        {closeModal ? <span aria-hidden="true">×</span> : ''}
                         <span className="sr-only">Close</span>
                     </button>
                 </div>

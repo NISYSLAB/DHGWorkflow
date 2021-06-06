@@ -11,7 +11,7 @@ const ModalComp = ({ closeModal, superState }) => {
 
     useEffect(() => {
         setData({ label: defaultLabel || '', style: defaultStyle });
-    }, []);
+    }, [defaultLabel, defaultStyle]);
 
     const submit = (e) => {
         e.preventDefault();

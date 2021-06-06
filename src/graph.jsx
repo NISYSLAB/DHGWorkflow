@@ -9,14 +9,16 @@ import ZoomComp from './component/ZoomSetter';
 import Konva from 'konva';
 import nodeEditing from 'cytoscape-node-editing'
 import $ from "jquery";
+import { useEffect } from 'react';
 
-class GraphComp extends React.Component {
-    constructor() {
-        super();
-        this.graphContainerRef = React.createRef();
-        this.graphRef = React.createRef();
-    }
-    componentDidMount() {
+const GraphComp = (props)=>{
+    const graphContainerRef = React.createRef();
+    const graphRef = React.createRef();
+    const { dispatcher, superState } = props;
+    useEffect(()=>{
+        cyFun.setSuperState(superState)
+    }, [superState])
+    useEffect(()=>{
         if (typeof cytoscape('core', 'edgehandles') !== 'function') {
             cytoscape.use(edgehandles);
         }
@@ -26,10 +28,10 @@ class GraphComp extends React.Component {
         if (typeof cytoscape('core', 'gridGuide') !== 'function') {
             gridGuide(cytoscape);
         }
-        this.graphRef.current.style.width = this.graphContainerRef.current.offsetWidth + "px"
-        this.graphRef.current.style.height = this.graphContainerRef.current.offsetHeight + "px"
-        this.cy = cytoscape({ ...cyOptions, container: this.graphRef.current });
-        this.cy.nodeEditing({ 
+        graphRef.current.style.width = graphContainerRef.current.offsetWidth + "px"
+        graphRef.current.style.height = graphContainerRef.current.offsetHeight + "px"
+        const cy = cytoscape({ ...cyOptions, container: graphRef.current });
+        cy.nodeEditing({ 
             resizeToContentCueEnabled: () => false, 
             setWidth: function(node, width) { 
                 if(node.data('type')!='special') node.css('width', width);
@@ -41,11 +43,10 @@ class GraphComp extends React.Component {
             isNoControlsMode: function (node) { return node.data('type')==='special' },
         });
 
-        this.cy.gridGuide({snapToGridOnRelease :false});
-        const { dispatcher } = this.props;
-        cyFun.setCy(this.cy);
+        cy.gridGuide({snapToGridOnRelease :false});
+        cyFun.setCy(cy);
         cyFun.setDispatcher(dispatcher);
-        window.cye = this.cy.edgehandles({
+        window.cye = cy.edgehandles({
             preview: false,
             handlePosition() {
                 return 'none';
@@ -56,17 +57,14 @@ class GraphComp extends React.Component {
             cyFun.addTestData();
         }
         window.xxx=cyFun
-    }
+    }, [])
 
-    render() {
-        const { dispatcher, superState } = this.props;
-        return (
-            <div className="graph-container" style={{ flex: 1 }} ref={this.graphContainerRef}>
-                <div style={{ zIndex: 1 }} id="cy" ref={this.graphRef} />
-                <ZoomComp dispatcher={dispatcher} superState={superState} />
-            </div>
-        );
-    }
+    return (
+        <div className="graph-container" style={{ flex: 1 }} ref={graphContainerRef}>
+            <div style={{ zIndex: 1 }} id="cy" ref={graphRef} />
+            <ZoomComp dispatcher={dispatcher} superState={superState} />
+        </div>
+    );
 }
 
 export default GraphComp;

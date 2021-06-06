@@ -46,6 +46,10 @@ class CoreGraph {
         this.dispatcher = dispatcher;
     }
 
+    setSuperState(superState) {
+        this.superState = superState;
+    }
+
     getPos() {
         const start = { x: 100, y: 100 };
         let found = true;
@@ -175,7 +179,7 @@ class CoreGraph {
     }
 
     jsonifyGraph() {
-        const graph = { nodes: [], edges: [] };
+        const graph = { nodes: [], edges: [], projectDetails: this.superState.projectDetails };
         this.cy.nodes().forEach((node) => {
             if (this.shouldNodeBeSaved(node.id())) {
                 const nodeJson = node.json();
@@ -211,6 +215,7 @@ class CoreGraph {
         content.edges.forEach((edge) => {
             this.addEdge(edge.data.source, edge.data.target, edge.data.label, edge.style);
         });
+        this.dispatcher({ type: T.SET_PROJECT_DETAILS, payload: content.projectDetails });
     }
 
     saveLocalStorage() {
