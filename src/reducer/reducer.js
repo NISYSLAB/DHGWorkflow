@@ -1,6 +1,6 @@
 import T from './actionType';
-import NodeDetails from '../component/NodeDetails';
-import EdgeDetails from '../component/EdgeDetails';
+import NodeDetails from '../component/modals/NodeDetails';
+import EdgeDetails from '../component/modals/EdgeDetails';
 import { NodeStyle, EdgeStyle } from '../config/defaultStyles';
 
 const reducer = (state, action) => {

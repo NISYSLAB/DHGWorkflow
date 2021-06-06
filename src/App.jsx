@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
 import './App.css';
 import GraphComp from './graph';
-import Modal from './component/Modal';
+import GraphCompDetails from './component/modals/GraphCompDetails';
 import { Header } from './component/Header';
 import { reducer, initialState, actionType as T } from './reducer';
 
@@ -10,7 +10,7 @@ const app = () => {
     return (
         <div className="container">
             {superState.ModelOpen ? (
-                <Modal
+                <GraphCompDetails
                     closeModal={() => dispatcher({ type: T.Model_Close })}
                     superState={superState}
                 />

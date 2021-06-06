@@ -1,6 +1,6 @@
 import React from 'react';
-import './edgeDetails.css';
 import ColorBox from './ColorBox';
+import './edgeDetails.css';
 
 const DefParentStyle = {
     height: '100px',
