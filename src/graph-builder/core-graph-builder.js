@@ -182,16 +182,25 @@ class CoreGraph {
         const graph = { nodes: [], edges: [], projectDetails: this.superState.projectDetails };
         this.cy.nodes().forEach((node) => {
             if (this.shouldNodeBeSaved(node.id())) {
-                const nodeJson = node.json();
+                const all = node.json();
+                const nodeJson = {
+                    label: all.data.label,
+                    id: all.data.id,
+                    position: all.position,
+                };
                 nodeJson.style = this.getStyle(node.id());
                 graph.nodes.push(nodeJson);
             }
         });
         this.cy.edges().forEach((edge) => {
             if (this.shouldEdgeBeSaved(edge.id())) {
-                const edgeJson = edge.json();
+                const all = edge.json();
+                const edgeJson = {
+                    source: this.getRealSourceId(edge.source().id()),
+                    target: all.data.target,
+                    label: all.data.label,
+                };
                 edgeJson.style = this.getStyle(edge.id());
-                edgeJson.data.source = this.getRealSourceId(edge.source().id());
                 graph.edges.push(edgeJson);
             }
         });
@@ -211,10 +220,10 @@ class CoreGraph {
     loadJson(content) {
         this.clearAll();
         content.nodes.forEach((node) => {
-            this.addNode(node.data.label, node.style, 'ordin', node.position, node.data);
+            this.addNode(node.label, node.style, 'ordin', node.position, { id: node.id });
         });
         content.edges.forEach((edge) => {
-            this.addEdge(edge.data.source, edge.data.target, edge.data.label, edge.style);
+            this.addEdge(edge.source, edge.target, edge.label, edge.style);
         });
         this.dispatcher({ type: T.SET_PROJECT_DETAILS, payload: content.projectDetails });
     }
