@@ -3,14 +3,14 @@ import {
     FaSave, FaUndo, FaRedo, FaTrash, FaFileImport, FaPlus, FaDownload, FaEdit, FaFolderPlus, FaRavelry, FaUserEdit,
 } from 'react-icons/fa';
 import {
-    dummyAction, createNode, editElement, toggleDrawMode, deleteElem,
+    dummyAction, createNode, editElement, deleteElem,
     downloadImg, saveAction, readFile, newProject, clearAll, editDetails,
 } from './toolbarFunctions';
 
 const toolbarList = (state) => [
     { type: 'action', text: 'Node', icon: FaPlus, action: createNode, active: true },
     { type: 'vsep' },
-    { type: 'action', text: 'Project', icon: FaFolderPlus, action: newProject, active: true },
+    { type: 'action', text: 'New', icon: FaFolderPlus, action: newProject, active: true },
     { type: 'action', text: 'Clear', icon: FaRavelry, action: clearAll, active: true },
     { type: 'action', text: 'Details', icon: FaUserEdit, action: editDetails, active: true },
     { type: 'vsep' },
@@ -29,7 +29,7 @@ const toolbarList = (state) => [
     },
     { type: 'action', text: 'Delete', icon: FaTrash, action: deleteElem, active: state.eleSelected },
     { type: 'vsep' },
-    { type: 'switch', text: 'Draw', action: toggleDrawMode, active: state.drawModeOn },
+    // { type: 'switch', text: 'Draw', action: toggleDrawMode, active: state.drawModeOn },
     { type: 'space' },
     { type: 'menu', text: 'Download', icon: FaDownload, action: downloadImg, active: true },
     { type: 'vsep' },

@@ -36,7 +36,7 @@ const FileUploader = ({
     const fileRef = React.createRef();
     return (
         <>
-            <input type="file" ref={fileRef} style={{ display: 'none' }} onChange={action} />
+            <input type="file" ref={fileRef} style={{ display: 'none' }} accept=".json" onChange={action} />
             <ActionButton {...{
                 Icon, text, active, tabIndex, action: () => fileRef.current.click(),
             }}
@@ -157,11 +157,6 @@ const Header = ({ title, state, dispatcher }) => (
 
 );
 
-// var fr = new FileReader();
-// fr.onload = function(e) {
-//     console.log(e.target.result);
-// };
-// fr.readAsText(file);
 export {
     Header, ActionButton, Vsep, Hsep, Space, TextBox,
 };

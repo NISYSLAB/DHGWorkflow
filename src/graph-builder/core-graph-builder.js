@@ -161,8 +161,18 @@ class CoreGraph {
     }
 
     downloadImg(format) {
-        if (format === 'PNG') saveAs(this.cy.png(), 'graph.png');
-        if (format === 'JPG') saveAs(this.cy.jpg(), 'graph.jpg');
+        if (format === 'PNG') {
+            saveAs(
+                this.cy.png(),
+                `${this.superState.projectDetails.name}-${this.superState.projectDetails.author}-DHGWorkflow.png`,
+            );
+        }
+        if (format === 'JPG') {
+            saveAs(
+                this.cy.jpg(),
+                `${this.superState.projectDetails.name}-${this.superState.projectDetails.author}-DHGWorkflow.jgp`,
+            );
+        }
     }
 
     shouldNodeBeSaved(nodeID) {
@@ -213,8 +223,10 @@ class CoreGraph {
         const blob = new Blob([bytes], {
             type: 'application/json;charset=utf-8',
         });
-        saveAs(blob,
-            `${this.superState.projectDetails.name}-${this.superState.projectDetails.author}-DHGWorkflow.json`);
+        saveAs(
+            blob,
+            `${this.superState.projectDetails.name}-${this.superState.projectDetails.author}-DHGWorkflow.json`,
+        );
     }
 
     loadJson(content) {

@@ -5,14 +5,14 @@ const NodeStyle = {
     opacity: 1,
     'background-color': '#e0f2f1',
     'border-color': '#000',
-    'border-width': '2px',
+    'border-width': '1px',
     'text-valign': 'center',
     'text-halign': 'center',
 };
 
 const EdgeStyle = {
     'target-arrow-shape': 'triangle',
-    width: '2px',
+    width: '1px',
     'line-color': '#000',
     'target-arrow-color': '#000',
 };
