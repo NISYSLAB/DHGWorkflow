@@ -1,5 +1,6 @@
 import CyFun from '../graph-builder';
 import { actionType as T } from '../reducer';
+import initialState from '../reducer/initialState';
 
 const createNode = (_, setState) => {
     setState({
@@ -62,9 +63,25 @@ const readFile = (e) => {
         fr.readAsText(e.target.files[0]);
     }
 };
+
+const newProject = (state, setState) => {
+    if (CyFun.clearAll()) {
+        setState({ type: T.SET_PROJECT_DETAILS, payload: initialState.projectDetails });
+    }
+};
+
+const clearAll = () => {
+    CyFun.clearAll();
+};
+
+const editDetails = (state, setState) => {
+    setState({ type: T.SET_PROJECT_DETAILS, payload: { ...state.projectDetails, set: false } });
+};
+
 // eslint-disable-next-line no-alert
 const dummyAction = (x) => alert(x);
 
 export {
-    createNode, dummyAction, editElement, toggleDrawMode, deleteElem, downloadImg, saveAction, readFile,
+    createNode, dummyAction, editElement, toggleDrawMode, deleteElem,
+    downloadImg, saveAction, readFile, newProject, clearAll, editDetails,
 };

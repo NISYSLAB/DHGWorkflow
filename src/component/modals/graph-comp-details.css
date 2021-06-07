@@ -11,35 +11,3 @@
 .ReactModalPortal .modal-footer>* {
     margin: .25rem;
 }
-
-.ReactModalPortal .btn-primary {
-    color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
-}
-
-.ReactModalPortal .btn-secondary {
-    color: #fff;
-    background-color: #6c757d;
-    border-color: #6c757d;
-}
-
-.ReactModalPortal .btn:not(:disabled):not(.disabled) {
-    cursor: pointer;
-}
-
-.ReactModalPortal .btn {
-    display: inline-block;
-    font-weight: 400;
-    color: #212529;
-    text-align: center;
-    vertical-align: middle;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-color: transparent;
-    border: 1px solid transparent;
-    padding: .375rem .75rem;
-    line-height: 1.5;
-    border-radius: .25rem;
-}

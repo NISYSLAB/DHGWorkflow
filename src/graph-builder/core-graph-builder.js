@@ -204,11 +204,12 @@ class CoreGraph {
         const blob = new Blob([bytes], {
             type: 'application/json;charset=utf-8',
         });
-        saveAs(blob, 'graph.json');
+        saveAs(blob,
+            `${this.superState.projectDetails.name}-${this.superState.projectDetails.author}-DHGWorkflow.json`);
     }
 
     loadJson(content) {
-        this.cy.elements().remove();
+        this.clearAll();
         content.nodes.forEach((node) => {
             this.addNode(node.data.label, node.style, 'ordin', node.position, node.data);
         });
@@ -223,7 +224,7 @@ class CoreGraph {
         this.autoSaveIntervalId = setTimeout(() => {
             const graphJson = this.jsonifyGraph();
             const serializedJson = JSON.stringify(graphJson);
-            window.localStorage.setItem('serializedGraph', serializedJson);
+            window.localStorage.setItem('serializedGraph', window.btoa(serializedJson));
             // eslint-disable-next-line no-console
             console.log('Saving graph locally');
         }, 1000);
@@ -231,8 +232,18 @@ class CoreGraph {
 
     loadGraphFromLocalStorage() {
         if (window.localStorage.getItem('serializedGraph') === null) return false;
-        this.loadJson(JSON.parse(window.localStorage.getItem('serializedGraph')));
+        this.loadJson(JSON.parse(window.atob(window.localStorage.getItem('serializedGraph'))));
         return true;
+    }
+
+    clearAll() {
+        if (
+            this.cy.elements().length === 0
+            // eslint-disable-next-line no-alert
+            || window.confirm('Do want clear all elements?')
+        ) this.cy.elements().remove();
+        this.saveLocalStorage();
+        return this.cy.elements().length === 0;
     }
 }
 

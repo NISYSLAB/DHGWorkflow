@@ -1,0 +1,27 @@
+.proj-details{
+    padding: 20px;
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 20px;
+}
+
+.proj-details *{
+    padding: 10px 5px;
+    text-align: center;
+}
+
+.proj-details .expand{
+    grid-column: 1 / span 2;
+    padding: 0;
+}
+
+.proj-details .btn{
+    width: 100%;
+}
+
+.proj-details .divider {
+    border-bottom: 1px solid #bbb;
+    width: 100%;
+    padding: 0;
+    margin: 20px 0;
+}

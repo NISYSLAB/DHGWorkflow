@@ -1,13 +1,18 @@
 /* eslint-disable object-curly-newline */
 import {
-    FaSave, FaUndo, FaRedo, FaTrash, FaFileImport, FaPlus, FaDownload, FaEdit,
+    FaSave, FaUndo, FaRedo, FaTrash, FaFileImport, FaPlus, FaDownload, FaEdit, FaFolderPlus, FaRavelry, FaUserEdit,
 } from 'react-icons/fa';
 import {
-    dummyAction, createNode, editElement, toggleDrawMode, deleteElem, downloadImg, saveAction, readFile,
+    dummyAction, createNode, editElement, toggleDrawMode, deleteElem,
+    downloadImg, saveAction, readFile, newProject, clearAll, editDetails,
 } from './toolbarFunctions';
 
 const toolbarList = (state) => [
     { type: 'action', text: 'Node', icon: FaPlus, action: createNode, active: true },
+    { type: 'vsep' },
+    { type: 'action', text: 'Project', icon: FaFolderPlus, action: newProject, active: true },
+    { type: 'action', text: 'Clear', icon: FaRavelry, action: clearAll, active: true },
+    { type: 'action', text: 'Details', icon: FaUserEdit, action: editDetails, active: true },
     { type: 'vsep' },
     { type: 'file-upload', text: 'Open', icon: FaFileImport, action: readFile, active: true },
     { type: 'action', text: 'Save', icon: FaSave, action: saveAction, active: true },

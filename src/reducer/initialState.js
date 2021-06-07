@@ -15,6 +15,7 @@ const initialState = {
     projectDetails: {
         name: '',
         author: '',
+        set: false,
     },
 };
 
