@@ -4,7 +4,7 @@ import cytoscape from 'cytoscape';
 import edgehandles from 'cytoscape-edgehandles';
 import gridGuide from 'cytoscape-grid-guide';
 import cyOptions from './config/cytoscape-options';
-import cyFun from './graph-builder';
+import myGraph from './graph-builder';
 import ZoomComp from './component/ZoomSetter';
 import Konva from 'konva';
 import nodeEditing from 'cytoscape-node-editing'
@@ -16,7 +16,7 @@ const GraphComp = (props)=>{
     const graphRef = React.createRef();
     const { dispatcher, superState } = props;
     useEffect(()=>{
-        cyFun.setSuperState(superState)
+        myGraph.set({superState})
     }, [superState])
     useEffect(()=>{
         if (typeof cytoscape('core', 'edgehandles') !== 'function') {
@@ -44,19 +44,16 @@ const GraphComp = (props)=>{
         });
 
         cy.gridGuide({snapToGridOnRelease :false});
-        cyFun.setCy(cy);
-        cyFun.setDispatcher(dispatcher);
-        window.cye = cy.edgehandles({
+        myGraph.set({cy, dispatcher, superState});
+        myGraph.regesterEvents();
+        cy.edgehandles({
             preview: false,
             handlePosition() {
                 return 'none';
             },
-            complete: (a, b, c) => {c.remove() ; cyFun.addEdge(a.id(), b.id())},
+            complete: (a, b, c) => {c.remove() ; myGraph.addEdge(a.id(), b.id())},
         });
-        if(!cyFun.loadGraphFromLocalStorage()){
-            cyFun.addTestData();
-        }
-        window.xxx=cyFun
+        myGraph.loadGraphFromLocalStorage()
     }, [])
 
     return (

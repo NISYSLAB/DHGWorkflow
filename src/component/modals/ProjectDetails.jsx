@@ -2,7 +2,6 @@ import React from 'react';
 import Modal from './ParentModal';
 import { actionType as T } from '../../reducer';
 import './project-details.css';
-import cyFun from '../../graph-builder';
 
 const ProjectDeails = ({ superState, dispatcher }) => {
     const setName = (e) => {
@@ -20,7 +19,6 @@ const ProjectDeails = ({ superState, dispatcher }) => {
     const submit = (e) => {
         e.preventDefault();
         dispatcher({ type: T.SET_PROJECT_DETAILS, payload: { ...superState.projectDetails, set: true } });
-        cyFun.saveLocalStorage();
     };
     const openExisting = () => {
         document.querySelector('input[type="file"]').click();

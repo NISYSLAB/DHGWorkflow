@@ -1,4 +1,4 @@
-const Automove = {
+const boundaryPoint = {
     getEq(P1, P2) {
         const m = (P1.y - P2.y) / (P1.x - P2.x);
         const c = P1.y - m * P1.x;
@@ -61,11 +61,11 @@ const Automove = {
 
         return x && y ? { x, y } : P;
     },
-    getClosest(C, P, w, h, type) {
-        if (type === 'rectangle') return this.getClosestRect(C, P, w, h);
-        return this.getClosestEllipse(C, P, w, h);
+    get(C, P, w, h, type) {
+        if (type === 'rectangle') return boundaryPoint.getClosestRect(C, P, w, h);
+        return boundaryPoint.getClosestEllipse(C, P, w, h);
     },
 
 };
 
-export default Automove;
+export default boundaryPoint.get;

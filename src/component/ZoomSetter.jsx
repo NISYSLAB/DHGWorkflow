@@ -2,7 +2,7 @@ import Slider from 'rc-slider';
 import React from 'react';
 import { BiReset, BiRectangle } from 'react-icons/bi';
 import { actionType as T } from '../reducer';
-import cyFun from '../graph-builder';
+import myGraph from '../graph-builder';
 import 'rc-slider/assets/index.css';
 import './zoomSetter.css';
 import GraphOption from '../config/cytoscape-options';
@@ -17,8 +17,8 @@ const ZoomComp = ({ dispatcher, superState }) => (
                 role="button"
                 tabIndex={0}
                 className="zoom-box zoom-btn"
-                onClick={() => cyFun.resetZoom()}
-                onKeyDown={(ev) => ev.key === 13 && (cyFun.resetZoom())}
+                onClick={() => myGraph.resetZoom()}
+                onKeyDown={(ev) => ev.key === 13 && (myGraph.resetZoom())}
             >
                 <BiReset />
 
@@ -27,8 +27,8 @@ const ZoomComp = ({ dispatcher, superState }) => (
                 role="button"
                 tabIndex={0}
                 className="zoom-box zoom-btn"
-                onClick={() => cyFun.fitZoom()}
-                onKeyDown={(ev) => ev.key === 13 && (cyFun.resetZoom())}
+                onClick={() => myGraph.fitZoom()}
+                onKeyDown={(ev) => ev.key === 13 && (myGraph.resetZoom())}
             >
                 <BiRectangle />
 
@@ -42,7 +42,7 @@ const ZoomComp = ({ dispatcher, superState }) => (
                     min={100 * minZoom}
                     max={100 * maxZoom}
                     marks={marks}
-                    onChange={(value) => { cyFun.setZoom(value); dispatcher({ type: T.SET_ZOOM, payload: value }); }}
+                    onChange={(value) => { myGraph.setZoom(value); dispatcher({ type: T.SET_ZOOM, payload: value }); }}
                     included={false}
                     value={superState.zoomValue}
                 />

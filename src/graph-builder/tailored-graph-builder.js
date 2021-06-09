@@ -1,19 +1,9 @@
 import CoreGraph from './core-graph-builder';
 import { actionType as T } from '../reducer';
-import AutomoveFn from './automove';
+import getBoundaryPoint from './calc-boundary-point';
 
-class TailoredGraph extends CoreGraph {
-    addTestData() {
-        this.addNode('A', {}, 'ordin', { x: 100, y: 100 });
-        this.addNode('B', {}, 'ordin', { x: 500, y: 100 });
-        return this;
-    }
-
-    getRealNode(juncNodeId) {
-        return this.getById(juncNodeId).incomers().filter('node')[0];
-    }
-
-    static calcPos(juncNode) {
+const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
+    static calJuncNodePos(juncNode) {
         const parNode = juncNode.incomers('node')[0];
         const meanNbrPosition = { x: 0, y: 0 };
         const setOfPos = new Set();
@@ -26,12 +16,16 @@ class TailoredGraph extends CoreGraph {
         if (setOfPos.size === 0) return meanNbrPosition;
         meanNbrPosition.x /= setOfPos.size;
         meanNbrPosition.y /= setOfPos.size;
-        return AutomoveFn.getClosest(
+        return getBoundaryPoint(
             parNode.position(), meanNbrPosition,
             parseInt(parNode.style().width.slice(0, -2), 10) / 2,
             parseInt(parNode.style().height.slice(0, -2), 10) / 2,
             parNode.style().shape,
         );
+    }
+
+    getRealNode(juncNodeId) {
+        return this.getById(juncNodeId).incomers().filter('node')[0];
     }
 
     addAutoMove(juncNode) {
@@ -42,7 +36,7 @@ class TailoredGraph extends CoreGraph {
     setNodeEvent(node) {
         node.on('drag style', () => {
             node.connectedEdges().connectedNodes('node[type="special"]').forEach((juncNode) => {
-                juncNode.position(TailoredGraph.calcPos(juncNode));
+                juncNode.position(TG.calJuncNodePos(juncNode));
             });
         });
         return this;
@@ -51,7 +45,7 @@ class TailoredGraph extends CoreGraph {
     addEdgeWithJuncNode(sourceID, targetID) {
         const juncNode = this.getById(sourceID);
         const ed = super.addEdge(sourceID, targetID, juncNode.data('edgeLabel'), juncNode.data('edgeStyle'));
-        juncNode.position(TailoredGraph.calcPos(juncNode));
+        juncNode.position(TG.calJuncNodePos(juncNode));
         return ed;
     }
 
@@ -59,7 +53,7 @@ class TailoredGraph extends CoreGraph {
         const sourceNode = this.getById(sourceID);
         const targetNode = this.getById(targetID);
         const sourceNodeStyle = sourceNode.style();
-        const juncNodePos = AutomoveFn.getClosest(
+        const juncNodePos = getBoundaryPoint(
             sourceNode.position(),
             targetNode.position(),
             parseInt(sourceNodeStyle.width.slice(0, -2), 10) / 2,
@@ -116,6 +110,6 @@ class TailoredGraph extends CoreGraph {
     getRealSourceId(nodeID) {
         return this.getById(nodeID).incomers('node')[0].id();
     }
-}
+};
 
 export default TailoredGraph;
