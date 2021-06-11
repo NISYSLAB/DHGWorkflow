@@ -97,17 +97,21 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
     deleteElem(id) {
         const el = this.getById(id);
         if (el.isNode()) {
-            el.outgoers().forEach((x) => super.deleteElem(x.id()));
+            if (el.removed()) return;
+            el.outgoers('node').forEach((x) => super.deleteElem(x.id()));
             el.connectedEdges().forEach((x) => this.deleteElem(x.id()));
             super.deleteNode(id);
         } else {
+            if (el.removed()) return;
             const junctionNode = el.source();
             super.deleteEdge(id);
-            if (junctionNode.outgoers().length === 0) this.deleteNode(junctionNode.id());
+            if (junctionNode) if (junctionNode.outgoers().length === 0) this.deleteNode(junctionNode.id());
         }
     }
 
     getRealSourceId(nodeID) {
+        if (this.getById(nodeID).data('type') === 'ordin') return nodeID;
+        if (this.getById(nodeID).incomers('node').length === 0) return nodeID;
         return this.getById(nodeID).incomers('node')[0].id();
     }
 };

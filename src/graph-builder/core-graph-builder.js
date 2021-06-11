@@ -1,9 +1,11 @@
 import { actionType as T } from '../reducer';
 import GraphLoadSave from './graph-load-save';
-import GraphComponent from './graph-component';
+// import GraphComponent from './graph-component';
 import GraphCanvas from './graph-canvas';
+import GraphUndoRedo from './graph-undo-redo';
 
-const CoreGraph = (ParentClass) => class extends GraphLoadSave(GraphComponent(GraphCanvas(ParentClass))) {
+const CoreGraph = (ParentClass) => class extends
+    GraphLoadSave(GraphCanvas(GraphUndoRedo(ParentClass))) {
     setNodeEvent() { return this; }
 
     getById(x) {

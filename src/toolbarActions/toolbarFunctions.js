@@ -37,10 +37,10 @@ const editElement = (state, setState) => {
     }
 };
 
-const toggleDrawMode = (state, setState) => {
-    CyFun.enableDraw(!state.drawModeOn);
-    setState({ type: T.TURN_DRAW, payload: !state.drawModeOn });
-};
+// const toggleDrawMode = (state, setState) => {
+//     CyFun.enableDraw(!state.drawModeOn);
+//     setState({ type: T.TURN_DRAW, payload: !state.drawModeOn });
+// };
 
 const deleteElem = (state) => {
     state.eleSelectedPayload.ids.forEach((id) => CyFun.deleteElem(id));
@@ -77,11 +77,14 @@ const clearAll = () => {
 const editDetails = (state, setState) => {
     setState({ type: T.SET_PROJECT_DETAILS, payload: { ...state.projectDetails, set: false } });
 };
-
-// eslint-disable-next-line no-alert
-const dummyAction = (x) => alert(x);
+const undo = () => {
+    CyFun.undo();
+};
+const redo = () => {
+    CyFun.redo();
+};
 
 export {
-    createNode, dummyAction, editElement, toggleDrawMode, deleteElem,
-    downloadImg, saveAction, readFile, newProject, clearAll, editDetails,
+    createNode, editElement, deleteElem, downloadImg, saveAction,
+    readFile, newProject, clearAll, editDetails, undo, redo,
 };

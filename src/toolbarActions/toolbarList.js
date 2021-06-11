@@ -3,8 +3,8 @@ import {
     FaSave, FaUndo, FaRedo, FaTrash, FaFileImport, FaPlus, FaDownload, FaEdit, FaFolderPlus, FaRavelry, FaUserEdit,
 } from 'react-icons/fa';
 import {
-    dummyAction, createNode, editElement, deleteElem,
-    downloadImg, saveAction, readFile, newProject, clearAll, editDetails,
+    createNode, editElement, deleteElem, downloadImg, saveAction,
+    readFile, newProject, clearAll, editDetails, undo, redo,
 } from './toolbarFunctions';
 
 const toolbarList = (state) => [
@@ -17,8 +17,8 @@ const toolbarList = (state) => [
     { type: 'file-upload', text: 'Open', icon: FaFileImport, action: readFile, active: true },
     { type: 'action', text: 'Save', icon: FaSave, action: saveAction, active: true },
     { type: 'vsep' },
-    { type: 'action', text: 'Undo', icon: FaUndo, action: dummyAction, active: false },
-    { type: 'action', text: 'Redo', icon: FaRedo, action: dummyAction, active: false },
+    { type: 'action', text: 'Undo', icon: FaUndo, action: undo, active: true },
+    { type: 'action', text: 'Redo', icon: FaRedo, action: redo, active: true },
     { type: 'vsep' },
     {
         type: 'action',
