@@ -132,7 +132,7 @@ const Header = ({ title, state, dispatcher }) => (
                                 Icon={tool.icon}
                                 text={tool.text}
                                 active={tool.active}
-                                action={(e) => tool.action(e, state, dispatcher)}
+                                action={(e) => tool.action(state, dispatcher, e)}
                                 key={tool.text}
                                 tabIndex={i + 1}
                             />

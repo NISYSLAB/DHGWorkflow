@@ -19,6 +19,7 @@ const initialState = {
     },
     undoEnabled: false,
     redoEnabled: false,
+    graphObject: null,
 };
 
 export default initialState;

@@ -74,6 +74,7 @@ const reducer = (state, action) => {
     case T.SET_UNDO: return { ...state, undoEnabled: action.payload };
     case T.SET_REDO: return { ...state, redoEnabled: action.payload };
 
+    case 'SET_GRAPH': return { ...state, graphObject: action.payload };
     default:
         return state;
     }
