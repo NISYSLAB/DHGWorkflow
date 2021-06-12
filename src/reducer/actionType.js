@@ -12,5 +12,7 @@ const actionType = {
     TURN_DRAW: 'TURN_DRAW',
     SET_ZOOM: 'SET_ZOOM',
     SET_PROJECT_DETAILS: 'SET_PROJECT_DETAILS',
+    SET_UNDO: 'SET_UNDO',
+    SET_REDO: 'SET_REDO',
 };
 export default zealit(actionType);

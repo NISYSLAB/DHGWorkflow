@@ -150,6 +150,13 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
 
     setPos(id, pos) {
         this.getById(id).position(pos);
+        this.getById(id).emit('moved');
+    }
+
+    setDim(id, dim, pos) {
+        this.getById(id).style('height', dim.height);
+        this.getById(id).style('width', dim.width);
+        this.setPos(id, pos);
     }
 };
 

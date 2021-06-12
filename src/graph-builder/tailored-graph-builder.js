@@ -34,7 +34,7 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
     }
 
     setNodeEvent(node) {
-        node.on('drag style', () => {
+        node.on('drag style moved', () => {
             node.connectedEdges().connectedNodes('node[type="special"]').forEach((juncNode) => {
                 juncNode.position(TG.calJuncNodePos(juncNode));
             });

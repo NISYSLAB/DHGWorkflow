@@ -70,6 +70,10 @@ const reducer = (state, action) => {
 
     case T.SET_ZOOM: return { ...state, zoomValue: action.payload };
     case T.SET_PROJECT_DETAILS: return { ...state, projectDetails: action.payload };
+
+    case T.SET_UNDO: return { ...state, undoEnabled: action.payload };
+    case T.SET_REDO: return { ...state, redoEnabled: action.payload };
+
     default:
         return state;
     }

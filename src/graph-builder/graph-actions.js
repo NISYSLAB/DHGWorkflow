@@ -6,4 +6,6 @@ export default {
     UPDATE_DATA: 'UPDATE_DATA',
     DEL_NODE: 'DEL_NODE',
     DEL_EDGE: 'DEL_EDGE',
+    SET_POS: 'SET_POS',
+    SET_DIM: 'SET_DIM',
 };

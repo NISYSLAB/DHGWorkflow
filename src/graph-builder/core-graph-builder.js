@@ -38,6 +38,30 @@ const CoreGraph = (ParentClass) => class extends
         this.cy.on('select unselect', () => this.selectDeselectEventHandler());
         this.cy.on('zoom', (e) => this.dispatcher({ type: T.SET_ZOOM, payload: Math.round(100 * e.target.zoom()) }));
         this.cy.on('add remove move style data free', '[type]', this.saveLocalStorage.bind(this));
+        this.cy.on('grab', (e) => {
+            e.target.forEach((node) => {
+                node.scratch('position', { ...node.position() });
+            });
+        });
+        this.cy.on('dragfree', (e) => {
+            e.target.forEach((node) => {
+                this.addPositionChange(node.id(), node.scratch('position'), { ...node.position() });
+            });
+        });
+        this.cy.on('nodeediting.resizestart', (e, type, node) => {
+            node.scratch('height', node.style().height);
+            node.scratch('width', node.style().width);
+            node.scratch('position', { ...node.position() });
+        });
+        this.cy.on('nodeediting.resizeend', (e, type, node) => {
+            this.addDimensionChange(
+                node.id(),
+                { height: node.scratch('height'), width: node.scratch('width') },
+                node.scratch('position'),
+                { height: node.style().height, width: node.style().width },
+                { ...node.position() },
+            );
+        });
     }
 };
 

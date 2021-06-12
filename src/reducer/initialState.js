@@ -17,6 +17,8 @@ const initialState = {
         author: '',
         set: false,
     },
+    undoEnabled: false,
+    redoEnabled: false,
 };
 
 export default initialState;

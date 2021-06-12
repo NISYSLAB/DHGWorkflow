@@ -17,8 +17,8 @@ const toolbarList = (state) => [
     { type: 'file-upload', text: 'Open', icon: FaFileImport, action: readFile, active: true },
     { type: 'action', text: 'Save', icon: FaSave, action: saveAction, active: true },
     { type: 'vsep' },
-    { type: 'action', text: 'Undo', icon: FaUndo, action: undo, active: true },
-    { type: 'action', text: 'Redo', icon: FaRedo, action: redo, active: true },
+    { type: 'action', text: 'Undo', icon: FaUndo, action: undo, active: state.undoEnabled },
+    { type: 'action', text: 'Redo', icon: FaRedo, action: redo, active: state.redoEnabled },
     { type: 'vsep' },
     {
         type: 'action',
