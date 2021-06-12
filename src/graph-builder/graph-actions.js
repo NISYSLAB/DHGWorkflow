@@ -1,0 +1,9 @@
+export default {
+    ADD_NODE: 'ADD_NODE',
+    ADD_EDGE: 'ADD_EDGE',
+    UPDATE_NODE: 'UPDATE_NODE',
+    UPDATE_EDGE: 'UPDATE_EDGE',
+    UPDATE_DATA: 'UPDATE_DATA',
+    DEL_NODE: 'DEL_NODE',
+    DEL_EDGE: 'DEL_EDGE',
+};

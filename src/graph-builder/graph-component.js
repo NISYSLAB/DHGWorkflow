@@ -1,13 +1,6 @@
 import { NodeStyle, EdgeStyle } from '../config/defaultStyles';
-// import GraphUndoRedo from './graph-undo-redo';
-const GraphUndoRedo = {};
-GraphUndoRedo.ADD_NODE = 'ADD_NODE';
-GraphUndoRedo.ADD_EDGE = 'ADD_EDGE';
-GraphUndoRedo.UPDATE_NODE = 'UPDATE_NODE';
-GraphUndoRedo.UPDATE_EDGE = 'UPDATE_EDGE';
-GraphUndoRedo.UPDATE_DATA = 'UPDATE_DATA';
-GraphUndoRedo.DEL_NODE = 'DEL_NODE';
-GraphUndoRedo.DEL_EDGE = 'DEL_EDGE';
+import GA from './graph-actions';
+
 const GraphComponent = (ParentClass) => class GC extends ParentClass {
     constructor() {
         super();
@@ -43,9 +36,9 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         });
         this.setNodeEvent(node);
         this.addAction(
-            { actionName: GraphUndoRedo.DEL_NODE, parameters: [node.id()] },
+            { actionName: GA.DEL_NODE, parameters: [node.id()] },
             {
-                actionName: GraphUndoRedo.ADD_NODE,
+                actionName: GA.ADD_NODE,
                 parameters: [label, style, type, position, data, node.id()],
             },
             tid,
@@ -62,8 +55,8 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
             style,
         });
         this.addAction(
-            { actionName: GraphUndoRedo.DEL_EDGE, parameters: [edge.id()] },
-            { actionName: GraphUndoRedo.ADD_EDGE, parameters: [source, target, label, style, type, edge.id()] },
+            { actionName: GA.DEL_EDGE, parameters: [edge.id()] },
+            { actionName: GA.ADD_EDGE, parameters: [source, target, label, style, type, edge.id()] },
             tid,
         );
 
@@ -86,10 +79,10 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
     updateNode(id, style, label, shouldUpdateLabel, tid = this.getTid()) {
         this.addAction(
             {
-                actionName: GraphUndoRedo.UPDATE_NODE,
+                actionName: GA.UPDATE_NODE,
                 parameters: [id, this.getStyle(id), this.getById(id).data('label'), shouldUpdateLabel],
             },
-            { actionName: GraphUndoRedo.UPDATE_NODE, parameters: [id, style, label, shouldUpdateLabel] },
+            { actionName: GA.UPDATE_NODE, parameters: [id, style, label, shouldUpdateLabel] },
             tid,
         );
         if (shouldUpdateLabel) this.getById(id).data('label', label);
@@ -99,10 +92,10 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
     updateEdge(id, style, label, shouldUpdateLabel, tid = this.getTid()) {
         this.addAction(
             {
-                actionName: GraphUndoRedo.UPDATE_EDGE,
+                actionName: GA.UPDATE_EDGE,
                 parameters: [id, this.getStyle(id), this.getById(id).data('label'), shouldUpdateLabel],
             },
-            { actionName: GraphUndoRedo.UPDATE_EDGE, parameters: [id, style, label, shouldUpdateLabel] },
+            { actionName: GA.UPDATE_EDGE, parameters: [id, style, label, shouldUpdateLabel] },
             tid,
         );
         if (shouldUpdateLabel) this.getById(id).data('label', label);
@@ -111,8 +104,8 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
 
     updateData(id, key, val, tid = this.getTid()) {
         this.addAction(
-            { actionName: GraphUndoRedo.UPDATE_DATA, parameters: [id, key, this.getById(id).data(key)] },
-            { actionName: GraphUndoRedo.UPDATE_DATA, parameters: [id, key, val] }, tid,
+            { actionName: GA.UPDATE_DATA, parameters: [id, key, this.getById(id).data(key)] },
+            { actionName: GA.UPDATE_DATA, parameters: [id, key, val] }, tid,
         );
         this.getById(id).data(key, val);
         return this;
@@ -124,13 +117,13 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         node.connectedEdges().forEach((edge) => this.deleteEdge(edge.id(), tid));
         this.addAction(
             {
-                actionName: GraphUndoRedo.ADD_NODE,
+                actionName: GA.ADD_NODE,
                 parameters: [
                     node.data('label'), this.getStyle(node.id()), node.data('type'),
                     node.position(), node.json().data, id,
                 ],
             },
-            { actionName: GraphUndoRedo.DEL_NODE, parameters: [id] }, tid,
+            { actionName: GA.DEL_NODE, parameters: [id] }, tid,
         );
         node.remove();
     }
@@ -140,12 +133,12 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         const jsonEd = this.getById(id).json();
         this.addAction(
             {
-                actionName: GraphUndoRedo.ADD_EDGE,
+                actionName: GA.ADD_EDGE,
                 parameters: [
                     jsonEd.data.source, jsonEd.data.target, jsonEd.data.label, this.getStyle(id), jsonEd.data.type, id,
                 ],
             },
-            { actionName: GraphUndoRedo.DEL_EDGE, parameters: [id] }, tid,
+            { actionName: GA.DEL_EDGE, parameters: [id] }, tid,
         );
         this.getById(id).remove();
     }
@@ -153,6 +146,10 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
     deleteElem(id, tid = this.getTid()) {
         if (this.getById(id).isNode()) return this.deleteNode(id, tid);
         return this.deleteEdge(id, tid);
+    }
+
+    setPos(id, pos) {
+        this.getById(id).position(pos);
     }
 };
 
