@@ -53,7 +53,7 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         return node;
     }
 
-    addEdge(source, target, label, style = {}, type = 'ordin', id, tid = (new Date()).getTime()) {
+    addEdge(source, target, label, style = {}, type = 'ordin', id, tid = this.getTid()) {
         const edge = this.cy.add({
             group: 'edges',
             data: {
@@ -83,7 +83,7 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         return this.getById(id).data('label') || this.getById(id).data('label');
     }
 
-    updateNode(id, style, label, shouldUpdateLabel, tid = (new Date()).getTime()) {
+    updateNode(id, style, label, shouldUpdateLabel, tid = this.getTid()) {
         this.addAction(
             {
                 actionName: GraphUndoRedo.UPDATE_NODE,
@@ -96,7 +96,7 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         this.getById(id).style(style);
     }
 
-    updateEdge(id, style, label, shouldUpdateLabel, tid = (new Date()).getTime()) {
+    updateEdge(id, style, label, shouldUpdateLabel, tid = this.getTid()) {
         this.addAction(
             {
                 actionName: GraphUndoRedo.UPDATE_EDGE,
@@ -109,7 +109,7 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         this.getById(id).style(style);
     }
 
-    updateData(id, key, val, tid = (new Date()).getTime()) {
+    updateData(id, key, val, tid = this.getTid()) {
         this.addAction(
             { actionName: GraphUndoRedo.UPDATE_DATA, parameters: [id, key, this.getById(id).data(key)] },
             { actionName: GraphUndoRedo.UPDATE_DATA, parameters: [id, key, val] }, tid,
@@ -118,10 +118,10 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         return this;
     }
 
-    deleteNode(id, tid = (new Date()).getTime()) {
+    deleteNode(id, tid = this.getTid()) {
         const node = this.getById(id);
-        node.connectedEdges('[type="ordin"]').forEach((edge) => this.deleteEdge(edge.id()));
-        node.connectedEdges().forEach((edge) => this.deleteEdge(edge.id()));
+        node.connectedEdges('[type="ordin"]').forEach((edge) => this.deleteEdge(edge.id(), tid));
+        node.connectedEdges().forEach((edge) => this.deleteEdge(edge.id(), tid));
         this.addAction(
             {
                 actionName: GraphUndoRedo.ADD_NODE,
@@ -135,7 +135,7 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         node.remove();
     }
 
-    deleteEdge(id, tid = (new Date()).getTime()) {
+    deleteEdge(id, tid = this.getTid()) {
         if (this.getById(id).length === 0 || this.getById(id).removed()) return;
         const jsonEd = this.getById(id).json();
         this.addAction(
@@ -150,9 +150,9 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         this.getById(id).remove();
     }
 
-    deleteElem(id) {
-        if (this.getById(id).isNode()) return this.deleteNode(id);
-        return this.deleteEdge(id);
+    deleteElem(id, tid = this.getTid()) {
+        if (this.getById(id).isNode()) return this.deleteNode(id, tid);
+        return this.deleteEdge(id, tid);
     }
 };
 

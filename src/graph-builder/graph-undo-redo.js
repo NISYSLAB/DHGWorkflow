@@ -1,6 +1,6 @@
 import GraphComponent from './graph-component';
 
-const GraphUndoRedo = (ParentClass) => class extends GraphComponent(ParentClass) {
+const GraphUndoRedo = (ParentClass) => class GUR extends GraphComponent(ParentClass) {
     // addNode() { return this; }
 
     // addEdge() { return this; }
@@ -39,6 +39,12 @@ const GraphUndoRedo = (ParentClass) => class extends GraphComponent(ParentClass)
         this.cur = 0;
     }
 
+    static performAction(actionSet) {
+        const { actionName, parameters } = actionSet;
+        const action = GraphUndoRedo.methodsMapped[actionName];
+        action(...parameters);
+    }
+
     addAction(inverse, equivalent, tid) {
         if (tid === 0) return;
         while (this.arr.length > this.cur) this.arr.pop();
@@ -47,19 +53,21 @@ const GraphUndoRedo = (ParentClass) => class extends GraphComponent(ParentClass)
     }
 
     undo() {
-        if (this.cur === 0) return;
-        this.cur -= 1;
-        const { actionName, parameters } = this.arr[this.cur].inverse;
-        const action = GraphUndoRedo.methodsMapped[actionName];
-        action(...parameters);
+        let curTid = null;
+        if (this.cur !== 0) curTid = this.arr[this.cur - 1].tid;
+        while (this.cur !== 0 && this.arr[this.cur - 1].tid === curTid) {
+            this.cur -= 1;
+            GUR.performAction(this.arr[this.cur].inverse);
+        }
     }
 
     redo() {
-        if (this.cur === this.arr.length) return;
-        const { actionName, parameters } = this.arr[this.cur].equivalent;
-        this.cur += 1;
-        const action = GraphUndoRedo.methodsMapped[actionName];
-        action(...parameters);
+        let curTid = null;
+        if (this.cur !== this.arr.length) curTid = this.arr[this.cur].tid;
+        while (this.cur !== this.arr.length && this.arr[this.cur].tid === curTid) {
+            GUR.performAction(this.arr[this.cur].equivalent);
+            this.cur += 1;
+        }
     }
 };
 

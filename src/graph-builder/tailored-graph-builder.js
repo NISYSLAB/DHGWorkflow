@@ -42,14 +42,20 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
         return this;
     }
 
-    addEdgeWithJuncNode(sourceID, targetID) {
+    addEdgeWithJuncNode(sourceID, targetID, tid) {
         const juncNode = this.getById(sourceID);
-        const ed = super.addEdge(sourceID, targetID, juncNode.data('edgeLabel'), juncNode.data('edgeStyle'));
+        const ed = super.addEdge(
+            sourceID, targetID,
+            juncNode.data('edgeLabel'),
+            juncNode.data('edgeStyle'),
+            'ordin',
+            undefined, tid,
+        );
         juncNode.position(TG.calJuncNodePos(juncNode));
         return ed;
     }
 
-    addEdgeWithoutJuncNode(sourceID, targetID, label, style) {
+    addEdgeWithoutJuncNode(sourceID, targetID, label, style, tid) {
         const sourceNode = this.getById(sourceID);
         const targetNode = this.getById(targetID);
         const sourceNodeStyle = sourceNode.style();
@@ -61,51 +67,51 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
             sourceNodeStyle.shape,
         );
         const juncNode = super.addNode('', { 'background-color': style['line-color'] },
-            'special', juncNodePos, { edgeLabel: label, edgeStyle: style });
+            'special', juncNodePos, { edgeLabel: label, edgeStyle: style }, undefined, tid);
         super.addEdge(sourceID, juncNode.id(), '', {
             ...style,
             'target-arrow-shape': 'none',
-        }, 'special');
+        }, 'special', undefined, tid);
         this.addAutoMove(juncNode, sourceNode);
-        return this.addEdgeWithJuncNode(juncNode.id(), targetID);
+        return this.addEdgeWithJuncNode(juncNode.id(), targetID, tid);
     }
 
-    addEdge(sourceID, targetID, label = '', style) {
+    addEdge(sourceID, targetID, label = '', style, tid = this.getTid()) {
         const sourceNode = this.getById(sourceID);
-        if (sourceNode.data('type') === 'special') return this.addEdgeWithJuncNode(sourceID, targetID);
+        if (sourceNode.data('type') === 'special') return this.addEdgeWithJuncNode(sourceID, targetID, tid);
         const juncNodes = sourceNode.outgoers('node').filter((node) => node.data('edgeLabel') === label);
-        if (juncNodes.length) return this.addEdgeWithJuncNode(juncNodes[0].id(), targetID);
-        if (label.length) return this.addEdgeWithoutJuncNode(sourceID, targetID, label, style);
+        if (juncNodes.length) return this.addEdgeWithJuncNode(juncNodes[0].id(), targetID, tid);
+        if (label.length) return this.addEdgeWithoutJuncNode(sourceID, targetID, label, style, tid);
         this.dispatcher({
             type: T.Model_Open_Create_Edge,
-            cb: (edgeLabel, edgeStyle) => this.addEdgeWithoutJuncNode(sourceID, targetID, edgeLabel, edgeStyle),
+            cb: (edgeLabel, edgeStyle) => this.addEdgeWithoutJuncNode(sourceID, targetID, edgeLabel, edgeStyle, tid),
         });
         return this;
     }
 
-    updateEdge(id, style, label, shouldUpdateLabel) {
+    updateEdge(id, style, label, shouldUpdateLabel, tid = this.getTid()) {
         const junctionNode = this.getById(id).source();
-        if (shouldUpdateLabel) this.updateData(junctionNode.data('id'), 'edgeLabel', label);
-        this.updateData(junctionNode.data('id'), 'edgeStyle', style);
-        this.updateNode([junctionNode.data('id')], { 'background-color': style['line-color'] }, '', false);
+        if (shouldUpdateLabel) this.updateData(junctionNode.data('id'), 'edgeLabel', label, tid);
+        this.updateData(junctionNode.data('id'), 'edgeStyle', style, tid);
+        this.updateNode([junctionNode.data('id')], { 'background-color': style['line-color'] }, '', false, tid);
 
         junctionNode
             .outgoers('edge')
-            .forEach((edge) => super.updateEdge(edge.data('id'), style, label, shouldUpdateLabel));
+            .forEach((edge) => super.updateEdge(edge.data('id'), style, label, shouldUpdateLabel, tid));
     }
 
-    deleteElem(id) {
+    deleteElem(id, tid = this.getTid()) {
         const el = this.getById(id);
         if (el.isNode()) {
             if (el.removed()) return;
-            el.outgoers('node').forEach((x) => super.deleteElem(x.id()));
-            el.connectedEdges().forEach((x) => this.deleteElem(x.id()));
-            super.deleteNode(id);
+            el.outgoers('node').forEach((x) => super.deleteElem(x.id(), tid));
+            el.connectedEdges().forEach((x) => this.deleteElem(x.id(), tid));
+            super.deleteNode(id, tid);
         } else {
             if (el.removed()) return;
             const junctionNode = el.source();
-            super.deleteEdge(id);
-            if (junctionNode) if (junctionNode.outgoers().length === 0) this.deleteNode(junctionNode.id());
+            super.deleteEdge(id, tid);
+            if (junctionNode) if (junctionNode.outgoers().length === 0) this.deleteNode(junctionNode.id(), tid);
         }
     }
 

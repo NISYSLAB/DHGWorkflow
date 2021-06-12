@@ -13,11 +13,12 @@ const createNode = (_, setState) => {
 
 const editElement = (state, setState) => {
     const shouldUpdateLabel = state.eleSelectedPayload.ids.length === 1;
+    const tid = new Date().getTime();
     if (state.eleSelectedPayload.type === 'NODE') {
         setState({
             type: T.Model_Open_Update_Node,
             cb: (label, style) => state.eleSelectedPayload.ids.forEach(
-                (id) => CyFun.updateNode(id, style, label, shouldUpdateLabel),
+                (id) => CyFun.updateNode(id, style, label, shouldUpdateLabel, tid),
             ),
             labelAllowed: shouldUpdateLabel,
             label: CyFun.getLabel(state.eleSelectedPayload.ids[0]),
@@ -28,7 +29,7 @@ const editElement = (state, setState) => {
         setState({
             type: T.Model_Open_Update_Edge,
             cb: (label, style) => state.eleSelectedPayload.ids.forEach(
-                (id) => CyFun.updateEdge(id, style, label, shouldUpdateLabel),
+                (id) => CyFun.updateEdge(id, style, label, shouldUpdateLabel, tid),
             ),
             labelAllowed: shouldUpdateLabel,
             label: CyFun.getLabel(state.eleSelectedPayload.ids[0]),
@@ -43,7 +44,8 @@ const editElement = (state, setState) => {
 // };
 
 const deleteElem = (state) => {
-    state.eleSelectedPayload.ids.forEach((id) => CyFun.deleteElem(id));
+    const tid = new Date().getTime();
+    state.eleSelectedPayload.ids.forEach((id) => CyFun.deleteElem(id, tid));
 };
 
 const downloadImg = (state, setState, format) => {
