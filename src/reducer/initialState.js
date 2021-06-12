@@ -11,15 +11,20 @@ const initialState = {
     },
     eleSelected: false,
     drawModeOn: true,
-    zoomValue: 100,
+    undoEnabled: false,
+    redoEnabled: false,
+    graphs: [],
+    curGraphIndex: 0,
+};
+
+const initialGraphState = {
     projectDetails: {
         name: '',
         author: '',
         set: false,
     },
-    undoEnabled: false,
-    redoEnabled: false,
-    graphObject: null,
+    component: null,
+    instance: null,
 };
 
-export default initialState;
+export { initialState, initialGraphState };

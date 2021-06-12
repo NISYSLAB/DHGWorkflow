@@ -14,5 +14,7 @@ const actionType = {
     SET_PROJECT_DETAILS: 'SET_PROJECT_DETAILS',
     SET_UNDO: 'SET_UNDO',
     SET_REDO: 'SET_REDO',
+    ADD_GRAPH_INSTANCE: 'ADD_GRAPH_INSTANCE',
+    ADD_GRAPH: 'ADD_GRAPH',
 };
 export default zealit(actionType);

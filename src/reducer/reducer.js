@@ -2,6 +2,7 @@ import T from './actionType';
 import NodeDetails from '../component/modals/NodeDetails';
 import EdgeDetails from '../component/modals/EdgeDetails';
 import { NodeStyle, EdgeStyle } from '../config/defaultStyles';
+import { initialGraphState } from './initialState';
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -68,13 +69,28 @@ const reducer = (state, action) => {
     case T.ELE_UNSELECTED: return { ...state, eleSelected: false };
     case T.TURN_DRAW: return { ...state, drawModeOn: action.payload };
 
-    case T.SET_ZOOM: return { ...state, zoomValue: action.payload };
-    case T.SET_PROJECT_DETAILS: return { ...state, projectDetails: action.payload };
-
     case T.SET_UNDO: return { ...state, undoEnabled: action.payload };
     case T.SET_REDO: return { ...state, redoEnabled: action.payload };
 
-    case 'SET_GRAPH': return { ...state, graphObject: action.payload };
+    case T.ADD_GRAPH: {
+        return {
+            ...state,
+            graphs: [
+                ...state.graphs,
+                {
+                    ...initialGraphState,
+                    component: action.payload.component,
+                    projectDetails: action.payload.projectDetails,
+                    id: action.payload.id,
+                },
+            ],
+        };
+    }
+    case T.ADD_GRAPH_INSTANCE: {
+        const newState = { ...state };
+        newState.graphs[state.curGraphIndex].instance = action.instance;
+        return { ...newState };
+    }
     default:
         return state;
     }

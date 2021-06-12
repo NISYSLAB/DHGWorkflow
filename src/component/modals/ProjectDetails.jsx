@@ -1,44 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from './ParentModal';
-import { actionType as T } from '../../reducer';
 import './project-details.css';
+import { actionType as T } from '../../reducer';
 
 const ProjectDeails = ({ superState, dispatcher }) => {
-    const setName = (e) => {
-        dispatcher({
-            type: T.SET_PROJECT_DETAILS,
-            payload: { ...superState.projectDetails, name: e.target.value },
-        });
-    };
-    const setAuthor = (e) => {
-        dispatcher({
-            type: T.SET_PROJECT_DETAILS,
-            payload: { ...superState.projectDetails, author: e.target.value },
-        });
-    };
+    const [projectName, setProjectName] = useState('');
+    const [author, setAuthor] = useState('');
     const submit = (e) => {
         e.preventDefault();
-        dispatcher({ type: T.SET_PROJECT_DETAILS, payload: { ...superState.projectDetails, set: true } });
+        const graphRef = React.createRef();
+        const id = `graph_${superState.curGraphIndex}`;
+        const component = <div style={{ zIndex: 1 }} id={id} ref={graphRef} key={superState.curGraphIndex} />;
+        dispatcher({
+            type: T.ADD_GRAPH,
+            payload: { id, component, projectDetails: { projectName, author, set: true } },
+        });
     };
     const openExisting = () => {
         document.querySelector('input[type="file"]').click();
     };
     return (
-        <Modal ModelOpen={!superState.projectDetails.set} title="Project Details">
+        <Modal
+            ModelOpen={
+                !superState.graphs[superState.curGraphIndex]
+                || !superState.graphs[superState.curGraphIndex].projectDetails.set
+            }
+            title="Project Details"
+        >
             <form className="proj-details" onSubmit={submit}>
                 <span>Workflow Name</span>
                 <input
                     placeholder="Title of workflow"
                     required
-                    value={superState.projectDetails.name}
-                    onChange={setName}
+                    value={projectName}
+                    onChange={(e) => setProjectName(e.target.value)}
                 />
                 <span>Author</span>
                 <input
                     placeholder="Author of workflow"
                     required
-                    value={superState.projectDetails.author}
-                    onChange={setAuthor}
+                    value={author}
+                    onChange={(e) => setAuthor(e.target.value)}
                 />
                 <div className="expand">
                     <button type="submit" className="btn btn-primary">Save</button>

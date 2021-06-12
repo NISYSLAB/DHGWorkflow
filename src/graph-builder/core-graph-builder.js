@@ -6,6 +6,14 @@ import GraphUndoRedo from './graph-undo-redo';
 
 const CoreGraph = (ParentClass) => class extends
     GraphLoadSave(GraphCanvas(GraphUndoRedo(ParentClass))) {
+    constructor(cy, dispatcher, superState) {
+        super();
+        if (dispatcher) this.dispatcher = dispatcher;
+        if (superState) this.superState = superState;
+        if (cy) this.cy = cy;
+        this.regesterEvents();
+    }
+
     setNodeEvent() { return this; }
 
     getById(x) {
@@ -36,7 +44,6 @@ const CoreGraph = (ParentClass) => class extends
 
     regesterEvents() {
         this.cy.on('select unselect', () => this.selectDeselectEventHandler());
-        this.cy.on('zoom', (e) => this.dispatcher({ type: T.SET_ZOOM, payload: Math.round(100 * e.target.zoom()) }));
         this.cy.on('add remove move style data free', '[type]', this.saveLocalStorage.bind(this));
         this.cy.on('grab', (e) => {
             e.target.forEach((node) => {

@@ -15,7 +15,7 @@ const app = () => {
                 closeModal={() => dispatcher({ type: T.Model_Close })}
                 superState={superState}
             />
-            <Header title={superState.projectDetails.name} state={superState} dispatcher={dispatcher} />
+            <Header state={superState} dispatcher={dispatcher} />
             <section className="body" style={{ display: 'flex' }}>
                 <GraphComp dispatcher={dispatcher} superState={superState} />
             </section>

@@ -93,10 +93,13 @@ const Vsep = () => <div className="Vsep sep" />;
 const Hsep = () => <div className="hsep sep" />;
 const Space = () => <div className="space" />;
 
-const Header = ({ title, state, dispatcher }) => (
+const Header = ({ state, dispatcher }) => (
     <header className="header">
         <section className="middle titlebar">
-            {title ? `${title} - DHGWorkflow Editor` : ''}
+            {
+                state.graphs[state.curGraphIndex]
+                    ? `${state.graphs[state.curGraphIndex].projectDetails.projectName} - DHGWorkflow Editor` : ''
+            }
         </section>
         <section className="toolbar">
             {

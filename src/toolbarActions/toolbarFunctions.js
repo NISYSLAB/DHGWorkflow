@@ -1,8 +1,9 @@
 import { actionType as T } from '../reducer';
-import initialState from '../reducer/initialState';
+import { initialState } from '../reducer/initialState';
 
 // const getGraphFun(state) = {};
-const getGraphFun = (state) => state.graphObject;
+const getGraphFun = (superState) => superState.graphs[superState.curGraphIndex]
+                                        && superState.graphs[superState.curGraphIndex].instance;
 
 const createNode = (state, setState) => {
     setState({

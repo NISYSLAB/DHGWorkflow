@@ -3,12 +3,21 @@ const GraphCanvas = (ParentClass) => class extends ParentClass {
         this.cy.reset();
     }
 
+    setOnZoom(cb) {
+        this.cy.removeListener('zoom');
+        this.cy.on('zoom', (e) => cb(Math.round(100 * e.target.zoom())));
+    }
+
     fitZoom() {
         this.cy.fit();
     }
 
     setZoom(v) {
         this.cy.zoom(v / 100);
+    }
+
+    getZoom() {
+        return Math.round(this.cy.zoom() * 100);
     }
 
     clearAll() {

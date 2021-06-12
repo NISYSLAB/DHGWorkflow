@@ -1,8 +1,6 @@
 import Slider from 'rc-slider';
-import React from 'react';
+import React, { useState } from 'react';
 import { BiReset, BiRectangle } from 'react-icons/bi';
-import { actionType as T } from '../reducer';
-// import myGraph from '../graph-builder';
 import 'rc-slider/assets/index.css';
 import './zoomSetter.css';
 import GraphOption from '../config/cytoscape-options';
@@ -10,9 +8,11 @@ import GraphOption from '../config/cytoscape-options';
 const { minZoom, maxZoom } = GraphOption;
 const marks = {};
 
-const ZoomComp = ({ dispatcher, superState }) => {
-    const myGraph = superState.graphObject;
-
+const ZoomComp = ({ superState }) => {
+    const myGraph = superState.graphs[superState.curGraphIndex] && superState.graphs[superState.curGraphIndex].instance;
+    if (!myGraph) return <></>;
+    const [zoomValue, setZoomValue] = useState(myGraph.getZoom());
+    myGraph.setOnZoom(setZoomValue);
     return (
         <div>
             <div className="zoom-comp">
@@ -37,7 +37,7 @@ const ZoomComp = ({ dispatcher, superState }) => {
 
                 </div>
                 <div className="zoom-box zoom-value">
-                    {superState.zoomValue}
+                    {zoomValue}
                     %
                 </div>
                 <div className="slider">
@@ -46,10 +46,10 @@ const ZoomComp = ({ dispatcher, superState }) => {
                         max={100 * maxZoom}
                         marks={marks}
                         onChange={
-                            (value) => { myGraph.setZoom(value); dispatcher({ type: T.SET_ZOOM, payload: value }); }
+                            (value) => { myGraph.setZoom(value); setZoomValue(value); }
                         }
                         included={false}
-                        value={superState.zoomValue}
+                        value={zoomValue}
                     />
                 </div>
             </div>
