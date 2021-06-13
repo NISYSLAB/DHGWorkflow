@@ -8,12 +8,9 @@ const ProjectDeails = ({ superState, dispatcher }) => {
     const [author, setAuthor] = useState('');
     const submit = (e) => {
         e.preventDefault();
-        const graphRef = React.createRef();
-        const id = `graph_${superState.curGraphIndex}`;
-        const component = <div style={{ zIndex: 1 }} id={id} ref={graphRef} key={superState.curGraphIndex} />;
         dispatcher({
             type: T.ADD_GRAPH,
-            payload: { id, component, projectDetails: { projectName, author, set: true } },
+            payload: { id: new Date().getTime(), projectDetails: { projectName, author, set: true } },
         });
     };
     const openExisting = () => {

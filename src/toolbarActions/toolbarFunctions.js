@@ -1,7 +1,5 @@
 import { actionType as T } from '../reducer';
-import { initialState } from '../reducer/initialState';
 
-// const getGraphFun(state) = {};
 const getGraphFun = (superState) => superState.graphs[superState.curGraphIndex]
                                         && superState.graphs[superState.curGraphIndex].instance;
 
@@ -70,9 +68,7 @@ const readFile = (state, setState, e) => {
 };
 
 const newProject = (state, setState) => {
-    if (getGraphFun(state).clearAll()) {
-        setState({ type: T.SET_PROJECT_DETAILS, payload: initialState.projectDetails });
-    }
+    setState({ type: T.NEW_GRAPH });
 };
 
 const clearAll = (state) => {

@@ -16,7 +16,7 @@ const app = () => {
                 superState={superState}
             />
             <Header state={superState} dispatcher={dispatcher} />
-            <section className="body" style={{ display: 'flex' }}>
+            <section className="body" style={{ display: 'flex', flexDirection: 'column' }}>
                 <GraphComp dispatcher={dispatcher} superState={superState} />
             </section>
         </div>

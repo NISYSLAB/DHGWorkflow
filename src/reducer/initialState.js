@@ -19,7 +19,7 @@ const initialState = {
 
 const initialGraphState = {
     projectDetails: {
-        name: '',
+        projectName: '',
         author: '',
         set: false,
     },

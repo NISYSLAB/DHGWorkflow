@@ -1,64 +1,61 @@
-/* eslint-disable */
-import React from 'react';
+import React, { useEffect } from 'react';
 import cytoscape from 'cytoscape';
 import edgehandles from 'cytoscape-edgehandles';
 import gridGuide from 'cytoscape-grid-guide';
+import Konva from 'konva';
+import nodeEditing from 'cytoscape-node-editing';
+import $ from 'jquery';
 import cyOptions from './config/cytoscape-options';
 import MyGraph from './graph-builder';
 import ZoomComp from './component/ZoomSetter';
-import Konva from 'konva';
-import nodeEditing from 'cytoscape-node-editing'
-import $ from "jquery";
-import { useEffect } from 'react';
+
 import { actionType as T } from './reducer';
+import './graph.css';
 
-const GraphComp = (props)=>{
+const GraphComp = (props) => {
     const graphContainerRef = React.createRef();
-    const graphRef = React.createRef();
     const { dispatcher, superState } = props;
-    
 
-    const initialiseNewGraph = (element)=>{
-        element.style.width = graphContainerRef.current.offsetWidth + "px"
-        element.style.height = graphContainerRef.current.offsetHeight + "px"
+    const initialiseNewGraph = (element, id) => {
+        // eslint-disable-next-line no-param-reassign
+        element.style.width = `${graphContainerRef.current.offsetWidth}px`;
+        // eslint-disable-next-line no-param-reassign
+        element.style.height = `${graphContainerRef.current.offsetHeight}px`;
         const cy = cytoscape({ ...cyOptions, container: element });
-        cy.nodeEditing({ 
-            resizeToContentCueEnabled: () => false, 
-            setWidth: function(node, width) { 
-                if(node.data('type')!='special') node.css('width', width);
+        cy.nodeEditing({
+            resizeToContentCueEnabled: () => false,
+            setWidth(node, width) {
+                if (node.data('type') !== 'special') node.css('width', width);
             },
-            setHeight: function(node, height) {
-                if(node.data('type')!='special') node.css('height', height);
-            }, 
-            isNoResizeMode: function (node) { return node.data('type')==='special' }, 
-            isNoControlsMode: function (node) { return node.data('type')==='special' },
+            setHeight(node, height) {
+                if (node.data('type') !== 'special') node.css('height', height);
+            },
+            isNoResizeMode(node) { return node.data('type') === 'special'; },
+            isNoControlsMode(node) { return node.data('type') === 'special'; },
         });
 
-        cy.gridGuide({snapToGridOnRelease :false});
-        const myGraph = new (MyGraph(Object))(cy, dispatcher, superState);
-        // myGraph.set({cy, dispatcher, superState});
-        // myGraph.regesterEvents();
+        cy.gridGuide({ snapToGridOnRelease: false });
+        const myGraph = new (MyGraph(Object))(id, cy, dispatcher, superState);
         cy.edgehandles({
             preview: false,
             handlePosition() {
                 return 'none';
             },
-            complete: (a, b, c) => {c.remove() ; myGraph.addEdge(a.id(), b.id())},
+            complete: (a, b, c) => { c.remove(); myGraph.addEdge(a.id(), b.id()); },
         });
-        // dispatcher({type: "SET_GRAPH", payload: myGraph})
+        myGraph.loadGraphFromLocalStorage();
         return myGraph;
-    }
-    useEffect(()=>{
-        if(superState.graphs[superState.curGraphIndex] &&  !superState.graphs[superState.curGraphIndex].instance){
-            const id = superState.graphs[superState.curGraphIndex].id;
-            const projectDetails = superState.graphs[superState.curGraphIndex].projectDetails;
-            console.log(id, superState.graphs[superState.curGraphIndex])
-            const graph = initialiseNewGraph(document.getElementById(id));
-            dispatcher({type: T.ADD_GRAPH_INSTANCE, instance: graph, projectDetails: {}})
-        }
-    },[superState.graphs.length])
-    
-    useEffect(()=>{
+    };
+    useEffect(() => {
+        superState.graphs.forEach((e, i) => {
+            if (e.instance) return;
+            const { id } = e;
+            const graph = initialiseNewGraph(document.getElementById(id), id);
+            dispatcher({ type: T.ADD_GRAPH_INSTANCE, instance: graph, index: i });
+        });
+    }, [superState.graphs.length]);
+
+    useEffect(() => {
         if (typeof cytoscape('core', 'edgehandles') !== 'function') {
             cytoscape.use(edgehandles);
         }
@@ -68,17 +65,51 @@ const GraphComp = (props)=>{
         if (typeof cytoscape('core', 'gridGuide') !== 'function') {
             gridGuide(cytoscape);
         }
-        
-        // initialiseNewGraph(graphRef.current);
-        
-    }, [])
+    }, []);
+
     return (
-        <div className="graph-container" style={{ flex: 1 }} ref={graphContainerRef}>
-            {/* <div style={{ zIndex: 1 }} id="cy" ref={graphRef} /> */}
-            {superState.graphs.map(e=>e.component)}
-            <ZoomComp dispatcher={dispatcher} superState={superState} />
-        </div>
+        <>
+            <div className="tab-par">
+                {superState.graphs.map((el, i) => (
+                    <div
+                        key={el.id}
+                        className={`tab ${superState.curGraphIndex === i ? 'selected' : 'none'}`}
+                        onClick={() => dispatcher({ type: T.CHANGE_TAB, payload: i })}
+                        onKeyDown={(ev) => ev.key === 13 && dispatcher({ type: T.CHANGE_TAB, payload: i })}
+                        role="button"
+                        tabIndex={0}
+                    >
+                        <span className="tab-text">
+                            {el.projectDetails.projectName}
+                            {' - '}
+                            {el.projectDetails.author}
+                        </span>
+                        <span
+                            className="tab-close"
+                            onClick={(e) => { e.stopPropagation(); dispatcher({ type: T.REMOVE_GRAPH, payload: i }); }}
+                            onKeyDown={(ev) => ev.key === 13 && dispatcher({ type: T.REMOVE_GRAPH, payload: i })}
+                            role="button"
+                            tabIndex={0}
+                        >
+                            {' '}
+                            X
+
+                        </span>
+                    </div>
+                ))}
+            </div>
+            <div className="graph-container" ref={graphContainerRef}>
+                {superState.graphs.map((el, i) => (
+                    <div
+                        style={{ zIndex: 1, display: superState.curGraphIndex === i ? 'block' : 'none' }}
+                        id={el.id}
+                        key={el.id}
+                    />
+                ))}
+                <ZoomComp dispatcher={dispatcher} superState={superState} />
+            </div>
+        </>
     );
-}
+};
 
 export default GraphComp;

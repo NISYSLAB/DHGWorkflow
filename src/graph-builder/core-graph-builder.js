@@ -6,11 +6,12 @@ import GraphUndoRedo from './graph-undo-redo';
 
 const CoreGraph = (ParentClass) => class extends
     GraphLoadSave(GraphCanvas(GraphUndoRedo(ParentClass))) {
-    constructor(cy, dispatcher, superState) {
+    constructor(id, cy, dispatcher, superState) {
         super();
         if (dispatcher) this.dispatcher = dispatcher;
         if (superState) this.superState = superState;
         if (cy) this.cy = cy;
+        this.id = id;
         this.regesterEvents();
     }
 

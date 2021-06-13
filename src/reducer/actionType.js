@@ -16,5 +16,8 @@ const actionType = {
     SET_REDO: 'SET_REDO',
     ADD_GRAPH_INSTANCE: 'ADD_GRAPH_INSTANCE',
     ADD_GRAPH: 'ADD_GRAPH',
+    CHANGE_TAB: 'CHANGE_TAB',
+    REMOVE_GRAPH: 'REMOVE_GRAPH',
+    NEW_GRAPH: 'NEW_GRAPH',
 };
 export default zealit(actionType);

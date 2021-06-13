@@ -82,15 +82,24 @@ const reducer = (state, action) => {
                     component: action.payload.component,
                     projectDetails: action.payload.projectDetails,
                     id: action.payload.id,
+                    instance: action.payload.instance,
                 },
             ],
         };
     }
     case T.ADD_GRAPH_INSTANCE: {
         const newState = { ...state };
-        newState.graphs[state.curGraphIndex].instance = action.instance;
+        newState.graphs[action.index].instance = action.instance;
         return { ...newState };
     }
+
+    case T.NEW_GRAPH: return { ...state, curGraphIndex: state.graphs.length };
+    case T.CHANGE_TAB: return { ...state, curGraphIndex: action.payload };
+    case T.REMOVE_GRAPH: return {
+        ...state,
+        graphs: state.graphs.filter((e, i) => i !== action.payload),
+        curGraphIndex: state.curGraphIndex !== action.payload ? state.curGraphIndex : 0,
+    };
     default:
         return state;
     }
