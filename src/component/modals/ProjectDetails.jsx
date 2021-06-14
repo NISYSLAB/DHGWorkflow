@@ -70,8 +70,19 @@ const ProjectDetails = ({ superState, dispatcher }) => {
                 />
                 <div className="expand">
                     <button type="submit" className="btn btn-primary">Save</button>
-                    <div className="divider" />
-                    <button type="button" className="btn btn-secondary" onClick={openExisting}>Open Existing</button>
+                    {curGraph ? <></> : (
+                        <>
+                            <div className="divider" />
+                            <button
+                                type="button"
+                                className="btn btn-secondary"
+                                onClick={openExisting}
+                            >
+                                Open Existing
+
+                            </button>
+                        </>
+                    )}
                 </div>
             </form>
         </Modal>

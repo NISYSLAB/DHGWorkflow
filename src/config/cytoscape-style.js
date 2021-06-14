@@ -45,8 +45,8 @@ const style = [
     {
         selector: 'node[type="special"]',
         style: {
-            width: 10,
-            height: 10,
+            width: 8,
+            height: 8,
             backgroundColor: 'red',
             'z-index': 1000,
         },

@@ -12,6 +12,7 @@ import ZoomComp from './component/ZoomSetter';
 import { actionType as T } from './reducer';
 import './graph.css';
 import localStorageManager from './graph-builder/local-storage-manager';
+import TabBar from './component/TabBar';
 
 const GraphComp = (props) => {
     const graphContainerRef = React.createRef();
@@ -80,39 +81,7 @@ const GraphComp = (props) => {
 
     return (
         <>
-            <div className="tab-par">
-                {superState.graphs.map((el, i) => (
-                    <div
-                        key={el.id}
-                        className={`tab ${superState.curGraphIndex === i ? 'selected' : 'none'}`}
-                        onClick={() => dispatcher({ type: T.CHANGE_TAB, payload: i })}
-                        onKeyDown={(ev) => ev.key === 13 && dispatcher({ type: T.CHANGE_TAB, payload: i })}
-                        role="button"
-                        tabIndex={0}
-                    >
-                        <span className="tab-text">
-                            {el.projectDetails.projectName}
-                            {' - '}
-                            {el.projectDetails.author}
-                        </span>
-                        <span
-                            className="tab-close"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                localStorageManager.remove(superState.graphs[i] ? superState.graphs[i].id : null);
-                                dispatcher({ type: T.REMOVE_GRAPH, payload: i });
-                            }}
-                            onKeyDown={(ev) => ev.key === 13 && dispatcher({ type: T.REMOVE_GRAPH, payload: i })}
-                            role="button"
-                            tabIndex={0}
-                        >
-                            {' '}
-                            X
-
-                        </span>
-                    </div>
-                ))}
-            </div>
+            <TabBar superState={superState} dispatcher={dispatcher} />
             <div className="graph-container" ref={graphContainerRef}>
                 {superState.graphs.map((el, i) => (
                     <div

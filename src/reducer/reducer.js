@@ -98,14 +98,20 @@ const reducer = (state, action) => {
     case T.REMOVE_GRAPH: return {
         ...state,
         graphs: state.graphs.filter((e, i) => i !== action.payload),
-        curGraphIndex: state.curGraphIndex !== action.payload ? state.curGraphIndex : 0,
+        curGraphIndex: state.curGraphIndex < action.payload
+            ? state.curGraphIndex
+            : Math.max(0, state.curGraphIndex - 1),
     };
 
     case T.SET_PROJECT_DETAILS: {
         const newState = { ...state };
-        newState.graphs = newState.graphs.map((g) => (
-            g.id === action.payload.id ? { ...g, projectDetails: action.payload.projectDetails } : g
-        ));
+        newState.graphs = newState.graphs.map((g) => {
+            if (g.id === action.payload.id) {
+                if (g.instance) g.instance.setProjectDetail(action.payload.projectDetails);
+                return { ...g, projectDetails: action.payload.projectDetails };
+            }
+            return g;
+        });
         return { ...newState };
     }
 

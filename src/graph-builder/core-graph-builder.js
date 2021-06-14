@@ -17,6 +17,11 @@ const CoreGraph = (ParentClass) => class extends
         this.saveLocalStorage();
     }
 
+    setProjectDetail(projectDetails) {
+        this.projectDetails = projectDetails;
+        this.saveLocalStorage();
+    }
+
     setNodeEvent() { return this; }
 
     getById(x) {
