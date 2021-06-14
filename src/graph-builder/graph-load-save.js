@@ -56,7 +56,7 @@ const GraphLoadSave = (ParentClass) => class extends ParentClass {
     }
 
     getName() {
-        return `${this.superState.projectDetails.name}-${this.superState.projectDetails.author}`;
+        return `${this.projectDetails.projectName}-${this.projectDetails.author}`;
     }
 
     saveToDisk() {
@@ -67,7 +67,6 @@ const GraphLoadSave = (ParentClass) => class extends ParentClass {
     }
 
     loadJson(content) {
-        this.clearAll();
         content.nodes.forEach((node) => {
             this.addNode(node.label, node.style, 'ordin', node.position, { id: node.id });
         });

@@ -1,27 +1,56 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from './ParentModal';
 import './project-details.css';
 import { actionType as T } from '../../reducer';
 
 const ProjectDetails = ({ superState, dispatcher }) => {
+    const curGraph = superState.graphs[superState.curGraphIndex];
     const [projectName, setProjectName] = useState('');
     const [author, setAuthor] = useState('');
-    const submit = (e) => {
-        e.preventDefault();
+
+    useEffect(() => {
+        if (!curGraph) {
+            setProjectName(''); setAuthor('');
+        } else {
+            setProjectName(curGraph.projectDetails.projectName);
+            setAuthor(curGraph.projectDetails.author);
+        }
+    }, [!curGraph || !curGraph.projectDetails.set]);
+
+    const addNewGraph = () => {
         dispatcher({
             type: T.ADD_GRAPH,
             payload: { id: new Date().getTime(), projectDetails: { projectName, author, set: true } },
         });
     };
+
+    const setProjectDetails = (projectDetails) => {
+        dispatcher({
+            type: T.SET_PROJECT_DETAILS,
+            payload: {
+                projectDetails,
+                id: curGraph.id,
+            },
+        });
+    };
+
+    const submit = (e) => {
+        e.preventDefault();
+        if (!curGraph) addNewGraph();
+        else setProjectDetails({ projectName, author, set: true });
+    };
+
     const openExisting = () => {
         document.querySelector('input[type="file"]').click();
     };
+    const closeModal = () => {
+        if (!curGraph) dispatcher({ type: T.CHANGE_TAB, payload: 0 });
+        else setProjectDetails({ ...curGraph.projectDetails, set: true });
+    };
     return (
         <Modal
-            ModelOpen={
-                !superState.graphs[superState.curGraphIndex]
-                || !superState.graphs[superState.curGraphIndex].projectDetails.set
-            }
+            ModelOpen={!curGraph || !curGraph.projectDetails.set}
+            closeModal={!curGraph && superState.curGraphIndex === 0 ? null : closeModal}
             title="Project Details"
         >
             <form className="proj-details" onSubmit={submit}>

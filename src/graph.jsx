@@ -19,9 +19,9 @@ const GraphComp = (props) => {
 
     const initialiseNewGraph = (element, id, projectDetails) => {
         // eslint-disable-next-line no-param-reassign
-        element.style.width = `${graphContainerRef.current.offsetWidth}px`;
+        element.style.width = `${graphContainerRef.current.offsetWidth - 2}px`;
         // eslint-disable-next-line no-param-reassign
-        element.style.height = `${graphContainerRef.current.offsetHeight}px`;
+        element.style.height = `${graphContainerRef.current.offsetHeight - 2}px`;
         const cy = cytoscape({ ...cyOptions, container: element });
         cy.nodeEditing({
             resizeToContentCueEnabled: () => false,

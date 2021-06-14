@@ -103,10 +103,9 @@ const reducer = (state, action) => {
 
     case T.SET_PROJECT_DETAILS: {
         const newState = { ...state };
-        newState.graphs = newState.graphs.map((g) => {
-            if (g.id === action.payload.id) return { ...g, projectDetails: action.payload.projectDetails };
-            return g;
-        });
+        newState.graphs = newState.graphs.map((g) => (
+            g.id === action.payload.id ? { ...g, projectDetails: action.payload.projectDetails } : g
+        ));
         return { ...newState };
     }
 
