@@ -11,12 +11,13 @@ import ZoomComp from './component/ZoomSetter';
 
 import { actionType as T } from './reducer';
 import './graph.css';
+import localStorageManager from './graph-builder/local-storage-manager';
 
 const GraphComp = (props) => {
     const graphContainerRef = React.createRef();
     const { dispatcher, superState } = props;
 
-    const initialiseNewGraph = (element, id) => {
+    const initialiseNewGraph = (element, id, projectDetails) => {
         // eslint-disable-next-line no-param-reassign
         element.style.width = `${graphContainerRef.current.offsetWidth}px`;
         // eslint-disable-next-line no-param-reassign
@@ -35,7 +36,7 @@ const GraphComp = (props) => {
         });
 
         cy.gridGuide({ snapToGridOnRelease: false });
-        const myGraph = new (MyGraph(Object))(id, cy, dispatcher, superState);
+        const myGraph = new (MyGraph(Object))(id, cy, dispatcher, superState, projectDetails);
         cy.edgehandles({
             preview: false,
             handlePosition() {
@@ -50,9 +51,10 @@ const GraphComp = (props) => {
         superState.graphs.forEach((e, i) => {
             if (e.instance) return;
             const { id } = e;
-            const graph = initialiseNewGraph(document.getElementById(id), id);
+            const graph = initialiseNewGraph(document.getElementById(id), id, e.projectDetails);
             dispatcher({ type: T.ADD_GRAPH_INSTANCE, instance: graph, index: i });
         });
+        // console.log(superState.graphs);
     }, [superState.graphs.length]);
 
     useEffect(() => {
@@ -65,6 +67,15 @@ const GraphComp = (props) => {
         if (typeof cytoscape('core', 'gridGuide') !== 'function') {
             gridGuide(cytoscape);
         }
+        localStorageManager.getAllGraphs().forEach((graphId) => {
+            dispatcher({
+                type: T.ADD_GRAPH,
+                payload: {
+                    id: graphId,
+                    projectDetails: { projectName: '', author: '', set: true },
+                },
+            });
+        });
     }, []);
 
     return (
@@ -86,7 +97,11 @@ const GraphComp = (props) => {
                         </span>
                         <span
                             className="tab-close"
-                            onClick={(e) => { e.stopPropagation(); dispatcher({ type: T.REMOVE_GRAPH, payload: i }); }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                localStorageManager.remove(superState.graphs[i] ? superState.graphs[i].id : null);
+                                dispatcher({ type: T.REMOVE_GRAPH, payload: i });
+                            }}
                             onKeyDown={(ev) => ev.key === 13 && dispatcher({ type: T.REMOVE_GRAPH, payload: i })}
                             role="button"
                             tabIndex={0}

@@ -4,13 +4,13 @@ import GraphComp from './graph';
 import GraphCompDetails from './component/modals/GraphCompDetails';
 import { Header } from './component/Header';
 import { reducer, initialState, actionType as T } from './reducer';
-import ProjectDeails from './component/modals/ProjectDetails';
+import ProjectDetails from './component/modals/ProjectDetails';
 
 const app = () => {
     const [superState, dispatcher] = useReducer(reducer, initialState);
     return (
         <div className="container">
-            <ProjectDeails superState={superState} dispatcher={dispatcher} />
+            <ProjectDetails superState={superState} dispatcher={dispatcher} />
             <GraphCompDetails
                 closeModal={() => dispatcher({ type: T.Model_Close })}
                 superState={superState}

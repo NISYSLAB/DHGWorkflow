@@ -1,5 +1,6 @@
 import { saveAs } from 'file-saver';
 import { actionType as T } from '../reducer';
+import localStorageManager from './local-storage-manager';
 
 const GraphLoadSave = (ParentClass) => class extends ParentClass {
     constructor() {
@@ -26,7 +27,7 @@ const GraphLoadSave = (ParentClass) => class extends ParentClass {
     }
 
     jsonifyGraph() {
-        const graph = { nodes: [], edges: [], projectDetails: this.superState.projectDetails };
+        const graph = { nodes: [], edges: [], projectDetails: this.projectDetails };
         this.cy.nodes().forEach((node) => {
             if (this.shouldNodeBeSaved(node.id())) {
                 const all = node.json();
@@ -73,21 +74,25 @@ const GraphLoadSave = (ParentClass) => class extends ParentClass {
         content.edges.forEach((edge) => {
             this.addEdge(edge.source, edge.target, edge.label, edge.style);
         });
-        this.dispatcher({ type: T.SET_PROJECT_DETAILS, payload: content.projectDetails });
+        this.projectDetails = content.projectDetails;
+        this.dispatcher({
+            type: T.SET_PROJECT_DETAILS,
+            payload: {
+                projectDetails: content.projectDetails,
+                id: this.id,
+            },
+        });
     }
 
     saveLocalStorage() {
         if (this.autoSaveTimeoutId !== null) clearTimeout(this.autoSaveIntervalId);
-        this.autoSaveIntervalId = setTimeout(() => {
-            const graphJson = this.jsonifyGraph();
-            const serializedJson = JSON.stringify(graphJson);
-            window.localStorage.setItem('serializedGraph', window.btoa(serializedJson));
-        }, 1000);
+        this.autoSaveIntervalId = setTimeout(() => localStorageManager.save(this.id, this.jsonifyGraph()), 1000);
     }
 
     loadGraphFromLocalStorage() {
-        if (window.localStorage.getItem('serializedGraph') === null) return false;
-        this.loadJson(JSON.parse(window.atob(window.localStorage.getItem('serializedGraph'))));
+        const graphContent = localStorageManager.get(this.id);
+        if (!graphContent) return false;
+        this.loadJson(graphContent);
         return true;
     }
 };

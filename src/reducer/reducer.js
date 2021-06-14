@@ -100,6 +100,16 @@ const reducer = (state, action) => {
         graphs: state.graphs.filter((e, i) => i !== action.payload),
         curGraphIndex: state.curGraphIndex !== action.payload ? state.curGraphIndex : 0,
     };
+
+    case T.SET_PROJECT_DETAILS: {
+        const newState = { ...state };
+        newState.graphs = newState.graphs.map((g) => {
+            if (g.id === action.payload.id) return { ...g, projectDetails: action.payload.projectDetails };
+            return g;
+        });
+        return { ...newState };
+    }
+
     default:
         return state;
     }

@@ -3,7 +3,7 @@ import Modal from './ParentModal';
 import './project-details.css';
 import { actionType as T } from '../../reducer';
 
-const ProjectDeails = ({ superState, dispatcher }) => {
+const ProjectDetails = ({ superState, dispatcher }) => {
     const [projectName, setProjectName] = useState('');
     const [author, setAuthor] = useState('');
     const submit = (e) => {
@@ -49,4 +49,4 @@ const ProjectDeails = ({ superState, dispatcher }) => {
     );
 };
 
-export default ProjectDeails;
+export default ProjectDetails;
