@@ -16,6 +16,7 @@ const ModalComp = ({ closeModal, superState }) => {
     const submit = (e) => {
         e.preventDefault();
         cb(data.label, data.style);
+        setData({ label: defaultLabel || '', style: defaultStyle });
         closeModal();
     };
 

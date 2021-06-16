@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Modal from './ParentModal';
 import './project-details.css';
 import { actionType as T } from '../../reducer';
@@ -7,7 +7,7 @@ const ProjectDetails = ({ superState, dispatcher }) => {
     const curGraph = superState.graphs[superState.curGraphIndex];
     const [projectName, setProjectName] = useState('');
     const [author, setAuthor] = useState('');
-
+    const inputRef = useCallback((node) => node && node.focus(), []);
     useEffect(() => {
         if (!curGraph) {
             setProjectName(''); setAuthor('');
@@ -56,6 +56,7 @@ const ProjectDetails = ({ superState, dispatcher }) => {
             <form className="proj-details" onSubmit={submit}>
                 <span>Workflow Name</span>
                 <input
+                    ref={inputRef}
                     placeholder="Title of workflow"
                     required
                     value={projectName}

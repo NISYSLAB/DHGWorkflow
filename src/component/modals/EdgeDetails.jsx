@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import ColorBox from './ColorBox';
 import './edgeDetails.css';
 
@@ -50,6 +50,8 @@ const EdgeDetails = ({
             { ...data.style, ...prop },
         });
     };
+    const inputRef = useCallback((node) => node && node.focus(), []);
+
     return (
         <div className="edgeform" onSubmit={submit}>
             <div style={ParentStyle}>
@@ -61,6 +63,7 @@ const EdgeDetails = ({
                 {labelAllowed ? <div> Label</div> : ''}
                 {labelAllowed ? (
                     <input
+                        ref={inputRef}
                         className="edgeLabel"
                         type="text"
                         required

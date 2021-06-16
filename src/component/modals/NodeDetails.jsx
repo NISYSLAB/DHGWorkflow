@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import './nodeDetails.css';
 import ColorBox from './ColorBox';
 
@@ -27,6 +27,7 @@ const DefNodeStyle = {
 const NodeDetails = ({
     data, setData, submit, labelAllowed,
 }) => {
+    const inputRef = useCallback((node) => node && node.focus(), []);
     const NodeStyle = {
         ...DefNodeStyle,
         backgroundColor: data.style['background-color'],
@@ -82,6 +83,7 @@ const NodeDetails = ({
                 {labelAllowed ? (
                     <input
                         className="nodeLabel"
+                        ref={inputRef}
                         type="text"
                         required
                         label="Node Label"
