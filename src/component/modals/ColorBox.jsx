@@ -9,7 +9,7 @@ const ColorBox = ({ color, setColor }) => {
             tabIndex={0}
             className="color-box-par"
             onClick={() => !visible && setVisible(true)}
-            onKeyDown={(ev) => ev.key === 13 && (!visible && setVisible(true))}
+            onKeyDown={(ev) => ev.key === ' ' && (!visible && setVisible(true))}
         >
             <div className="color-box" style={{ background: color }} />
             <div

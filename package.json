@@ -13,6 +13,7 @@
     "cytoscape-grid-guide": "^2.3.2",
     "cytoscape-node-editing": "^4.0.0",
     "file-saver": "^2.0.5",
+    "hotkeys-js": "^3.8.7",
     "jquery": "^3.0.0",
     "konva": "^7.0.3",
     "rc-slider": "^9.7.2",

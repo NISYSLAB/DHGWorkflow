@@ -21,7 +21,7 @@ const ZoomComp = ({ superState }) => {
                     tabIndex={0}
                     className="zoom-box zoom-btn"
                     onClick={() => myGraph.resetZoom()}
-                    onKeyDown={(ev) => ev.key === 13 && (myGraph.resetZoom())}
+                    onKeyDown={(ev) => ev.key === ' ' && (myGraph.resetZoom())}
                 >
                     <BiReset />
 
@@ -31,7 +31,7 @@ const ZoomComp = ({ superState }) => {
                     tabIndex={0}
                     className="zoom-box zoom-btn"
                     onClick={() => myGraph.fitZoom()}
-                    onKeyDown={(ev) => ev.key === 13 && (myGraph.resetZoom())}
+                    onKeyDown={(ev) => ev.key === ' ' && (myGraph.resetZoom())}
                 >
                     <BiRectangle />
 

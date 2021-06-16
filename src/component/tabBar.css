@@ -46,7 +46,7 @@
     overflow: hidden;
 }
 
-.tab-close {
+.tab-act {
     margin-left: 5px;
     height: 100%;
     border: 0;
@@ -54,6 +54,6 @@
     padding: 0;
 }
 
-.tab-close:hover {
+.tab-act:hover {
     text-shadow: 0px 0px 10px #000;
 }

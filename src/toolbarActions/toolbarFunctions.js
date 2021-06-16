@@ -40,11 +40,6 @@ const editElement = (state, setState) => {
     }
 };
 
-// const toggleDrawMode = (state, setState) => {
-//     getGraphFun(state).enableDraw(!state.drawModeOn);
-//     setState({ type: T.TURN_DRAW, payload: !state.drawModeOn });
-// };
-
 const deleteElem = (state) => {
     const tid = new Date().getTime();
     state.eleSelectedPayload.ids.forEach((id) => getGraphFun(state).deleteElem(id, tid));
@@ -92,7 +87,7 @@ const editDetails = (state, setState) => {
     });
 };
 const undo = (state) => {
-    getGraphFun(state).undo();
+    if (getGraphFun(state))getGraphFun(state).undo();
 };
 const redo = (state) => {
     getGraphFun(state).redo();

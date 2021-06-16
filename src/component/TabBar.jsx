@@ -2,6 +2,7 @@ import React from 'react';
 import {
     MdEdit, MdClose, MdAdd,
 } from 'react-icons/md';
+import hotkeys from 'hotkeys-js';
 import localStorageManager from '../graph-builder/local-storage-manager';
 import { actionType as T } from '../reducer';
 import { newProject, editDetails } from '../toolbarActions/toolbarFunctions';
@@ -19,12 +20,30 @@ const TabBar = ({ superState, dispatcher }) => {
         e.stopPropagation();
         editDetails(superState, dispatcher);
     };
+    React.useEffect(() => {
+        hotkeys('ctrl+shift+m,command+shift+m', (event) => {
+            event.preventDefault();
+            document.getElementById('new_graph').click();
+        });
+        hotkeys('ctrl+shift+e,command+shift+e', (event) => {
+            event.preventDefault();
+            const el = document.querySelector('.tab.tab-graph.selected > .tab-act.edit');
+            if (el) el.click();
+        });
+        hotkeys('ctrl+shift+l,command+shift+l', (event) => {
+            event.preventDefault();
+            const el = document.querySelector('.tab.tab-graph.selected > .tab-act.close');
+            if (el) el.click();
+        });
+    }, []);
+
     return (
         <div className="tab-par">
             <button
                 className="tab"
                 onClick={newProject.bind(this, superState, dispatcher)}
                 type="button"
+                id="new_graph"
             >
                 <MdAdd size={25} />
             </button>
@@ -33,9 +52,10 @@ const TabBar = ({ superState, dispatcher }) => {
                     key={el.id}
                     className={`tab tab-graph ${superState.curGraphIndex === i ? 'selected' : 'none'}`}
                     onClick={() => dispatcher({ type: T.CHANGE_TAB, payload: i })}
-                    onKeyDown={(ev) => ev.key === 13 && dispatcher({ type: T.CHANGE_TAB, payload: i })}
+                    onKeyDown={(ev) => ev.key === ' ' && dispatcher({ type: T.CHANGE_TAB, payload: i })}
                     role="button"
                     tabIndex={0}
+                    id={`tab_${i}`}
                 >
                     <span className="tab-text">
                         {el.projectDetails.projectName}
@@ -45,7 +65,7 @@ const TabBar = ({ superState, dispatcher }) => {
 
                     {superState.curGraphIndex === i ? (
                         <button
-                            className="tab-close"
+                            className="tab-act edit"
                             onClick={editCur}
                             type="button"
                         >
@@ -53,7 +73,7 @@ const TabBar = ({ superState, dispatcher }) => {
                         </button>
                     ) : <></>}
                     <button
-                        className="tab-close"
+                        className="tab-act close"
                         onClick={closeTab.bind(this, i)}
                         type="button"
                     >
