@@ -80,9 +80,16 @@ const GraphComp = (props) => {
     }, []);
 
     return (
-        <>
+        <div
+            style={{
+                flex: 1,
+                flexDirection: 'column',
+                display: 'flex',
+
+            }}
+        >
             <TabBar superState={superState} dispatcher={dispatcher} />
-            <div className="graph-container" ref={graphContainerRef}>
+            <div style={{ flex: 1, background: 'white' }} className="graph-container" ref={graphContainerRef}>
                 {superState.graphs.map((el, i) => (
                     <div
                         style={{ zIndex: 1, display: superState.curGraphIndex === i ? 'block' : 'none' }}
@@ -92,7 +99,7 @@ const GraphComp = (props) => {
                 ))}
                 <ZoomComp dispatcher={dispatcher} superState={superState} />
             </div>
-        </>
+        </div>
     );
 };
 
