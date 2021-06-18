@@ -73,6 +73,12 @@ const GraphUndoRedo = (ParentClass) => class GUR extends GraphComponent(ParentCl
         this.dispatcher({ type: T.SET_UNDO, payload: this.curActionIndex !== 0 });
         this.dispatcher({ type: T.SET_REDO, payload: this.curActionIndex !== this.actionArr.length });
     }
+
+    setCurStatus() {
+        if (super.setCurStatus) super.setCurStatus();
+        this.dispatcher({ type: T.SET_UNDO, payload: this.curActionIndex !== 0 });
+        this.dispatcher({ type: T.SET_REDO, payload: this.curActionIndex !== this.actionArr.length });
+    }
 };
 
 export default GraphUndoRedo;

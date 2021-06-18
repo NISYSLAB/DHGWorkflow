@@ -57,6 +57,11 @@ const GraphComp = (props) => {
         });
         // console.log(superState.graphs);
     }, [superState.graphs.length]);
+    useEffect(() => {
+        if (superState.graphs[superState.curGraphIndex]) {
+            superState.graphs[superState.curGraphIndex].instance.setCurStatus();
+        }
+    }, [superState.curGraphIndex]);
 
     useEffect(() => {
         if (typeof cytoscape('core', 'edgehandles') !== 'function') {

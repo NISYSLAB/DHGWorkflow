@@ -78,6 +78,11 @@ const CoreGraph = (ParentClass) => class extends
             );
         });
     }
+
+    setCurStatus() {
+        if (super.setCurStatus) super.setCurStatus();
+        this.selectDeselectEventHandler();
+    }
 };
 
 export default CoreGraph;

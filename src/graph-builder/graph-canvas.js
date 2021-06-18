@@ -5,6 +5,7 @@ const GraphCanvas = (ParentClass) => class extends ParentClass {
 
     setOnZoom(cb) {
         this.cy.removeListener('zoom');
+        this.setZoomUI = cb;
         this.cy.on('zoom', (e) => cb(Math.round(100 * e.target.zoom())));
     }
 
@@ -26,6 +27,11 @@ const GraphCanvas = (ParentClass) => class extends ParentClass {
         if (!window.confirm('Do want to clear all elements?')) return false;
         this.cy.elements().remove();
         return true;
+    }
+
+    setCurStatus() {
+        if (super.setCurStatus) super.setCurStatus();
+        this.setZoomUI(Math.round(this.cy.zoom() * 100));
     }
 };
 
