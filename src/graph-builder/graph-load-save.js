@@ -10,7 +10,7 @@ const GraphLoadSave = (ParentClass) => class extends ParentClass {
 
     downloadImg(format) {
         if (format === 'PNG') saveAs(this.cy.png(), `${this.getName()}-DHGWorkflow.png`);
-        if (format === 'JPG') saveAs(this.cy.png(), `${this.getName()}-DHGWorkflow.jgp`);
+        if (format === 'JPG') saveAs(this.cy.png(), `${this.getName()}-DHGWorkflow.jpg`);
     }
 
     shouldNodeBeSaved(nodeID) {

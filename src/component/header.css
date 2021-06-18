@@ -25,7 +25,8 @@
     transition: none;
     height: 64px;
 }
-.toolbar .tool.active{
+
+.toolbar .tool.active {
     color: #333;
 }
 
@@ -81,15 +82,18 @@
     height: 1px;
 }
 
-.rc-switch-checked{
+.rc-switch-checked {
     border: 1px solid #1e88e5;
     background-color: #1e88e5;
 }
-.rc-menu-container{
+
+.rc-menu-container {
     position: absolute;
 }
 
 .rc-menu-button {
     border: 0;
     background: transparent;
+    margin: 0;
+    padding: 0;
 }

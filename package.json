@@ -24,6 +24,7 @@
     "react-icons": "^4.2.0",
     "react-modal": "^3.13.1",
     "react-scripts": "4.0.3",
+    "react-tooltip": "^4.2.21",
     "web-vitals": "^0.2.4",
     "workbox-background-sync": "^5.1.3",
     "workbox-broadcast-update": "^5.1.3",

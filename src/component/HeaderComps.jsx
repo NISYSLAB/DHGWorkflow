@@ -3,13 +3,13 @@ import Switch from 'rc-switch';
 import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
 
 function DropDown({
-    Icon, text, action, active, tabIndex,
+    Icon, text, action, active, tabIndex, hotkey,
 }) {
     return (
         <Menu menuButton={(
             <MenuButton>
                 <ActionButton {...{
-                    Icon, text, action, active, tabIndex,
+                    Icon, text, action, active, tabIndex, hotkey,
                 }}
                 />
             </MenuButton>
@@ -22,14 +22,14 @@ function DropDown({
 }
 
 const FileUploader = ({
-    Icon, text, action, active, tabIndex,
+    Icon, text, action, active, tabIndex, hotkey,
 }) => {
     const fileRef = React.createRef();
     return (
         <>
             <input type="file" ref={fileRef} style={{ display: 'none' }} accept=".json" onChange={action} />
             <ActionButton {...{
-                Icon, text, active, tabIndex, action: () => fileRef.current.click(),
+                Icon, text, active, tabIndex, action: () => fileRef.current.click(), hotkey,
             }}
             />
         </>
@@ -58,7 +58,7 @@ const Switcher = ({
 );
 
 const ActionButton = ({
-    Icon, text, action, active, tabIndex,
+    Icon, text, action, active, tabIndex, hotkey,
 }) => (
     <div
         role="button"
@@ -67,6 +67,7 @@ const ActionButton = ({
         className={`tool ${active ? 'active' : ''}`}
         onClick={() => (active && action())}
         onKeyDown={(ev) => active && ev.key === ' ' && action()}
+        data-tip={hotkey ? hotkey.split(',')[0] : ''}
     >
         <div className="icon"><Icon size="25" /></div>
         <div style={{ fontSize: 16 }}>{text}</div>

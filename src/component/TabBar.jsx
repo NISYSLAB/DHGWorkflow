@@ -3,6 +3,7 @@ import {
     MdEdit, MdClose, MdAdd,
 } from 'react-icons/md';
 import hotkeys from 'hotkeys-js';
+import ReactTooltip from 'react-tooltip';
 import localStorageManager from '../graph-builder/local-storage-manager';
 import { actionType as T } from '../reducer';
 import { newProject, editDetails } from '../toolbarActions/toolbarFunctions';
@@ -44,6 +45,7 @@ const TabBar = ({ superState, dispatcher }) => {
                 onClick={newProject.bind(this, superState, dispatcher)}
                 type="button"
                 id="new_graph"
+                data-tip="New Workflow Tab (Ctrl + Shift + M)"
             >
                 <MdAdd size={25} />
             </button>
@@ -68,6 +70,8 @@ const TabBar = ({ superState, dispatcher }) => {
                             className="tab-act edit"
                             onClick={editCur}
                             type="button"
+                            data-tip="Edit Workflow Details (Ctrl + Shift + E)"
+                            data-for="header-tab"
                         >
                             <MdEdit size={16} />
                         </button>
@@ -76,9 +80,12 @@ const TabBar = ({ superState, dispatcher }) => {
                         className="tab-act close"
                         onClick={closeTab.bind(this, i)}
                         type="button"
+                        data-tip="Close current Workflow (Ctrl + Shift + L)"
+                        data-for="header-tab"
                     >
                         <MdClose size={20} />
                     </button>
+                    <ReactTooltip place="bottom" type="dark" effect="solid" id="header-tab" />
                 </div>
             ))}
         </div>

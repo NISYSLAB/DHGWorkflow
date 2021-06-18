@@ -14,7 +14,7 @@ const toolbarList = (state) => [
         icon: FaPlus,
         action: createNode,
         active: true,
-        hotkey: 'ctrl+g',
+        hotkey: 'Ctrl+G',
     },
     { type: 'vsep' },
     {
@@ -23,7 +23,7 @@ const toolbarList = (state) => [
         icon: FaFileImport,
         action: readFile,
         active: true,
-        hotkey: 'ctrl+o',
+        hotkey: 'Ctrl+O',
     },
     {
         type: 'action',
@@ -31,7 +31,7 @@ const toolbarList = (state) => [
         icon: FaSave,
         action: saveAction,
         active: true,
-        hotkey: 'ctrl+s',
+        hotkey: 'Ctrl+S',
     },
     {
         type: 'action',
@@ -39,7 +39,7 @@ const toolbarList = (state) => [
         icon: FaRegTimesCircle,
         action: clearAll,
         active: true,
-        hotkey: 'ctrl+backspace',
+        hotkey: 'Ctrl+Backspace',
     },
     { type: 'vsep' },
     {
@@ -48,7 +48,7 @@ const toolbarList = (state) => [
         icon: FaUndo,
         action: undo,
         active: state.undoEnabled,
-        hotkey: 'ctrl+z',
+        hotkey: 'Ctrl+Z',
     },
     {
         type: 'action',
@@ -56,7 +56,7 @@ const toolbarList = (state) => [
         icon: FaRedo,
         action: redo,
         active: state.redoEnabled,
-        hotkey: 'ctrl+y,ctrl+shift+z',
+        hotkey: 'Ctrl+Shift+Z,Ctrl+Y',
     },
     { type: 'vsep' },
     {
@@ -65,7 +65,7 @@ const toolbarList = (state) => [
         icon: FaEdit,
         action: editElement,
         active: (state.eleSelected && state.eleSelectedPayload.type !== 'MIX'),
-        hotkey: 'ctrl+e',
+        hotkey: 'Ctrl+E',
     },
     {
         type: 'action',
@@ -73,7 +73,7 @@ const toolbarList = (state) => [
         icon: FaTrash,
         action: deleteElem,
         active: state.eleSelected,
-        hotkey: 'backspace,del,clear,delete',
+        hotkey: 'Delete,Backspace,Del,Clear',
     },
     { type: 'vsep' },
     { type: 'space' },

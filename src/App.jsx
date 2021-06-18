@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 import './App.css';
+import ReactTooltip from 'react-tooltip';
 import GraphComp from './graph';
 import GraphCompDetails from './component/modals/GraphCompDetails';
 import { Header } from './component/Header';
@@ -19,6 +20,7 @@ const app = () => {
             <section className="body" style={{ display: 'flex' }}>
                 <GraphComp dispatcher={dispatcher} superState={superState} />
             </section>
+            <ReactTooltip place="bottom" type="dark" effect="solid" />
         </div>
     );
 };

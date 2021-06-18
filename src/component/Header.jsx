@@ -1,13 +1,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import hotkeys from 'hotkeys-js';
-import 'rc-switch/assets/index.css';
 import toolbarList from '../toolbarActions/toolbarList';
 import '@szhsin/react-menu/dist/index.css';
 import './header.css';
 import {
     ActionButton, Vsep, Hsep, Space, TextBox, Switcher, DropDown, FileUploader,
 } from './HeaderComps';
+import 'rc-switch/assets/index.css';
 
 const setHotKeys = (actions) => {
     let keys = '';
@@ -15,7 +15,7 @@ const setHotKeys = (actions) => {
     actions.forEach((action, i) => {
         if (action.hotkey) {
             action.hotkey.split(',').forEach((key) => {
-                [key, key.replace('ctrl', 'command')].forEach((k) => {
+                [key, key.replace('Ctrl', 'Command')].forEach((k) => {
                     keys += `${k},`;
                     map[k] = document.getElementById(`action_${i + 1}`);
                 });
@@ -45,7 +45,7 @@ const Header = ({ state, dispatcher }) => {
             <section className="toolbar">
                 {
                     actions.map(({
-                        text, active, action, icon, type,
+                        text, active, action, icon, type, hotkey,
                     }, i) => {
                         const props = {
                             text,
@@ -54,6 +54,7 @@ const Header = ({ state, dispatcher }) => {
                             key: text,
                             action: (e) => action(state, dispatcher, e),
                             Icon: icon,
+                            hotkey,
                         };
                         switch (type) {
                         case 'vsep': return <Vsep key={`${`v${i}`}`} />;
@@ -61,7 +62,8 @@ const Header = ({ state, dispatcher }) => {
                         case 'switch': return <Switcher {...props} />;
                         case 'menu': return <DropDown {...props} />;
                         case 'file-upload': return <FileUploader {...props} />;
-                        default: return <ActionButton {...props} />;
+                        case 'action': return <ActionButton {...props} />;
+                        default: return <></>;
                         }
                     })
                 }
