@@ -31,9 +31,10 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
             data: {
                 id, label, type, ...data,
             },
-            style,
             position,
         });
+        // ↓ Not optimal to do ↓
+        Object.entries(style).forEach((p) => { node.style(p[0], p[1]); });
         this.setNodeEvent(node);
         this.addAction(
             { actionName: GA.DEL_NODE, parameters: [node.id()] },
@@ -52,8 +53,9 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
             data: {
                 source, target, label, type, id,
             },
-            style,
         });
+        // ↓ Not optimal to do ↓
+        Object.entries(style).forEach((p) => { edge.style(p[0], p[1]); });
         this.addAction(
             { actionName: GA.DEL_EDGE, parameters: [edge.id()] },
             { actionName: GA.ADD_EDGE, parameters: [source, target, label, style, type, edge.id()] },

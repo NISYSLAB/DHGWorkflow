@@ -25,7 +25,8 @@ const GraphCanvas = (ParentClass) => class extends ParentClass {
         if (this.cy.elements().length === 0) return true;
         // eslint-disable-next-line no-alert
         if (!window.confirm('Do want to clear all elements?')) return false;
-        this.cy.elements().remove();
+        const tid = new Date().getTime();
+        this.cy.elements().forEach((el) => this.deleteElem(el.id(), tid));
         return true;
     }
 

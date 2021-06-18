@@ -76,8 +76,10 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
         return this.addEdgeWithJuncNode(juncNode.id(), targetID, tid);
     }
 
-    addEdge(sourceID, targetID, label = '', style, tid = this.getTid()) {
+    addEdge(sourceID, targetID, label = '', style, type = 'ordin', id, tid = this.getTid()) {
         const sourceNode = this.getById(sourceID);
+        // ↓ Condition never statisfies ↓
+        if (type === 'special') return super.addEdge(sourceID, targetID, label, style, type, id, tid);
         if (sourceNode.data('type') === 'special') return this.addEdgeWithJuncNode(sourceID, targetID, tid);
         const juncNodes = sourceNode.outgoers('node').filter((node) => node.data('edgeLabel') === label);
         if (juncNodes.length) return this.addEdgeWithJuncNode(juncNodes[0].id(), targetID, tid);

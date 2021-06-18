@@ -67,11 +67,12 @@ const GraphLoadSave = (ParentClass) => class extends ParentClass {
     }
 
     loadJson(content) {
+        const tid = new Date().getTime();
         content.nodes.forEach((node) => {
-            this.addNode(node.label, node.style, 'ordin', node.position, { id: node.id });
+            this.addNode(node.label, node.style, 'ordin', node.position, { }, node.id, tid);
         });
         content.edges.forEach((edge) => {
-            this.addEdge(edge.source, edge.target, edge.label, edge.style);
+            this.addEdge(edge.source, edge.target, edge.label, edge.style, 'ordin', undefined, tid);
         });
         this.projectDetails = content.projectDetails;
         this.dispatcher({
