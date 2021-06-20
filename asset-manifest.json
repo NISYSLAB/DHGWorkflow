@@ -1,27 +1,27 @@
 {
   "files": {
-    "main.css": "/DHGWorkflow/static/css/main.722d8365.chunk.css",
-    "main.js": "/DHGWorkflow/static/js/main.5d5b3acd.chunk.js",
-    "main.js.map": "/DHGWorkflow/static/js/main.5d5b3acd.chunk.js.map",
-    "runtime-main.js": "/DHGWorkflow/static/js/runtime-main.d51c6d6d.js",
-    "runtime-main.js.map": "/DHGWorkflow/static/js/runtime-main.d51c6d6d.js.map",
+    "main.css": "/DHGWorkflow/static/css/main.4be4a836.chunk.css",
+    "main.js": "/DHGWorkflow/static/js/main.b476d4cf.chunk.js",
+    "main.js.map": "/DHGWorkflow/static/js/main.b476d4cf.chunk.js.map",
+    "runtime-main.js": "/DHGWorkflow/static/js/runtime-main.b0cdce1a.js",
+    "runtime-main.js.map": "/DHGWorkflow/static/js/runtime-main.b0cdce1a.js.map",
     "static/css/2.2c1e88b0.chunk.css": "/DHGWorkflow/static/css/2.2c1e88b0.chunk.css",
-    "static/js/2.cfc1f478.chunk.js": "/DHGWorkflow/static/js/2.cfc1f478.chunk.js",
-    "static/js/2.cfc1f478.chunk.js.map": "/DHGWorkflow/static/js/2.cfc1f478.chunk.js.map",
-    "static/js/3.62723729.chunk.js": "/DHGWorkflow/static/js/3.62723729.chunk.js",
-    "static/js/3.62723729.chunk.js.map": "/DHGWorkflow/static/js/3.62723729.chunk.js.map",
+    "static/js/2.3ddb56b8.chunk.js": "/DHGWorkflow/static/js/2.3ddb56b8.chunk.js",
+    "static/js/2.3ddb56b8.chunk.js.map": "/DHGWorkflow/static/js/2.3ddb56b8.chunk.js.map",
+    "static/js/3.570dcf98.chunk.js": "/DHGWorkflow/static/js/3.570dcf98.chunk.js",
+    "static/js/3.570dcf98.chunk.js.map": "/DHGWorkflow/static/js/3.570dcf98.chunk.js.map",
     "index.html": "/DHGWorkflow/index.html",
     "service-worker.js": "/DHGWorkflow/service-worker.js",
     "service-worker.js.map": "/DHGWorkflow/service-worker.js.map",
     "static/css/2.2c1e88b0.chunk.css.map": "/DHGWorkflow/static/css/2.2c1e88b0.chunk.css.map",
-    "static/css/main.722d8365.chunk.css.map": "/DHGWorkflow/static/css/main.722d8365.chunk.css.map",
-    "static/js/2.cfc1f478.chunk.js.LICENSE.txt": "/DHGWorkflow/static/js/2.cfc1f478.chunk.js.LICENSE.txt"
+    "static/css/main.4be4a836.chunk.css.map": "/DHGWorkflow/static/css/main.4be4a836.chunk.css.map",
+    "static/js/2.3ddb56b8.chunk.js.LICENSE.txt": "/DHGWorkflow/static/js/2.3ddb56b8.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.d51c6d6d.js",
+    "static/js/runtime-main.b0cdce1a.js",
     "static/css/2.2c1e88b0.chunk.css",
-    "static/js/2.cfc1f478.chunk.js",
-    "static/css/main.722d8365.chunk.css",
-    "static/js/main.5d5b3acd.chunk.js"
+    "static/js/2.3ddb56b8.chunk.js",
+    "static/css/main.4be4a836.chunk.css",
+    "static/js/main.b476d4cf.chunk.js"
   ]
 }
