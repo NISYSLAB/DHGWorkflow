@@ -19,5 +19,6 @@ const actionType = {
     CHANGE_TAB: 'CHANGE_TAB',
     REMOVE_GRAPH: 'REMOVE_GRAPH',
     NEW_GRAPH: 'NEW_GRAPH',
+    SET_SHARE_MODAL: 'SET_SHARE_MODAL',
 };
 export default zealit(actionType);

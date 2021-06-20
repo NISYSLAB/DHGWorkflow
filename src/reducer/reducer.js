@@ -115,6 +115,10 @@ const reducer = (state, action) => {
         return { ...newState };
     }
 
+    case T.SET_SHARE_MODAL: {
+        return { ...state, shareModal: action.payload };
+    }
+
     default:
         return state;
     }

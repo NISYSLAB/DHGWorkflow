@@ -1,10 +1,10 @@
 import {
-    FaSave, FaUndo, FaRedo, FaTrash, FaFileImport, FaPlus, FaDownload, FaEdit, FaRegTimesCircle,
+    FaSave, FaUndo, FaRedo, FaTrash, FaFileImport, FaPlus, FaDownload, FaEdit, FaRegTimesCircle, FaShare,
 } from 'react-icons/fa';
 
 import {
     createNode, editElement, deleteElem, downloadImg, saveAction,
-    readFile, clearAll, undo, redo,
+    readFile, clearAll, undo, redo, openShareModal,
 } from './toolbarFunctions';
 
 const toolbarList = (state) => [
@@ -77,6 +77,13 @@ const toolbarList = (state) => [
     },
     { type: 'vsep' },
     { type: 'space' },
+    {
+        type: 'action',
+        text: 'Share',
+        icon: FaShare,
+        action: openShareModal,
+        active: true,
+    },
     {
         type: 'menu',
         text: 'Download',

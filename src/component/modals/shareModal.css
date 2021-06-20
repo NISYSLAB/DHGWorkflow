@@ -1,0 +1,27 @@
+.share-modal {
+    background-color: #efefef70;
+    margin: 20px;
+    display: flex;
+}
+
+.preDiv {
+    display: block;
+    font-family: monospace;
+    white-space: pre;
+    padding: 20px;
+    flex: 1;
+    border: 0;
+    background: transparent;
+}
+
+.copyBtn {
+    background: #eee;
+    padding: 20px;
+    cursor: pointer;
+    border: 0;
+    
+}
+
+.copyBtn:hover{
+    background: #ddd;
+}

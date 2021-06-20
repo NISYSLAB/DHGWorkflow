@@ -27,7 +27,9 @@ const GraphLoadSave = (ParentClass) => class extends ParentClass {
     }
 
     jsonifyGraph() {
-        const graph = { nodes: [], edges: [], projectDetails: this.projectDetails };
+        const graph = {
+            nodes: [], edges: [], projectDetails: this.projectDetails, id: this.id,
+        };
         this.cy.nodes().forEach((node) => {
             if (this.shouldNodeBeSaved(node.id())) {
                 const all = node.json();
@@ -94,6 +96,10 @@ const GraphLoadSave = (ParentClass) => class extends ParentClass {
         if (!graphContent) return false;
         this.loadJson(graphContent);
         return true;
+    }
+
+    serializeGraph() {
+        return btoa(JSON.stringify(this.jsonifyGraph()));
     }
 };
 

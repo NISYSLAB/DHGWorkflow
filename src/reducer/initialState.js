@@ -13,6 +13,7 @@ const initialState = {
     drawModeOn: true,
     undoEnabled: false,
     redoEnabled: false,
+    shareModal: false,
     graphs: [],
     curGraphIndex: 0,
 };

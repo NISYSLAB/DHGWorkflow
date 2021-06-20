@@ -55,8 +55,8 @@ const GraphComp = (props) => {
             const graph = initialiseNewGraph(document.getElementById(id), id, e.projectDetails);
             dispatcher({ type: T.ADD_GRAPH_INSTANCE, instance: graph, index: i });
         });
-        // console.log(superState.graphs);
     }, [superState.graphs.length]);
+
     useEffect(() => {
         if (superState.graphs[superState.curGraphIndex]) {
             superState.graphs[superState.curGraphIndex].instance.setCurStatus();
@@ -72,6 +72,14 @@ const GraphComp = (props) => {
         }
         if (typeof cytoscape('core', 'gridGuide') !== 'function') {
             gridGuide(cytoscape);
+        }
+        const graphFromParams = Object.fromEntries(new URLSearchParams(window.location.search).entries()).g;
+        if (graphFromParams) {
+            const graphContent = JSON.parse(atob(graphFromParams));
+            const gid = new Date().getTime().toString();
+            localStorageManager.addToFront(gid);
+            localStorageManager.save(gid, graphContent);
+            window.history.replaceState({}, document.title, window.location.pathname);
         }
         localStorageManager.getAllGraphs().forEach((graphId) => {
             dispatcher({
@@ -90,7 +98,7 @@ const GraphComp = (props) => {
                 flex: 1,
                 flexDirection: 'column',
                 display: 'flex',
-
+                width: '100%',
             }}
         >
             <TabBar superState={superState} dispatcher={dispatcher} />

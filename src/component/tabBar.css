@@ -1,8 +1,8 @@
 .tab-par {
-    word-spacing: -1;
     display: flex;
     overflow: auto;
     margin-bottom: -1px;
+    width: 100%;;
 }
 
 .tab {

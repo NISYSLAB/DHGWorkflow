@@ -6,18 +6,20 @@ import GraphCompDetails from './component/modals/GraphCompDetails';
 import { Header } from './component/Header';
 import { reducer, initialState, actionType as T } from './reducer';
 import ProjectDetails from './component/modals/ProjectDetails';
+import ShareModal from './component/modals/ShareModal';
 
 const app = () => {
     const [superState, dispatcher] = useReducer(reducer, initialState);
     return (
         <div className="container">
             <ProjectDetails superState={superState} dispatcher={dispatcher} />
+            <ShareModal superState={superState} dispatcher={dispatcher} />
             <GraphCompDetails
                 closeModal={() => dispatcher({ type: T.Model_Close })}
                 superState={superState}
             />
             <Header state={superState} dispatcher={dispatcher} />
-            <section className="body" style={{ display: 'flex' }}>
+            <section className="body" style={{ display: 'flex', overflow: 'hidden' }}>
                 <GraphComp dispatcher={dispatcher} superState={superState} />
             </section>
             <ReactTooltip place="bottom" type="dark" effect="solid" />
