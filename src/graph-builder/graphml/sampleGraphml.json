@@ -1,0 +1,182 @@
+{
+  "graphml": {
+    "$": {
+      "xmlns": "http://graphml.graphdrawing.org/xmlns",
+      "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+      "xsi:schemaLocation": "http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd",
+      "xmlns:y": "http://www.yworks.com/xml/graphml"
+    },
+    "key": [
+      {
+        "$": {
+          "for": "node",
+          "id": "d6",
+          "yfiles.type": "nodegraphics"
+        }
+      },
+      {
+        "$": {
+          "for": "edge",
+          "id": "d10",
+          "yfiles.type": "edgegraphics"
+        }
+      }
+    ],
+    "graph": [
+      {
+        "$": {
+          "edgedefault": "directed",
+          "id": "G"
+        },
+        "node": [
+          {
+            "$": {
+              "id": "n0"
+            },
+            "data": [
+              {
+                "$": {
+                  "key": "d6"
+                },
+                "y:ShapeNode": [
+                  {
+                    "y:Geometry": [
+                      {
+                        "$": {
+                          "height": "30.0",
+                          "width": "30.0",
+                          "x": "444.0",
+                          "y": "192.0"
+                        }
+                      }
+                    ],
+                    "y:Fill": [
+                      {
+                        "$": {
+                          "color": "#FFCC00",
+                          "transparent": "false"
+                        }
+                      }
+                    ],
+                    "y:BorderStyle": [
+                      {
+                        "$": {
+                          "color": "#000000",
+                          "width": "1.0"
+                        }
+                      }
+                    ],
+                    "y:NodeLabel": [
+                      "LoopSimNode111"
+                    ],
+                    "y:Shape": [
+                      {
+                        "$": {
+                          "type": "ellipse"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "$": {
+              "id": "n1"
+            },
+            "data": [
+              {
+                "$": {
+                  "key": "d6"
+                },
+                "y:ShapeNode": [
+                  {
+                    "y:Geometry": [
+                      {
+                        "$": {
+                          "height": "30.0",
+                          "width": "30.0",
+                          "x": "557.0",
+                          "y": "314.0"
+                        }
+                      }
+                    ],
+                    "y:Fill": [
+                      {
+                        "$": {
+                          "color": "#FFCC00",
+                          "transparent": "false"
+                        }
+                      }
+                    ],
+                    "y:BorderStyle": [
+                      {
+                        "$": {
+                          "color": "#000000",
+                          "width": "1.0"
+                        }
+                      }
+                    ],
+                    "y:NodeLabel": [
+                      "LoopSimNode2"
+                    ],
+                    "y:Shape": [
+                      {
+                        "$": {
+                          "type": "ellipse"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "edge": [
+          {
+            "$": {
+              "id": "e0",
+              "source": "n0",
+              "target": "n1"
+            },
+            "data": [
+              {
+                "$": {
+                  "key": "d10"
+                },
+                "y:GenericEdge": [
+                  {
+                    "$": {
+                      "configuration": "com.yworks.bpmn.Connection"
+                    },
+                    "y:LineStyle": [
+                      {
+                        "$": {
+                          "color": "#000000",
+                          "width": "1.0"
+                        }
+                      }
+                    ],
+                    "y:Arrows": [
+                      {
+                        "$": {
+                          "source": "none",
+                          "target": "delta"
+                        }
+                      }
+                    ],
+                    "y:EdgeLabel": [
+                      "LoopSimEdge12"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,6 +1,7 @@
 import { saveAs } from 'file-saver';
 import { actionType as T } from '../reducer';
 import localStorageManager from './local-storage-manager';
+import graphmlBuilder from './graphml/builder';
 
 const GraphLoadSave = (ParentClass) => class extends ParentClass {
     constructor() {
@@ -62,10 +63,11 @@ const GraphLoadSave = (ParentClass) => class extends ParentClass {
     }
 
     saveToDisk() {
-        const str = JSON.stringify(this.jsonifyGraph());
+        // const str = JSON.stringify(this.jsonifyGraph());
+        const str = graphmlBuilder(this.jsonifyGraph());
         const bytes = new TextEncoder().encode(str);
         const blob = new Blob([bytes], { type: 'application/json;charset=utf-8' });
-        saveAs(blob, `${this.getName()}-DHGWorkflow.json`);
+        saveAs(blob, `${this.getName()}-DHGWorkflow-${new Date().getTime()}.graphml`);
     }
 
     loadJson(content) {

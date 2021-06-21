@@ -50,6 +50,19 @@
         ],
         "react/prop-types": "off"
     },
+    "overrides": [
+        {
+            "files": [
+                "*ML.js"
+            ],
+            "rules": {
+                "indent": [
+                    "error",
+                    2
+                ]
+            }
+        }
+    ],
     "settings": {
         "import/ignore": [
             ".css$",
