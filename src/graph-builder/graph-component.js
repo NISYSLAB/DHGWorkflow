@@ -1,4 +1,3 @@
-import { NodeStyle, EdgeStyle } from '../config/defaultStyles';
 import GA from './graph-actions';
 
 const GraphComponent = (ParentClass) => class GC extends ParentClass {
@@ -29,12 +28,10 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         const node = this.cy.add({
             group: 'nodes',
             data: {
-                id, label, type, ...data,
+                ...data, id, label, type, style,
             },
             position,
         });
-        // ↓ Not optimal to do ↓
-        Object.entries(style).forEach((p) => { node.style(p[0], p[1]); });
         this.setNodeEvent(node);
         this.addAction(
             { actionName: GA.DEL_NODE, parameters: [node.id()] },
@@ -51,11 +48,9 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         const edge = this.cy.add({
             group: 'edges',
             data: {
-                source, target, label, type, id,
+                source, target, label, type, id, style,
             },
         });
-        // ↓ Not optimal to do ↓
-        Object.entries(style).forEach((p) => { edge.style(p[0], p[1]); });
         this.addAction(
             { actionName: GA.DEL_EDGE, parameters: [edge.id()] },
             { actionName: GA.ADD_EDGE, parameters: [source, target, label, style, type, edge.id()] },
@@ -66,12 +61,8 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
     }
 
     getStyle(id) {
-        const el = this.getById(id);
-        const allStyles = el.style();
-        const styles = {};
-        if (el.isNode()) Object.entries(NodeStyle).forEach((p) => { styles[p[0]] = allStyles[p[0]]; });
-        if (el.isEdge()) Object.entries(EdgeStyle).forEach((p) => { styles[p[0]] = allStyles[p[0]]; });
-        return styles;
+        return this.getById(id).data('style');
+        // const el =
     }
 
     getLabel(id) {
@@ -88,7 +79,7 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
             tid,
         );
         if (shouldUpdateLabel) this.getById(id).data('label', label);
-        this.getById(id).style(style);
+        this.getById(id).data('style', style);
     }
 
     updateEdge(id, style, label, shouldUpdateLabel, tid = this.getTid()) {
@@ -101,7 +92,7 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
             tid,
         );
         if (shouldUpdateLabel) this.getById(id).data('label', label);
-        this.getById(id).style(style);
+        this.getById(id).data('style', style);
     }
 
     updateData(id, key, val, tid = this.getTid()) {
@@ -156,8 +147,8 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
     }
 
     setDim(id, dim, pos) {
-        this.getById(id).style('height', dim.height);
-        this.getById(id).style('width', dim.width);
+        const style = this.getById(id).data('style');
+        this.getById(id).data('style', { ...style, height: dim.height, width: dim.width });
         this.setPos(id, pos);
     }
 };

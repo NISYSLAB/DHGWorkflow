@@ -27,10 +27,14 @@ const GraphComp = (props) => {
         cy.nodeEditing({
             resizeToContentCueEnabled: () => false,
             setWidth(node, width) {
-                if (node.data('type') !== 'special') node.css('width', width);
+                if (node.data('type') !== 'special') {
+                    node.data('style', { ...node.data('style'), width });
+                }
             },
             setHeight(node, height) {
-                if (node.data('type') !== 'special') node.css('height', height);
+                if (node.data('type') !== 'special') {
+                    node.data('style', { ...node.data('style'), height });
+                }
             },
             isNoResizeMode(node) { return node.data('type') === 'special'; },
             isNoControlsMode(node) { return node.data('type') === 'special'; },

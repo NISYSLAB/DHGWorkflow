@@ -2,6 +2,25 @@
     text-align: center;
 }
 
+.par-div{
+    height: 1px;
+    min-height: 100px;
+    width: auto;
+    background: aliceblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.edge-div{
+    border: none;
+    width: 240px;
+    height: 1px;
+    background-color: rgb(0, 0, 0);
+    display: inline-block;
+}
+
 .edgeform input[type="number"] {
     width: 50px;
 }

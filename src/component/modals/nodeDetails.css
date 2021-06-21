@@ -2,6 +2,30 @@
     text-align: center;
 }
 
+.parent-div {
+    height: 50px;
+    min-height: 100px;
+    width: auto;
+    background: aliceblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.node-div {
+    border: 1px solid rgb(0, 0, 0);
+    width: 100px;
+    height: 200px;
+    background-color: rgb(224, 242, 241);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    opacity: 1;
+    border-radius: 0px;
+}
+
 .comp {
     display: inline-block;
 }
@@ -31,11 +55,12 @@
 /* .form > *:nth-child(11) {
     grid-column: 2 / span 3;
 } */
+
 .nodeform .nodeLabel {
     grid-column: 2 / span 3;
 }
 
-.nodeform .color-box{
+.nodeform .color-box {
     width: 36px;
     height: 14px;
     border-radius: 2px;
@@ -43,7 +68,7 @@
     border: 1px solid gray
 }
 
-.color-box-par{
+.color-box-par {
     padding: 5px;
     background: rgba(0, 0, 0, 0.384);
     border-radius: 1px;
@@ -53,13 +78,15 @@
     width: fit-content;
     border: 1px solid gray
 }
-.color-picker{
+
+.color-picker {
     display: inline-block;
     margin: 13px 0px;
     position: absolute;
     background: transparent;
 }
-.color-picker .overlay{
+
+.color-picker .overlay {
     top: 0;
     bottom: 0;
     left: 0;
@@ -71,7 +98,7 @@
 }
 
 @media screen and (max-width: 650px) {
-    .nodeform .form  {
+    .nodeform .form {
         grid-template-columns: auto auto;
         width: auto
     }

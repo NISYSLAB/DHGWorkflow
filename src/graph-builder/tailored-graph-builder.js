@@ -18,9 +18,9 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
         meanNbrPosition.y /= setOfPos.size;
         return getBoundaryPoint(
             parNode.position(), meanNbrPosition,
-            parseInt(parNode.style().width.slice(0, -2), 10) / 2,
-            parseInt(parNode.style().height.slice(0, -2), 10) / 2,
-            parNode.style().shape,
+            parNode.data('style').width / 2,
+            parNode.data('style').height / 2,
+            parNode.data('style').shape,
         );
     }
 
@@ -58,12 +58,12 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
     addEdgeWithoutJuncNode(sourceID, targetID, label, style, tid) {
         const sourceNode = this.getById(sourceID);
         const targetNode = this.getById(targetID);
-        const sourceNodeStyle = sourceNode.style();
+        const sourceNodeStyle = sourceNode.data('style');
         const juncNodePos = getBoundaryPoint(
             sourceNode.position(),
             targetNode.position(),
-            parseInt(sourceNodeStyle.width.slice(0, -2), 10) / 2,
-            parseInt(sourceNodeStyle.height.slice(0, -2), 10) / 2,
+            sourceNodeStyle.width / 2,
+            sourceNodeStyle.height / 2,
             sourceNodeStyle.shape,
         );
         const juncNode = super.addNode('', { 'background-color': style['line-color'] },

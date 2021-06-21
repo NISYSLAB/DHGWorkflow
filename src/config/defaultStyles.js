@@ -1,20 +1,16 @@
 const NodeStyle = {
-    width: '100px',
-    height: '50px',
+    width: 100,
+    height: 50,
     shape: 'rectangle',
     opacity: 1,
-    'background-color': '#e0f2f1',
-    'border-color': '#000',
-    'border-width': '1px',
-    'text-valign': 'center',
-    'text-halign': 'center',
+    backgroundColor: '#e0f2f1',
+    borderColor: '#000',
+    borderWidth: 1,
 };
 
 const EdgeStyle = {
-    'target-arrow-shape': 'triangle',
-    width: '1px',
-    'line-color': '#000',
-    'target-arrow-color': '#000',
+    thickness: 1,
+    backgroundColor: '#000',
 };
 
 export { NodeStyle, EdgeStyle };

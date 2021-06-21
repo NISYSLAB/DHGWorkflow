@@ -64,8 +64,8 @@ const CoreGraph = (ParentClass) => class extends
             });
         });
         this.cy.on('nodeediting.resizestart', (e, type, node) => {
-            node.scratch('height', node.style().height);
-            node.scratch('width', node.style().width);
+            node.scratch('height', node.data('style').height);
+            node.scratch('width', node.data('style').width);
             node.scratch('position', { ...node.position() });
         });
         this.cy.on('nodeediting.resizeend', (e, type, node) => {
@@ -73,7 +73,7 @@ const CoreGraph = (ParentClass) => class extends
                 node.id(),
                 { height: node.scratch('height'), width: node.scratch('width') },
                 node.scratch('position'),
-                { height: node.style().height, width: node.style().width },
+                { height: node.data('style').height, width: node.data('style').width },
                 { ...node.position() },
             );
         });
