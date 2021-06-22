@@ -9,18 +9,22 @@ const Modal = ({
 }) => {
     const [curClass, setCurClass] = useState('');
     const [isOpen, setIsOpen] = useState(ModelOpen);
+    const [stid, setStid] = useState(null);
     useEffect(() => {
         if (ModelOpen === true) {
             setIsOpen(true);
             setCurClass('closing');
-            setTimeout(() => {
+            clearTimeout(stid);
+            setStid(setTimeout(() => {
+                setIsOpen(true);
                 setCurClass('');
-            }, 20);
+            }, 20));
         } else {
             setCurClass('closing');
-            setTimeout(() => {
+            clearTimeout(stid);
+            setStid(setTimeout(() => {
                 setIsOpen(false);
-            }, 400);
+            }, 400));
         }
     }, [ModelOpen]);
 

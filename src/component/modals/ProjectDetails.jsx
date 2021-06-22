@@ -12,8 +12,8 @@ const ProjectDetails = ({ superState, dispatcher }) => {
         if (!curGraph) {
             setProjectName(''); setAuthor('');
         } else {
-            setProjectName(curGraph.projectDetails.projectName);
-            setAuthor(curGraph.projectDetails.author);
+            setProjectName(curGraph.projectDetails.projectName || '');
+            setAuthor(curGraph.projectDetails.author || '');
         }
     }, [!curGraph || !curGraph.projectDetails.set]);
 
@@ -45,7 +45,12 @@ const ProjectDetails = ({ superState, dispatcher }) => {
     };
     const closeModal = () => {
         if (!curGraph) dispatcher({ type: T.CHANGE_TAB, payload: 0 });
-        else setProjectDetails({ ...curGraph.projectDetails, set: true });
+        else {
+            setProjectDetails({
+                ...curGraph.projectDetails,
+                set: Boolean(curGraph.projectDetails.author && curGraph.projectDetails.projectName),
+            });
+        }
     };
     return (
         <Modal
