@@ -1,5 +1,6 @@
 import { actionType as T } from '../reducer';
 import localStorageManager from '../graph-builder/local-storage-manager';
+import graphMLParser from '../graph-builder/graphml/parser';
 
 const getGraphFun = (superState) => superState.graphs[superState.curGraphIndex]
                                         && superState.graphs[superState.curGraphIndex].instance;
@@ -57,12 +58,13 @@ const readFile = (state, setState, e) => {
     if (e.target && e.target.files && e.target.files[0]) {
         const fr = new FileReader();
         fr.onload = (x) => {
-            const graphContent = JSON.parse(x.target.result);
-            const id = new Date().getTime();
-            localStorageManager.save(id, graphContent);
-            setState({
-                type: T.ADD_GRAPH,
-                payload: { id, projectDetails: { ...graphContent.projectDetails, set: true } },
+            graphMLParser(x.target.result).then((graphContent) => {
+                const id = new Date().getTime();
+                localStorageManager.save(id, graphContent);
+                setState({
+                    type: T.ADD_GRAPH,
+                    payload: { id, projectDetails: { ...graphContent.projectDetails, set: true } },
+                });
             });
         };
         fr.readAsText(e.target.files[0]);

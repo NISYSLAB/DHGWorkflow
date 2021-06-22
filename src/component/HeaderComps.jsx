@@ -27,7 +27,7 @@ const FileUploader = ({
     const fileRef = React.createRef();
     return (
         <>
-            <input type="file" ref={fileRef} style={{ display: 'none' }} accept=".json" onChange={action} />
+            <input type="file" ref={fileRef} style={{ display: 'none' }} accept=".graphml" onChange={action} />
             <ActionButton {...{
                 Icon, text, active, tabIndex, action: () => fileRef.current.click(), hotkey,
             }}
