@@ -27,17 +27,17 @@ const GraphComp = (props) => {
         cy.nodeEditing({
             resizeToContentCueEnabled: () => false,
             setWidth(node, width) {
-                if (node.data('type') !== 'special') {
+                if (node.data('type') === 'ordin') {
                     node.data('style', { ...node.data('style'), width });
                 }
             },
             setHeight(node, height) {
-                if (node.data('type') !== 'special') {
+                if (node.data('type') === 'ordin') {
                     node.data('style', { ...node.data('style'), height });
                 }
             },
-            isNoResizeMode(node) { return node.data('type') === 'special'; },
-            isNoControlsMode(node) { return node.data('type') === 'special'; },
+            isNoResizeMode(node) { return node.data('type') !== 'ordin'; },
+            isNoControlsMode(node) { return node.data('type') !== 'ordin'; },
         });
 
         cy.gridGuide({ snapToGridOnRelease: false });
@@ -47,6 +47,7 @@ const GraphComp = (props) => {
             handlePosition() {
                 return 'none';
             },
+            handleNodes: 'node[type = "ordin"],node[type = "special"]',
             complete: (a, b, c) => { c.remove(); myGraph.addEdge(a.id(), b.id()); },
         });
         myGraph.loadGraphFromLocalStorage();

@@ -3,8 +3,9 @@ import GraphLoadSave from './graph-load-save';
 // import GraphComponent from './graph-component';
 import GraphCanvas from './graph-canvas';
 import GraphUndoRedo from './graph-undo-redo';
+import BendingDistanceWeight from './calculations/bending-dist-weight';
 
-const CoreGraph = (ParentClass) => class extends
+const CoreGraph = (ParentClass) => class CG extends
     GraphLoadSave(GraphCanvas(GraphUndoRedo(ParentClass))) {
     constructor(id, cy, dispatcher, superState, projectDetails) {
         super();
@@ -15,6 +16,9 @@ const CoreGraph = (ParentClass) => class extends
         this.projectDetails = projectDetails;
         this.regesterEvents();
         this.saveLocalStorage();
+        this.bendNode = this.cy.add(
+            { group: 'nodes', data: { type: 'bend' }, classes: ['hidden'] },
+        );
     }
 
     setProjectDetail(projectDetails) {
@@ -77,6 +81,32 @@ const CoreGraph = (ParentClass) => class extends
                 { ...node.position() },
             );
         });
+
+        this.cy.on('drag', (evt) => (evt.target[0].data('type') !== 'bend' ? this.cy.$(':selected').unselect() : 0));
+        this.cy.on('select unselect', () => {
+            const el = this.cy.$(':selected');
+            if (el.length !== 1 || !el[0].isEdge()) {
+                this.bendNode.removeListener('drag');
+                this.bendNode.addClass('hidden');
+                return;
+            }
+            this.bendNode.position(CG.getBendEdgePoint(el));
+            this.bendNode.on('drag', () => {
+                const DW = BendingDistanceWeight.getWeightDistance(
+                    this.bendNode.position(), el.source().position(), el.target().position(),
+                );
+                el.emit('bending');
+                el.style('segment-weights', DW.w);
+                el.style('segment-distances', DW.d);
+            });
+            this.bendNode.removeClass('hidden');
+        });
+    }
+
+    static getBendEdgePoint(el) {
+        const w = parseFloat(el.style('segment-weights'));
+        const d = parseFloat(el.style('segment-distances').slice(0, -2));
+        return BendingDistanceWeight.getCoordinate(w, d, el.source().position(), el.target().position());
     }
 
     setCurStatus() {

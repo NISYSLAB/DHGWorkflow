@@ -7,7 +7,7 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
         const parNode = juncNode.incomers('node')[0];
         const meanNbrPosition = { x: 0, y: 0 };
         const setOfPos = new Set();
-        juncNode.outgoers('node').forEach((node) => setOfPos.add(JSON.stringify(node.position())));
+        juncNode.outgoers('edge').forEach((edge) => setOfPos.add(JSON.stringify(TG.getBendEdgePoint(edge))));
         setOfPos.forEach((posStr) => {
             const pos = JSON.parse(posStr);
             meanNbrPosition.x += pos.x;
@@ -51,6 +51,7 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
             'ordin',
             undefined, tid,
         );
+        ed.on('bending', () => juncNode.position(TG.calJuncNodePos(juncNode)));
         juncNode.position(TG.calJuncNodePos(juncNode));
         return ed;
     }

@@ -18,6 +18,25 @@ const style = [
         },
     },
     {
+        selector: 'node[type="special"]',
+        style: {
+            width: 8,
+            height: 8,
+            backgroundColor: 'red',
+            'z-index': 1000,
+        },
+    },
+    {
+        selector: 'node[type="bend"]',
+        style: {
+            width: 30,
+            height: 30,
+            backgroundColor: '#9575cd',
+            opacity: 0.4,
+        },
+    },
+
+    {
         selector: 'edge',
         style: {
             'curve-style': 'bezier',
@@ -52,21 +71,18 @@ const style = [
         },
     },
     {
+        selector: '.hidden',
+        style: {
+            display: 'none',
+        },
+    },
+    {
         selector: '.eh-handle',
         style: {
             'background-color': '#f00',
             height: 20,
             width: 20,
             opacity: 0.5,
-        },
-    },
-    {
-        selector: 'node[type="special"]',
-        style: {
-            width: 8,
-            height: 8,
-            backgroundColor: 'red',
-            'z-index': 1000,
         },
     },
     {
