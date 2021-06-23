@@ -1,6 +1,6 @@
 import CoreGraph from './core-graph-builder';
 import { actionType as T } from '../reducer';
-import getBoundaryPoint from './calc-boundary-point';
+import getBoundaryPoint from './calculations/boundary-point';
 
 const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
     static calJuncNodePos(juncNode) {

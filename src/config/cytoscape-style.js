@@ -45,6 +45,10 @@ const style = [
             'text-border-color': '#fff',
             'text-border-width': 2,
             'text-border-opacity': 1,
+            'curve-style': 'segments',
+            'segment-distances': 0,
+            'segment-weights': 0.5,
+            'edge-distances': 'node-position',
         },
     },
     {
