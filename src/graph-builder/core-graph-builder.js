@@ -1,6 +1,5 @@
 import { actionType as T } from '../reducer';
 import GraphLoadSave from './graph-load-save';
-// import GraphComponent from './graph-component';
 import GraphCanvas from './graph-canvas';
 import GraphUndoRedo from './graph-undo-redo';
 import BendingDistanceWeight from './calculations/bending-dist-weight';
@@ -15,7 +14,7 @@ const CoreGraph = (ParentClass) => class CG extends
         this.id = id;
         this.projectDetails = projectDetails;
         this.regesterEvents();
-        this.saveLocalStorage();
+        this.cy.emit('graph-modified');
         this.bendNode = this.cy.add(
             { group: 'nodes', data: { type: 'bend' }, classes: ['hidden'] },
         );
@@ -23,10 +22,8 @@ const CoreGraph = (ParentClass) => class CG extends
 
     setProjectDetail(projectDetails) {
         this.projectDetails = projectDetails;
-        this.saveLocalStorage();
+        this.cy.emit('graph-modified');
     }
-
-    setNodeEvent() { return this; }
 
     getById(x) {
         return this.cy.getElementById(x);
@@ -55,8 +52,8 @@ const CoreGraph = (ParentClass) => class CG extends
     }
 
     regesterEvents() {
+        if (super.regesterEvents) super.regesterEvents();
         this.cy.on('select unselect', () => this.selectDeselectEventHandler());
-        this.cy.on('add remove move style data free', '[type]', this.saveLocalStorage.bind(this));
         this.cy.on('grab', (e) => {
             e.target.forEach((node) => {
                 node.scratch('position', { ...node.position() });
@@ -82,7 +79,9 @@ const CoreGraph = (ParentClass) => class CG extends
             );
         });
 
-        this.cy.on('hide-bend', () => { this.bendNode.removeListener('drag'); this.bendNode.addClass('hidden'); });
+        this.cy.on('hide-bend remove', () => {
+            this.bendNode.removeListener('drag'); this.bendNode.addClass('hidden');
+        });
 
         this.cy.on('grabon', (evt) => (evt.target[0].data('type') !== 'bend' ? this.cy.emit('hide-bend') : 0));
         this.cy.on('freeon', (evt) => (evt.target[0].data('type') !== 'bend' ? this.cy.emit('show-bend') : 0));
@@ -97,7 +96,6 @@ const CoreGraph = (ParentClass) => class CG extends
                 );
                 el.data('style', { ...el.data('style'), bendDistance: DW.d, bendWeight: DW.w });
                 el.emit('bending');
-                this.saveLocalStorage();
             });
             return this.bendNode.removeClass('hidden');
         });

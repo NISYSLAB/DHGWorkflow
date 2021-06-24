@@ -10,6 +10,13 @@ const GraphLoadSave = (ParentClass) => class extends ParentClass {
         this.autoSaveIntervalId = null;
     }
 
+    regesterEvents() {
+        if (super.regesterEvents) super.regesterEvents();
+        this.cy.on('add remove data dragfreeon', 'node[type="ordin"]', this.saveLocalStorage.bind(this));
+        this.cy.on('add remove data', 'edge[type="ordin"]', this.saveLocalStorage.bind(this));
+        this.cy.on('nodeediting.resizeend graph-modified', this.saveLocalStorage.bind(this));
+    }
+
     downloadImg(format) {
         if (format === 'PNG') saveAs(this.cy.png(), `${this.getName()}-DHGWorkflow.png`);
         if (format === 'JPG') saveAs(this.cy.png(), `${this.getName()}-DHGWorkflow.jpg`);
@@ -68,7 +75,6 @@ const GraphLoadSave = (ParentClass) => class extends ParentClass {
     }
 
     saveToDisk() {
-        // const str = JSON.stringify(this.jsonifyGraph());
         const str = graphmlBuilder(this.jsonifyGraph());
         const bytes = new TextEncoder().encode(str);
         const blob = new Blob([bytes], { type: 'application/json;charset=utf-8' });

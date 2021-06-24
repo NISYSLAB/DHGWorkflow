@@ -1,5 +1,3 @@
-// import { NodeStyle, EdgeStyle } from './defaultStyles';
-
 const style = [
     {
         selector: 'node[type = "ordin"]',

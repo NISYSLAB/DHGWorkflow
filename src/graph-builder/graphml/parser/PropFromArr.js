@@ -49,7 +49,4 @@ class PropFromArr {
 
     F() { return this.arr[0]; }
 }
-// const arr = { a: [[{ c: [[[[1]]]] }]] };
-// const X = new PropFromArr(arr);
-// console.log(X.parseProps('a.c'));
 export default PropFromArr;

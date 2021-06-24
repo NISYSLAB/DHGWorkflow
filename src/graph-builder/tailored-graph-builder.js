@@ -3,6 +3,19 @@ import { actionType as T } from '../reducer';
 import getBoundaryPoint from './calculations/boundary-point';
 
 const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
+    regesterEvents() {
+        super.regesterEvents();
+        this.cy.on('drag data', 'node[type="ordin"]', (evt) => {
+            evt.target.connectedEdges().connectedNodes('node[type="special"]').forEach((juncNode) => {
+                juncNode.position(TG.calJuncNodePos(juncNode));
+            });
+        });
+        this.cy.on('bending', (evt) => {
+            const juncNode = evt.target.source();
+            juncNode.position(TG.calJuncNodePos(juncNode));
+        });
+    }
+
     static calJuncNodePos(juncNode) {
         const parNode = juncNode.incomers('node')[0];
         const meanNbrPosition = { x: 0, y: 0 };
@@ -34,15 +47,6 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
         return this;
     }
 
-    setNodeEvent(node) {
-        node.on('drag style moved', () => {
-            node.connectedEdges().connectedNodes('node[type="special"]').forEach((juncNode) => {
-                juncNode.position(TG.calJuncNodePos(juncNode));
-            });
-        });
-        return this;
-    }
-
     addEdgeWithJuncNode(sourceID, targetID, edgeStyle = {}, tid) {
         const juncNode = this.getById(sourceID);
         const ed = super.addEdge(
@@ -52,7 +56,6 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
             'ordin',
             undefined, tid,
         );
-        ed.on('bending', () => juncNode.position(TG.calJuncNodePos(juncNode)));
         juncNode.position(TG.calJuncNodePos(juncNode));
         return ed;
     }

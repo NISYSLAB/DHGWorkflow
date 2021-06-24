@@ -27,14 +27,10 @@ const GraphComp = (props) => {
         cy.nodeEditing({
             resizeToContentCueEnabled: () => false,
             setWidth(node, width) {
-                if (node.data('type') === 'ordin') {
-                    node.data('style', { ...node.data('style'), width });
-                }
+                node.data('style', { ...node.data('style'), width });
             },
             setHeight(node, height) {
-                if (node.data('type') === 'ordin') {
-                    node.data('style', { ...node.data('style'), height });
-                }
+                node.data('style', { ...node.data('style'), height });
             },
             isNoResizeMode(node) { return node.data('type') !== 'ordin'; },
             isNoControlsMode(node) { return node.data('type') !== 'ordin'; },

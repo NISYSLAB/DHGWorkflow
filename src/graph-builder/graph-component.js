@@ -33,7 +33,6 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
             },
             position,
         });
-        this.setNodeEvent(node);
         this.addAction(
             { actionName: GA.DEL_NODE, parameters: [node.id()] },
             {
@@ -76,7 +75,6 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
 
     getStyle(id) {
         return this.getById(id).data('style');
-        // const el =
     }
 
     getLabel(id) {
