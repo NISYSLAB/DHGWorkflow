@@ -2,6 +2,7 @@ import { saveAs } from 'file-saver';
 import { actionType as T } from '../reducer';
 import localStorageManager from './local-storage-manager';
 import graphmlBuilder from './graphml/builder';
+import BendingDistanceWeight from './calculations/bending-dist-weight';
 
 const GraphLoadSave = (ParentClass) => class extends ParentClass {
     constructor() {
@@ -52,6 +53,10 @@ const GraphLoadSave = (ParentClass) => class extends ParentClass {
                     label: all.data.label,
                 };
                 edgeJson.style = this.getStyle(edge.id());
+                edgeJson.style.bendPoint = BendingDistanceWeight.getCoordinate(
+                    edgeJson.style.bendWeight, edgeJson.style.bendDistance,
+                    edge.source().position(), edge.target().position(),
+                );
                 graph.edges.push(edgeJson);
             }
         });

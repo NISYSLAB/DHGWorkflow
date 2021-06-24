@@ -1,5 +1,5 @@
 const edgeML = ({
-  id, label, source, target, lineColor, lineWidth,
+  id, label, source, target, lineColor, lineWidth, bendPoint,
 }) => ({
   $: {
     id,
@@ -33,6 +33,19 @@ const edgeML = ({
             },
           ],
           'y:EdgeLabel': [label],
+          'y:Path': [
+            {
+              $: {
+                sx: '0.0',
+                sy: '0.0',
+                tx: '0.0',
+                ty: '0.0',
+              },
+              'y:Point': [
+                { $: bendPoint },
+              ],
+            },
+          ],
         },
       ],
     },

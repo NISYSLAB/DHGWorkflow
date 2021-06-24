@@ -29,6 +29,7 @@ const parseEdge = (edge) => ({
     style: {
         backgroundColor: new PropFromArr(edge).parseProps('data.*.y:LineStyle.$.color'),
         thickness: parseFloat(new PropFromArr(edge).parseProps('data.*.y:LineStyle.$.width')),
+        bendPoint: new PropFromArr(edge).parseProps('data.*.y:Path.y:Point.$'),
     },
 });
 

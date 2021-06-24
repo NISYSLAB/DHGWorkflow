@@ -14,7 +14,7 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
             meanNbrPosition.x += pos.x;
             meanNbrPosition.y += pos.y;
         });
-        if (setOfPos.size === 0) return meanNbrPosition;
+        if (setOfPos.size === 0) return juncNode.position();
         meanNbrPosition.x /= setOfPos.size;
         meanNbrPosition.y /= setOfPos.size;
         return getBoundaryPoint(

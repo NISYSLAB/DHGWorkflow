@@ -1,3 +1,4 @@
+import BendingDistanceWeight from './calculations/bending-dist-weight';
 import GA from './graph-actions';
 
 const GraphComponent = (ParentClass) => class GC extends ParentClass {
@@ -44,14 +45,24 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         return node;
     }
 
-    addEdge(source, target, label, style = {}, type = 'ordin', id, tid = this.getTid()) {
-        const newStyle = { ...style };
-        newStyle.bendDistance = newStyle.bendDistance || 0;
-        newStyle.bendWeight = newStyle.bendWeight || 0.5;
+    parseBendinDW(rawStyle, sourceId, targetId) {
+        if (rawStyle.bendDistance && rawStyle.bendWeight) return rawStyle;
+        if (rawStyle.bendPoint) {
+            const { x, y } = rawStyle.bendPoint;
+            const { d, w } = BendingDistanceWeight.getWeightDistance(
+                { x, y }, this.getById(sourceId).position(), this.getById(targetId).position(),
+            );
+            return { ...rawStyle, bendDistance: d, bendWeight: w };
+        }
+        return { ...rawStyle, bendDistance: 0, bendWeight: 0.5 };
+    }
+
+    addEdge(source, target, label, rawStyle = {}, type = 'ordin', id, tid = this.getTid()) {
+        const style = this.parseBendinDW(rawStyle, source, target);
         const edge = this.cy.add({
             group: 'edges',
             data: {
-                source, target, label, type, id, style: newStyle,
+                source, target, label, type, id, style,
             },
         });
         this.addAction(
