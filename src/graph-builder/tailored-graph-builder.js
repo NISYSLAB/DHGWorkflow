@@ -7,7 +7,8 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
         const parNode = juncNode.incomers('node')[0];
         const meanNbrPosition = { x: 0, y: 0 };
         const setOfPos = new Set();
-        juncNode.outgoers('edge').forEach((edge) => setOfPos.add(JSON.stringify(TG.getBendEdgePoint(edge))));
+        juncNode.outgoers('edge[type="ordin"]')
+            .forEach((edge) => setOfPos.add(JSON.stringify(TG.getBendEdgePoint(edge))));
         setOfPos.forEach((posStr) => {
             const pos = JSON.parse(posStr);
             meanNbrPosition.x += pos.x;
@@ -42,12 +43,12 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
         return this;
     }
 
-    addEdgeWithJuncNode(sourceID, targetID, tid) {
+    addEdgeWithJuncNode(sourceID, targetID, edgeStyle = {}, tid) {
         const juncNode = this.getById(sourceID);
         const ed = super.addEdge(
             sourceID, targetID,
             juncNode.data('edgeLabel'),
-            juncNode.data('edgeStyle'),
+            { ...juncNode.data('edgeStyle'), bendDistance: edgeStyle.bendDistance, bendWeight: edgeStyle.bendWeight },
             'ordin',
             undefined, tid,
         );
@@ -74,16 +75,16 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
             'target-arrow-shape': 'none',
         }, 'special', undefined, tid);
         this.addAutoMove(juncNode, sourceNode);
-        return this.addEdgeWithJuncNode(juncNode.id(), targetID, tid);
+        return this.addEdgeWithJuncNode(juncNode.id(), targetID, style, tid);
     }
 
     addEdge(sourceID, targetID, label = '', style, type = 'ordin', id, tid = this.getTid()) {
         const sourceNode = this.getById(sourceID);
         // ↓ Condition never statisfies ↓
         if (type === 'special') return super.addEdge(sourceID, targetID, label, style, type, id, tid);
-        if (sourceNode.data('type') === 'special') return this.addEdgeWithJuncNode(sourceID, targetID, tid);
+        if (sourceNode.data('type') === 'special') return this.addEdgeWithJuncNode(sourceID, targetID, style, tid);
         const juncNodes = sourceNode.outgoers('node').filter((node) => node.data('edgeLabel') === label);
-        if (juncNodes.length) return this.addEdgeWithJuncNode(juncNodes[0].id(), targetID, tid);
+        if (juncNodes.length) return this.addEdgeWithJuncNode(juncNodes[0].id(), targetID, style, tid);
         if (label.length) return this.addEdgeWithoutJuncNode(sourceID, targetID, label, style, tid);
         this.dispatcher({
             type: T.Model_Open_Create_Edge,

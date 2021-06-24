@@ -82,30 +82,31 @@ const CoreGraph = (ParentClass) => class CG extends
             );
         });
 
-        this.cy.on('drag', (evt) => (evt.target[0].data('type') !== 'bend' ? this.cy.$(':selected').unselect() : 0));
-        this.cy.on('select unselect', () => {
+        this.cy.on('hide-bend', () => { this.bendNode.removeListener('drag'); this.bendNode.addClass('hidden'); });
+
+        this.cy.on('grabon', (evt) => (evt.target[0].data('type') !== 'bend' ? this.cy.emit('hide-bend') : 0));
+        this.cy.on('freeon', (evt) => (evt.target[0].data('type') !== 'bend' ? this.cy.emit('show-bend') : 0));
+
+        this.cy.on('select unselect show-bend', () => {
             const el = this.cy.$(':selected');
-            if (el.length !== 1 || !el[0].isEdge()) {
-                this.bendNode.removeListener('drag');
-                this.bendNode.addClass('hidden');
-                return;
-            }
+            if (el.length !== 1 || !el[0].isEdge()) return this.cy.emit('hide-bend');
             this.bendNode.position(CG.getBendEdgePoint(el));
             this.bendNode.on('drag', () => {
                 const DW = BendingDistanceWeight.getWeightDistance(
                     this.bendNode.position(), el.source().position(), el.target().position(),
                 );
+                el.data('style', { ...el.data('style'), bendDistance: DW.d, bendWeight: DW.w });
                 el.emit('bending');
-                el.style('segment-weights', DW.w);
-                el.style('segment-distances', DW.d);
+                this.saveLocalStorage();
             });
-            this.bendNode.removeClass('hidden');
+            return this.bendNode.removeClass('hidden');
         });
     }
 
     static getBendEdgePoint(el) {
-        const w = parseFloat(el.style('segment-weights'));
-        const d = parseFloat(el.style('segment-distances').slice(0, -2));
+        const { bendWeight, bendDistance } = el.data('style');
+        const w = parseFloat(bendWeight);
+        const d = parseFloat(bendDistance);
         return BendingDistanceWeight.getCoordinate(w, d, el.source().position(), el.target().position());
     }
 

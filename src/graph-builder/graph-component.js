@@ -45,10 +45,13 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
     }
 
     addEdge(source, target, label, style = {}, type = 'ordin', id, tid = this.getTid()) {
+        const newStyle = { ...style };
+        newStyle.bendDistance = newStyle.bendDistance || 0;
+        newStyle.bendWeight = newStyle.bendWeight || 0.5;
         const edge = this.cy.add({
             group: 'edges',
             data: {
-                source, target, label, type, id, style,
+                source, target, label, type, id, style: newStyle,
             },
         });
         this.addAction(

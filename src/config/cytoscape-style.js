@@ -49,6 +49,10 @@ const style = [
             width: 'data(style.thickness)',
             'line-color': 'data(style.backgroundColor)',
             'target-arrow-color': 'data(style.backgroundColor)',
+            'curve-style': 'segments',
+            'segment-distances': 'data(style.bendDistance)',
+            'segment-weights': 'data(style.bendWeight)',
+            'edge-distances': 'node-position',
         },
     },
     {
@@ -64,10 +68,6 @@ const style = [
             'text-border-color': '#fff',
             'text-border-width': 2,
             'text-border-opacity': 1,
-            'curve-style': 'segments',
-            'segment-distances': 0,
-            'segment-weights': 0.5,
-            'edge-distances': 'node-position',
         },
     },
     {
