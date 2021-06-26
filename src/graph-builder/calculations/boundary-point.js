@@ -35,31 +35,35 @@ const boundaryPoint = {
     slope(x1, y1, x2, y2) {
         return (x1 - x2) / (y1 - y2);
     },
-    getClosestRect(C, P, w, h) {
+
+    setSubQ(C, P, w, h) {
         const [S1, S2] = [[C.x + w, C.y + h], [C.x + w, C.y - h]]
-            .map(([x, y]) => (C.x - x) * (P.y - y) - (C.y - y) * (P.x - x));
-        let x;
-        let y;
+            .map(([x, y]) => ((C.x - x) * (P.y - y) - (C.y - y) * (P.x - x)) > 0);
+        if (S1 && !S2) return 0;
+        if (!S1 && !S2) return 1;
+        if (!S1 && S2) return 2;
+        if (S1 && S2) return 3;
+        return -1;
+    },
+
+    getClosestRect(C, P, w, h) {
         const [m, c] = this.getEq(P, C);
-        const D = [ // To point to center
-            [(C.y - h - c) / m, C.y - h],
-            [C.x + w, m * (C.x + w) + c],
-            [C.x - w, m * (C.x - w) + c],
-            [(C.y + h - c) / m, C.y + h],
+        let D = [
+            [C.x + w, C.y],
+            [C.x, C.y + h],
+            [C.x - w, C.y],
+            [C.x, C.y - h],
         ];
-        // const D = [
-        //     [Math.min(C.x + w, Math.max(C.x - w, P.x)), C.y - h],
-        //     [C.x + w, Math.min(C.y + h, Math.max(C.y - h, P.y))],
-        //     [C.x - w, Math.min(C.y + h, Math.max(C.y - h, P.y))],
-        //     [Math.min(C.x + w, Math.max(C.x - w, P.x)), C.y + h],
-        // ];
-
-        if (S1 <= 0 && S2 <= 0) [,,, [x, y]] = D;
-        else if (S1 >= 0 && S2 <= 0) [, [x, y]] = D;
-        else if (S1 >= 0 && S2 >= 0) [[x, y]] = D;
-        else if (S1 <= 0 && S2 >= 0) [,, [x, y]] = D;
-
-        return x && y ? { x, y } : P;
+        if (Math.abs(m) !== Infinity) {
+            D = [ // To point toward center
+                [C.x + w, m * (C.x + w) + c],
+                [(C.y + h - c) / m, C.y + h],
+                [C.x - w, m * (C.x - w) + c],
+                [(C.y - h - c) / m, C.y - h],
+            ];
+        }
+        const [x, y] = D[this.setSubQ(C, P, w, h)];
+        return { x, y };
     },
     get(C, P, w, h, type) {
         if (type === 'rectangle') return boundaryPoint.getClosestRect(C, P, w, h);

@@ -7,11 +7,15 @@ const BendingDistanceWeight = {
         y: P.x * Math.sin(Q) + P.y * Math.cos(Q),
     }),
 
-    extraRad: (A, B) => (((A.x > B.x && A.y > B.y) || (A.x > B.x && A.y < B.y)) ? Math.PI : 0),
+    extraRad: (A, B) => (((A.x >= B.x && A.y > B.y) || (A.x >= B.x && A.y < B.y)) ? Math.PI : 0),
+
+    getRadian(tanQ, A, B) {
+        return (Math.atan(tanQ) - this.extraRad(A, B) + 2 * Math.PI) % (2 * Math.PI);
+    },
 
     getCoordinate(w, d, A, B) {
         const tanQ = (A.y - B.y) / (A.x - B.x);
-        const Q = ((Math.atan(tanQ) - this.extraRad(A, B)) + 2 * Math.PI) % (2 * Math.PI);
+        const Q = this.getRadian(tanQ, A, B);
         const D = this.dist(A, B) * w;
         const P = { x: D, y: d };
         const { x, y } = this.rotate(P, Q);
@@ -21,7 +25,7 @@ const BendingDistanceWeight = {
     getWeightDistance(p, A, B) {
         const P = { x: p.x - A.x, y: p.y - A.y };
         const tanQ = (A.y - B.y) / (A.x - B.x);
-        const Q = (Math.atan(tanQ) - this.extraRad(A, B) + 2 * Math.PI) % (2 * Math.PI);
+        const Q = this.getRadian(tanQ, A, B);
         const { x, y } = this.rotate(P, -Q);
         const d = this.dist(A, B);
         return { d: y, w: x / d };
