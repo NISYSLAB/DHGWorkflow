@@ -13,11 +13,11 @@ const CoreGraph = (ParentClass) => class CG extends
         if (cy) this.cy = cy;
         this.id = id;
         this.projectDetails = projectDetails;
-        this.regesterEvents();
         this.cy.emit('graph-modified');
         this.bendNode = this.cy.add(
             { group: 'nodes', data: { type: 'bend' }, classes: ['hidden'] },
         );
+        this.regesterEvents();
     }
 
     setProjectDetail(projectDetails) {
@@ -86,18 +86,33 @@ const CoreGraph = (ParentClass) => class CG extends
         this.cy.on('grabon', (evt) => (evt.target[0].data('type') !== 'bend' ? this.cy.emit('hide-bend') : 0));
         this.cy.on('freeon', (evt) => (evt.target[0].data('type') !== 'bend' ? this.cy.emit('show-bend') : 0));
 
+        this.cy.on('click tap', (ev) => {
+            if (ev.target === this.cy) {
+                this.cy.emit('hide-bend');
+                this.cy.$('.eh-handle').remove();
+            }
+        });
         this.cy.on('select unselect show-bend', () => {
             const el = this.cy.$(':selected');
-            if (el.length !== 1 || !el[0].isEdge()) return this.cy.emit('hide-bend');
+            if (el.length !== 1 || !el[0].isEdge()) this.cy.emit('hide-bend');
+            return el.emit('bend-edge');
+        });
+        this.cy.on('mouseover', 'edge', (ev) => {
+            ev.target.emit('bend-edge');
+        });
+
+        this.cy.on('bend-edge', 'edge', (ev) => {
+            if (!this.bendNode.hasClass('hidden')) this.cy.emit('hide-bend');
+            const el = ev.target;
             this.bendNode.position(CG.getBendEdgePoint(el));
             this.bendNode.on('drag', () => {
                 const DW = BendingDistanceWeight.getWeightDistance(
                     this.bendNode.position(), el.source().position(), el.target().position(),
                 );
                 el.data('style', { ...el.data('style'), bendDistance: DW.d, bendWeight: DW.w });
-                el.emit('bending');
+                ev.target.emit('bending');
             });
-            return this.bendNode.removeClass('hidden');
+            this.bendNode.removeClass('hidden');
         });
     }
 

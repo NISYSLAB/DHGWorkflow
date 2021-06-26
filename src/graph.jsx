@@ -36,7 +36,11 @@ const GraphComp = (props) => {
             isNoControlsMode(node) { return node.data('type') !== 'ordin'; },
         });
 
-        cy.gridGuide({ snapToGridOnRelease: false });
+        cy.gridGuide({
+            snapToGridOnRelease: false,
+            zoomDash: true,
+            panGrid: true,
+        });
         const myGraph = new (MyGraph(Object))(id, cy, dispatcher, superState, projectDetails);
         cy.edgehandles({
             preview: false,

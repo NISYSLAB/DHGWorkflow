@@ -1,5 +1,11 @@
 const style = [
     {
+        selector: '*',
+        style: {
+            'overlay-opacity': '0',
+        },
+    },
+    {
         selector: 'node[type = "ordin"]',
         style: {
             content: 'data(label)',
@@ -22,15 +28,6 @@ const style = [
             height: 8,
             backgroundColor: 'red',
             'z-index': 1000,
-        },
-    },
-    {
-        selector: 'node[type="bend"]',
-        style: {
-            width: 30,
-            height: 30,
-            backgroundColor: '#9575cd',
-            opacity: 0.4,
         },
     },
 
@@ -75,12 +72,25 @@ const style = [
         },
     },
     {
+        selector: '.eh-handle,node[type="bend"]',
+        style: {
+            height: 25,
+            width: 25,
+            opacity: 0.4,
+            'border-width': 5,
+            'border-opacity': 0.1,
+        },
+    },
+    {
+        selector: 'node[type="bend"]',
+        style: {
+            backgroundColor: '#9575cd',
+        },
+    },
+    {
         selector: '.eh-handle',
         style: {
-            'background-color': '#f00',
-            height: 20,
-            width: 20,
-            opacity: 0.5,
+            'background-color': '#f50057',
         },
     },
     {
@@ -88,6 +98,7 @@ const style = [
         style: {
             'overlay-color': '#000',
             'overlay-opacity': 0.1,
+            'overlay-padding': 5,
         },
     },
 
