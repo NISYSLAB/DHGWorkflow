@@ -75,6 +75,7 @@ const reducer = (state, action) => {
     case T.ADD_GRAPH: {
         return {
             ...state,
+            curGraphIndex: state.graphs.length,
             graphs: [
                 ...state.graphs,
                 {
@@ -86,6 +87,9 @@ const reducer = (state, action) => {
                 },
             ],
         };
+    }
+    case T.ADD_GRAPH_BULK: {
+        return { ...state, graphs: [...state.graphs, ...action.payload] };
     }
     case T.ADD_GRAPH_INSTANCE: {
         const newState = { ...state };

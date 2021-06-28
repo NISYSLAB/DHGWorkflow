@@ -70,7 +70,6 @@ const ProjectDetails = ({ superState, dispatcher }) => {
                 <span>Author</span>
                 <input
                     placeholder="Author of workflow"
-                    required
                     value={author}
                     onChange={(e) => setAuthor(e.target.value)}
                 />

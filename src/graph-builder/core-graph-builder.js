@@ -18,6 +18,7 @@ const CoreGraph = (ParentClass) => class CG extends
             { group: 'nodes', data: { type: 'bend' }, classes: ['hidden'] },
         );
         this.regesterEvents();
+        this.cy.emit('graph-modified');
     }
 
     setProjectDetail(projectDetails) {

@@ -61,7 +61,7 @@ const TabBar = ({ superState, dispatcher }) => {
                 >
                     <span className="tab-text">
                         {el.projectDetails.projectName}
-                        {' - '}
+                        {el.projectDetails.author ? ' - ' : ''}
                         {el.projectDetails.author}
                     </span>
 

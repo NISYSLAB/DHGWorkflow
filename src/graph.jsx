@@ -63,7 +63,7 @@ const GraphComp = (props) => {
     }, [superState.graphs.length]);
 
     useEffect(() => {
-        if (superState.graphs[superState.curGraphIndex]) {
+        if (superState.graphs[superState.curGraphIndex] && superState.graphs[superState.curGraphIndex].instance) {
             superState.graphs[superState.curGraphIndex].instance.setCurStatus();
         }
     }, [superState.curGraphIndex]);
@@ -86,14 +86,13 @@ const GraphComp = (props) => {
             localStorageManager.save(gid, graphContent);
             window.history.replaceState({}, document.title, window.location.pathname);
         }
-        localStorageManager.getAllGraphs().forEach((graphId) => {
-            dispatcher({
-                type: T.ADD_GRAPH,
-                payload: {
-                    id: graphId,
-                    projectDetails: { projectName: '', author: '', set: true },
-                },
-            });
+        const allSavedGs = localStorageManager.getAllGraphs().map((graphId) => ({
+            id: graphId,
+            projectDetails: { projectName: '', author: '', set: true },
+        }));
+        dispatcher({
+            type: T.ADD_GRAPH_BULK,
+            payload: allSavedGs,
         });
     }, []);
 
