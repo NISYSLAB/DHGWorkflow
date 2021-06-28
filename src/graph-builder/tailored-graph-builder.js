@@ -73,6 +73,7 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
         );
         const juncNode = super.addNode('', { 'background-color': style['line-color'] },
             'special', juncNodePos, { edgeLabel: label, edgeStyle: style }, undefined, tid);
+        juncNode.ungrabify();
         super.addEdge(sourceID, juncNode.id(), '', {
             ...style,
             'target-arrow-shape': 'none',

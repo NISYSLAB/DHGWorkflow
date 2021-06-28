@@ -3,7 +3,7 @@ const NodeStyle = {
     height: 50,
     shape: 'rectangle',
     opacity: 1,
-    backgroundColor: '#e0f2f1',
+    backgroundColor: '#ffcc00',
     borderColor: '#000',
     borderWidth: 1,
 };

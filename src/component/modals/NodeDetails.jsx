@@ -1,4 +1,6 @@
-import React, { useCallback } from 'react';
+import React, {
+    useCallback, useEffect, useState, createRef,
+} from 'react';
 import './nodeDetails.css';
 import ColorBox from './ColorBox';
 
@@ -6,10 +8,20 @@ const NodeDetails = ({
     data, setData, submit, labelAllowed,
 }) => {
     const inputRef = useCallback((node) => node && node.focus(), []);
+    const textRef = createRef();
+    const [widthSet, setWidthSet] = useState(false);
 
     const setStyle = (prop) => {
         setData({ ...data, style: { ...data.style, ...prop } });
     };
+
+    useEffect(() => {
+        if (!widthSet) {
+            setStyle({
+                width: Math.max(data.style.width, Math.min(500, textRef.current.offsetWidth + 20)),
+            });
+        }
+    }, [!widthSet && data.label]);
 
     return (
         <div className="nodeform" onSubmit={submit}>
@@ -21,7 +33,7 @@ const NodeDetails = ({
                         borderRadius: data.style.shape === 'ellipse' ? '100%' : 0,
                     }}
                 >
-                    {labelAllowed ? data.label : ''}
+                    <span ref={textRef}>{labelAllowed ? data.label : ''}</span>
 
                 </div>
             </div>
@@ -70,7 +82,12 @@ const NodeDetails = ({
                 <input
                     type="number"
                     value={data.style.width}
-                    onChange={(e) => setStyle({ width: Math.min(500, e.target.value) })}
+                    onChange={(e) => {
+                        setWidthSet(true);
+                        setStyle({
+                            width: Math.min(500, e.target.value),
+                        });
+                    }}
                 />
 
                 <div> Height</div>
