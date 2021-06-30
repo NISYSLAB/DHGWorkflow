@@ -71,7 +71,7 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
             sourceNodeStyle.height / 2,
             sourceNodeStyle.shape,
         );
-        const juncNode = super.addNode('', { 'background-color': style['line-color'] },
+        const juncNode = super.addNode('', { backgroundColor: style.backgroundColor },
             'special', juncNodePos, { edgeLabel: label, edgeStyle: style }, undefined, tid);
         juncNode.ungrabify();
         super.addEdge(sourceID, juncNode.id(), '', {
@@ -101,7 +101,7 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
         const junctionNode = this.getById(id).source();
         if (shouldUpdateLabel) this.updateData(junctionNode.data('id'), 'edgeLabel', label, tid);
         this.updateData(junctionNode.data('id'), 'edgeStyle', style, tid);
-        this.updateNode([junctionNode.data('id')], { 'background-color': style['line-color'] }, '', false, tid);
+        this.updateNode([junctionNode.data('id')], { backgroundColor: style.backgroundColor }, '', false, tid);
 
         junctionNode
             .outgoers('edge')
