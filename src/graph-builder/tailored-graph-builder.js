@@ -83,6 +83,7 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
     }
 
     addEdge(sourceID, targetID, label = '', style, type = 'ordin', id, tid = this.getTid()) {
+        if (this.getById(targetID).data('type') !== 'ordin') return this;
         const sourceNode = this.getById(sourceID);
         // ↓ Condition never statisfies ↓
         if (type === 'special') return super.addEdge(sourceID, targetID, label, style, type, id, tid);

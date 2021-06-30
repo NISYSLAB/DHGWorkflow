@@ -101,12 +101,14 @@ const NodeDetails = ({
                 <ColorBox
                     color={data.style.backgroundColor}
                     setColor={(color) => setStyle({ backgroundColor: color })}
+                    type="light"
                 />
 
                 <div> Border Color</div>
                 <ColorBox
                     color={data.style.borderColor}
                     setColor={(color) => setStyle({ borderColor: color })}
+                    type="dark"
                 />
 
                 <div> Border Width</div>

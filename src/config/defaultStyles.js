@@ -10,7 +10,7 @@ const NodeStyle = {
 
 const EdgeStyle = {
     thickness: 1,
-    backgroundColor: '#000',
+    backgroundColor: null,
 };
 
 export { NodeStyle, EdgeStyle };

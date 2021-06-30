@@ -55,6 +55,7 @@ const EdgeDetails = ({
                 <ColorBox
                     color={data.style.backgroundColor}
                     setColor={(color) => setStyle({ backgroundColor: color })}
+                    type="dark"
                 />
             </div>
         </div>
