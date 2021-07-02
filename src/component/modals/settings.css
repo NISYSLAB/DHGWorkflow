@@ -1,0 +1,32 @@
+.setting-container{
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 20px;
+    margin: 20px;
+    width: 90vw;
+}
+
+.setting-container .footer{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    padding: .75rem;
+    border-top: 1px solid #dee2e6;
+    border-bottom-right-radius: calc(.3rem - 1px);
+    border-bottom-left-radius: calc(.3rem - 1px);
+    grid-column: 1/3;
+}
+
+.setting-container .footer>* {
+    margin: .25rem;
+}
+
+@media screen and (max-width: 890px) {
+    .setting-container{
+        grid-template-columns: auto;
+    }
+    .setting-container .footer{
+        grid-column: 1/2;
+    }
+}

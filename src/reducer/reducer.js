@@ -123,6 +123,10 @@ const reducer = (state, action) => {
         return { ...state, shareModal: action.payload };
     }
 
+    case T.SET_SETTING_MODAL: {
+        return { ...state, settingsModal: action.payload };
+    }
+
     default:
         return state;
     }

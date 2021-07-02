@@ -14,7 +14,7 @@
     bottom: auto;
     margin-right: -50%;
     transform: translateX(-50%);
-    width: 50%;
+    min-width: 50%;
     background-color: rgba(255, 255, 255, 0);
 }
 
@@ -46,7 +46,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    width: 100%;
+    min-width: 100%;
     pointer-events: auto;
     background-color: #fff;
     background-clip: padding-box;
@@ -113,12 +113,12 @@
 
 @media screen and (max-width: 1200px) {
     .ReactModalPortal .Modal {
-        width: 70%;
+        min-width: 70%;
     }
 }
 
 @media screen and (max-width: 800px) {
     .ReactModalPortal .Modal {
-        width: 90%;
+        min-width: 90%;
     }
 }

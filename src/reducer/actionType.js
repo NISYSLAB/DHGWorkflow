@@ -21,5 +21,6 @@ const actionType = {
     REMOVE_GRAPH: 'REMOVE_GRAPH',
     NEW_GRAPH: 'NEW_GRAPH',
     SET_SHARE_MODAL: 'SET_SHARE_MODAL',
+    SET_SETTING_MODAL: 'SET_SETTING_MODAL',
 };
 export default zealit(actionType);

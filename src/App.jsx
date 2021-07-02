@@ -7,6 +7,7 @@ import { Header } from './component/Header';
 import { reducer, initialState, actionType as T } from './reducer';
 import ProjectDetails from './component/modals/ProjectDetails';
 import ShareModal from './component/modals/ShareModal';
+import SettingsModal from './component/modals/Settings';
 
 const app = () => {
     const [superState, dispatcher] = useReducer(reducer, initialState);
@@ -14,6 +15,7 @@ const app = () => {
         <div className="container">
             <ProjectDetails superState={superState} dispatcher={dispatcher} />
             <ShareModal superState={superState} dispatcher={dispatcher} />
+            <SettingsModal superState={superState} dispatcher={dispatcher} />
             <GraphCompDetails
                 closeModal={() => dispatcher({ type: T.Model_Close })}
                 superState={superState}
