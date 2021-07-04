@@ -1,5 +1,6 @@
 import BendingDistanceWeight from './calculations/bending-dist-weight';
 import GA from './graph-actions';
+import { actionType as T } from '../reducer';
 
 const GraphComponent = (ParentClass) => class GC extends ParentClass {
     constructor() {
@@ -56,7 +57,7 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         return { ...rawStyle, bendDistance: 0, bendWeight: 0.5 };
     }
 
-    addEdge(source, target, label, rawStyle = {}, type = 'ordin', id, tid = this.getTid()) {
+    addEdgeWithLabel(source, target, label, rawStyle = {}, type = 'ordin', id, tid = this.getTid()) {
         const style = this.parseBendinDW(rawStyle, source, target);
         const edge = this.cy.add({
             group: 'edges',
@@ -71,6 +72,17 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         );
 
         return edge;
+    }
+
+    addEdge(source, target, label, rawStyle = {}, type = 'ordin', id, tid = this.getTid()) {
+        if (type === 'ordin' && label) {
+            return this.addEdgeWithLabel(source, target, label, rawStyle, type, id, tid);
+        }
+        this.dispatcher({
+            type: T.Model_Open_Create_Edge,
+            cb: (edgeLabel, edgeStyle) => this.addEdgeWithLabel(source, target, edgeLabel, edgeStyle, type, id, tid),
+        });
+        return undefined;
     }
 
     getStyle(id) {
