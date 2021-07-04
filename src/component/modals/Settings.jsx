@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from './ParentModal';
 import './settings.css';
 import { actionType as T } from '../../reducer';
@@ -7,8 +7,19 @@ import CodeEdit from '../CodeEdit';
 const SettingsModal = ({ superState, dispatcher }) => {
     const [nodeValidator, setNodeValidator] = useState('');
     const [edgeValidator, setEdgeValidator] = useState('');
+    useEffect(() => {
+        if (superState.graphs[superState.curGraphIndex] && superState.graphs[superState.curGraphIndex].instance) {
+            setNodeValidator(superState.graphs[superState.curGraphIndex].instance.getNodeValidator());
+            setEdgeValidator(superState.graphs[superState.curGraphIndex].instance.getEdgeValidator());
+        }
+    }, [superState.graphs[superState.curGraphIndex] && superState.graphs[superState.curGraphIndex].instance]);
+
     const close = () => dispatcher({ type: T.SET_SETTING_MODAL, payload: false });
     const submit = () => {
+        superState.graphs[superState.curGraphIndex].instance.setEdgeNodeValidator({
+            nodeValidator: `(node, nodes, edges)=>{${nodeValidator}}`,
+            edgeValidator: `(edge, nodes, edges)=>{${nodeValidator}}`,
+        });
         dispatcher({ type: T.SET_SETTING_MODAL, payload: false });
     };
 

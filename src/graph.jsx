@@ -13,6 +13,7 @@ import { actionType as T } from './reducer';
 import './graph.css';
 import localStorageManager from './graph-builder/local-storage-manager';
 import TabBar from './component/TabBar';
+import { edgeValidator, nodeValidator } from './config/defaultValidators';
 
 const GraphComp = (props) => {
     const graphContainerRef = React.createRef();
@@ -41,7 +42,9 @@ const GraphComp = (props) => {
             zoomDash: true,
             panGrid: true,
         });
-        const myGraph = new (MyGraph(Object))(id, cy, dispatcher, superState, projectDetails);
+        const myGraph = new (MyGraph(Object))(
+            id, cy, dispatcher, superState, projectDetails, nodeValidator, edgeValidator,
+        );
         cy.edgehandles({
             preview: false,
             handlePosition() {

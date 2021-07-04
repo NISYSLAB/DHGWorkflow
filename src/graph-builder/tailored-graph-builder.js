@@ -49,7 +49,7 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
 
     addEdgeWithJuncNode(sourceID, targetID, edgeStyle = {}, tid) {
         const juncNode = this.getById(sourceID);
-        const ed = super.addEdge(
+        const ed = super.addEdgeWithLabel(
             sourceID, targetID,
             juncNode.data('edgeLabel'),
             { ...juncNode.data('edgeStyle'), bendDistance: edgeStyle.bendDistance, bendWeight: edgeStyle.bendWeight },
@@ -74,7 +74,7 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
         const juncNode = super.addNode('', { backgroundColor: style.backgroundColor },
             'special', juncNodePos, { edgeLabel: label, edgeStyle: style }, undefined, tid);
         juncNode.ungrabify();
-        super.addEdge(sourceID, juncNode.id(), '', {
+        super.addEdgeWithLabel(sourceID, juncNode.id(), '', {
             ...style,
             'target-arrow-shape': 'none',
         }, 'special', undefined, tid);
@@ -86,14 +86,18 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
         if (this.getById(targetID).data('type') !== 'ordin') return this;
         const sourceNode = this.getById(sourceID);
         // ↓ Condition never statisfies ↓
-        if (type === 'special') return super.addEdge(sourceID, targetID, label, style, type, id, tid);
+        if (type === 'special') return super.addEdgeWithLabel(sourceID, targetID, label, style, type, id, tid);
         if (sourceNode.data('type') === 'special') return this.addEdgeWithJuncNode(sourceID, targetID, style, tid);
         const juncNodes = sourceNode.outgoers('node').filter((node) => node.data('edgeLabel') === label);
         if (juncNodes.length) return this.addEdgeWithJuncNode(juncNodes[0].id(), targetID, style, tid);
         if (label.length) return this.addEdgeWithoutJuncNode(sourceID, targetID, label, style, tid);
         this.dispatcher({
             type: T.Model_Open_Create_Edge,
-            cb: (edgeLabel, edgeStyle) => this.addEdgeWithoutJuncNode(sourceID, targetID, edgeLabel, edgeStyle, tid),
+            cb: (edgeLabel, edgeStyle) => {
+                const message = this.customValidiateEdge(edgeLabel, edgeStyle, sourceID, targetID);
+                if (message.ok) this.addEdgeWithoutJuncNode(sourceID, targetID, edgeLabel, edgeStyle, tid);
+                return message;
+            },
         });
         return this;
     }
@@ -128,6 +132,33 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
         if (this.getById(nodeID).data('type') === 'ordin') return nodeID;
         if (this.getById(nodeID).incomers('node').length === 0) return nodeID;
         return this.getById(nodeID).incomers('node')[0].id();
+    }
+
+    customGetNodesEdges() {
+        const nodes = this.cy.$('node[type="ordin"]').map((node) => ({
+            label: node.data('label'),
+            style: node.data('style'),
+        }));
+        const edges = this.cy.$('edge[type="ordin"]').map((edge) => ({
+            label: edge.data('label'),
+            source: this.getById(this.getRealSourceId(edge.source().id())).data('label'),
+            target: edge.target().data('label'),
+            style: edge.data('style'),
+        }));
+        return [nodes, edges];
+    }
+
+    customValidiateEdge(label, style, source, target) {
+        const [nodes, edges] = this.customGetNodesEdges();
+        try {
+            const message = this.edgeValidator({
+                label, style, source, target,
+            }, nodes, edges);
+            if (message && message.ok !== undefined && message.err !== undefined) return message;
+            return { ok: false, err: 'Invalid return format from the defined node validator.' };
+        } catch (e) {
+            return { ok: false, err: `Error raised at node validator: ${e.message}` };
+        }
     }
 };
 

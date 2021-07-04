@@ -9,7 +9,9 @@ const createNode = (state, setState) => {
     setState({
         type: T.Model_Open_Create_Node,
         cb: (label, style) => {
-            getGraphFun(state).addNode(label, style);
+            const message = getGraphFun(state).validiateNode(label, style);
+            if (message.ok) getGraphFun(state).addNode(label, style);
+            return message;
         },
     });
 };

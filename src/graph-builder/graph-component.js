@@ -3,8 +3,9 @@ import GA from './graph-actions';
 import { actionType as T } from '../reducer';
 
 const GraphComponent = (ParentClass) => class GC extends ParentClass {
-    constructor() {
-        super();
+    constructor(...args) {
+        super(...args);
+        [,,,,, this.nodeValidator, this.edgeValidator] = args;
         this.getTid = () => new Date().getTime();
     }
 
@@ -80,7 +81,11 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         }
         this.dispatcher({
             type: T.Model_Open_Create_Edge,
-            cb: (edgeLabel, edgeStyle) => this.addEdgeWithLabel(source, target, edgeLabel, edgeStyle, type, id, tid),
+            cb: (edgeLabel, edgeStyle) => {
+                const message = this.validiateEdge(edgeLabel, edgeStyle, source, target);
+                if (message.ok) this.addEdgeWithLabel(source, target, edgeLabel, edgeStyle, type, id, tid);
+                return message;
+            },
         });
         return undefined;
     }
@@ -174,6 +179,58 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         const style = this.getById(id).data('style');
         this.getById(id).data('style', { ...style, height: dim.height, width: dim.width });
         this.setPos(id, pos);
+    }
+
+    getNodeValidator() {
+        const [a, b] = [this.nodeValidator.toString().indexOf('{'), this.nodeValidator.toString().lastIndexOf('}')];
+        return this.nodeValidator.toString().slice(a + 1, b).trim();
+    }
+
+    getEdgeValidator() {
+        const [a, b] = [this.edgeValidator.toString().indexOf('{'), this.edgeValidator.toString().lastIndexOf('}')];
+        return this.edgeValidator.toString().slice(a + 1, b).trim();
+    }
+
+    setEdgeNodeValidator({ nodeValidator, edgeValidator }) {
+        // eslint-disable-next-line no-eval
+        this.nodeValidator = eval(nodeValidator);
+        // eslint-disable-next-line no-eval
+        this.edgeValidator = eval(edgeValidator);
+    }
+
+    getNodesEdges() {
+        const nodes = this.cy.$('node[type="ordin"]').map((node) => ({
+            label: node.data('label'),
+            style: node.data('style'),
+        }));
+        const edges = this.cy.$('edge[type="ordin"]').map((edge) => ({
+            label: edge.data('label'),
+            source: edge.source().data('label'),
+            target: edge.target().data('label'),
+            style: edge.data('style'),
+        }));
+        return [nodes, edges];
+    }
+
+    validiateComp(comp, validator) {
+        const [nodes, edges] = this.getNodesEdges();
+        try {
+            const message = validator(comp, nodes, edges);
+            if (message && message.ok !== undefined && message.err !== undefined) return message;
+            return { ok: false, err: 'Invalid return format from the defined node validator.' };
+        } catch (e) {
+            return { ok: false, err: `Error raised at node validator: ${e.message}` };
+        }
+    }
+
+    validiateNode(label, style) {
+        return this.validiateComp({ label, style }, this.nodeValidator);
+    }
+
+    validiateEdge(label, style, source, target) {
+        return this.validiateComp({
+            label, style, source, target,
+        }, this.edgeValidator);
     }
 };
 

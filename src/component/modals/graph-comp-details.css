@@ -8,6 +8,14 @@
     border-bottom-right-radius: calc(.3rem - 1px);
     border-bottom-left-radius: calc(.3rem - 1px);
 }
+
 .ReactModalPortal .modal-footer>* {
     margin: .25rem;
+}
+
+.ReactModalPortal .err {
+    text-align: center;
+    color: #f00;
+    font-family: monospaceoo;
+    padding-bottom: 20px;
 }
