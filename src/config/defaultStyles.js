@@ -11,6 +11,7 @@ const NodeStyle = {
 const EdgeStyle = {
     thickness: 1,
     backgroundColor: null,
+    shape: 'solid',
 };
 
 export { NodeStyle, EdgeStyle };

@@ -20,13 +20,29 @@ const EdgeDetails = ({
 }) => {
     const setStyle = (prop) => setData({ ...data, style: { ...data.style, ...prop } });
     const inputRef = useCallback((node) => node && node.focus(), []);
+    const RadioBtn = ({ name, shape }) => (
+        <label htmlFor="ellipse">
+            <input
+                type="radio"
+                name="shape"
+                value={shape}
+                checked={data.style.shape === shape}
+                onChange={() => setStyle({ shape })}
+            />
+            {name}
+        </label>
+    );
 
     return (
         <div className="edgeform" onSubmit={submit}>
             <div className="par-div">
                 <div
                     className="edge-div"
-                    style={{ ...data.style, height: data.style.thickness }}
+                    style={{
+                        borderBottomWidth: data.style.thickness,
+                        borderBottomColor: data.style.backgroundColor,
+                        borderBottomStyle: data.style.shape,
+                    }}
                 />
                 <Triangle size={data.style.thickness} color={data.style.backgroundColor} />
                 <div className="label">{data.label}</div>
@@ -36,7 +52,7 @@ const EdgeDetails = ({
                 {labelAllowed ? (
                     <input
                         ref={inputRef}
-                        className="edgeLabel"
+                        className="span-rest edgeLabel"
                         type="text"
                         required
                         label="Edge Label"
@@ -45,6 +61,12 @@ const EdgeDetails = ({
                         onChange={(e) => setData({ ...data, label: `${e.target.value}` })}
                     />
                 ) : ''}
+                <div> Shape</div>
+                <div className="span-rest hascheckbox">
+                    <div><RadioBtn name="Solid" shape="solid" /></div>
+                    <div><RadioBtn name="Dotted" shape="dotted" /></div>
+                    <div><RadioBtn name="Dashed" shape="dashed" /></div>
+                </div>
                 <div> Thickness</div>
                 <input
                     type="number"

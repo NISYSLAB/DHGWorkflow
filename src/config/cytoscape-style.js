@@ -48,6 +48,7 @@ const style = [
             segmentDistances: 'data(style.bendDistance)',
             segmentWeights: 'data(style.bendWeight)',
             edgeDistances: 'node-position',
+            lineStyle: 'data(style.shape)',
         },
     },
     {
