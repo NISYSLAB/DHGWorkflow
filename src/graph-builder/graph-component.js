@@ -46,7 +46,24 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         return node;
     }
 
-    parseBendinDW(rawStyle, sourceId, targetId) {
+    getEdgesBetweenNodes(sourceId, targetId) {
+        return this.getById(sourceId).edgesWith(this.getById(targetId));
+    }
+
+    getBendingD(sourceId, targetId) {
+        const edges = this.getEdgesBetweenNodes(sourceId, targetId);
+        const dists = new Set();
+        edges.forEach((edge) => {
+            dists.add(edge.data('style').bendDistance);
+        });
+        for (let d = 0; ;d += 20) {
+            if (!dists.has(d)) return d;
+            if (!dists.has(-d)) return -d;
+        }
+    }
+
+    parseBendinDW(rawStyle, sourceId, targetId, type) {
+        if (type !== 'ordin') return { ...rawStyle, bendDistance: 0, bendWeight: 0 };
         if (rawStyle.bendDistance && rawStyle.bendWeight) return rawStyle;
         if (rawStyle.bendPoint) {
             const { x, y } = rawStyle.bendPoint;
@@ -55,11 +72,11 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
             );
             return { ...rawStyle, bendDistance: d, bendWeight: w };
         }
-        return { ...rawStyle, bendDistance: 0, bendWeight: 0.5 };
+        return { ...rawStyle, bendDistance: this.getBendingD(sourceId, targetId), bendWeight: 0.5 };
     }
 
     addEdgeWithLabel(source, target, label, rawStyle = {}, type = 'ordin', id, tid = this.getTid()) {
-        const style = this.parseBendinDW(rawStyle, source, target);
+        const style = this.parseBendinDW(rawStyle, source, target, type);
         const edge = this.cy.add({
             group: 'edges',
             data: {

@@ -160,6 +160,13 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
             return { ok: false, err: `Error raised at node validator: ${e.message}` };
         }
     }
+
+    getEdgesBetweenNodes(n1, n2) {
+        const [c1, c2] = [n1, n2]
+            .map((n) => this.getById(this.getRealSourceId(n)))
+            .map((r) => r.outgoers('node[type="special"]').union(r));
+        return c1.edgesWith(c2);
+    }
 };
 
 export default TailoredGraph;
