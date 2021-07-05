@@ -5,8 +5,8 @@ import graphmlBuilder from './graphml/builder';
 import BendingDistanceWeight from './calculations/bending-dist-weight';
 
 const GraphLoadSave = (ParentClass) => class extends ParentClass {
-    constructor() {
-        super();
+    constructor(...args) {
+        super(...args);
         this.autoSaveIntervalId = null;
     }
 

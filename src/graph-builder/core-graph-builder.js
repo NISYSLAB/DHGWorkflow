@@ -6,8 +6,8 @@ import BendingDistanceWeight from './calculations/bending-dist-weight';
 
 const CoreGraph = (ParentClass) => class CG extends
     GraphLoadSave(GraphCanvas(GraphUndoRedo(ParentClass))) {
-    constructor(id, cy, dispatcher, superState, projectDetails) {
-        super();
+    constructor(id, cy, dispatcher, superState, projectDetails, nodeValidator, edgeValidator) {
+        super(id, cy, dispatcher, superState, projectDetails, nodeValidator, edgeValidator);
         if (dispatcher) this.dispatcher = dispatcher;
         if (superState) this.superState = superState;
         if (cy) this.cy = cy;

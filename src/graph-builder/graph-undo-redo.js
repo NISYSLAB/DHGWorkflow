@@ -3,8 +3,8 @@ import GA from './graph-actions';
 import { actionType as T } from '../reducer';
 
 const GraphUndoRedo = (ParentClass) => class GUR extends GraphComponent(ParentClass) {
-    constructor() {
-        super();
+    constructor(...props) {
+        super(...props);
 
         GUR.methodsMapped = {
             [GA.ADD_NODE]: (...args) => super.addNode.bind(this)(...args, 0),
