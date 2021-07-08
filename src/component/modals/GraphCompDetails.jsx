@@ -11,6 +11,10 @@ const ModalComp = ({ closeModal, superState }) => {
     } = modalPayload;
 
     useEffect(() => {
+        setErrorMessage('');
+    }, [ModelOpen]);
+
+    useEffect(() => {
         setData({ label: defaultLabel || '', style: defaultStyle });
         setErrorMessage('');
     }, [defaultLabel, defaultStyle]);

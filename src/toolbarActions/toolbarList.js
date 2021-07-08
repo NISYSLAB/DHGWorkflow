@@ -93,7 +93,7 @@ const toolbarList = (state) => [
     },
     {
         type: 'menu',
-        text: 'Download',
+        text: 'Export',
         icon: FaDownload,
         action: downloadImg,
         active: true,
