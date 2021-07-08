@@ -94,7 +94,7 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
         this.dispatcher({
             type: T.Model_Open_Create_Edge,
             cb: (edgeLabel, edgeStyle) => {
-                const message = this.customValidiateEdge(edgeLabel, edgeStyle, sourceID, targetID);
+                const message = this.validiateEdge(edgeLabel, edgeStyle, sourceID, targetID);
                 if (message.ok) this.addEdgeWithoutJuncNode(sourceID, targetID, edgeLabel, edgeStyle, tid);
                 return message;
             },
@@ -132,33 +132,6 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
         if (this.getById(nodeID).data('type') === 'ordin') return nodeID;
         if (this.getById(nodeID).incomers('node').length === 0) return nodeID;
         return this.getById(nodeID).incomers('node')[0].id();
-    }
-
-    customGetNodesEdges() {
-        const nodes = this.cy.$('node[type="ordin"]').map((node) => ({
-            label: node.data('label'),
-            style: node.data('style'),
-        }));
-        const edges = this.cy.$('edge[type="ordin"]').map((edge) => ({
-            label: edge.data('label'),
-            source: this.getById(this.getRealSourceId(edge.source().id())).data('label'),
-            target: edge.target().data('label'),
-            style: edge.data('style'),
-        }));
-        return [nodes, edges];
-    }
-
-    customValidiateEdge(label, style, source, target) {
-        const [nodes, edges] = this.customGetNodesEdges();
-        try {
-            const message = this.edgeValidator({
-                label, style, source, target,
-            }, nodes, edges);
-            if (message && message.ok !== undefined && message.err !== undefined) return message;
-            return { ok: false, err: 'Invalid return format from the defined node validator.' };
-        } catch (e) {
-            return { ok: false, err: `Error raised at node validator: ${e.message}` };
-        }
     }
 
     getEdgesBetweenNodes(n1, n2) {

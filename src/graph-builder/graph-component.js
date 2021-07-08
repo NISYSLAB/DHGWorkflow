@@ -219,12 +219,14 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         const nodes = this.cy.$('node[type="ordin"]').map((node) => ({
             label: node.data('label'),
             style: node.data('style'),
+            id: node.data('id'),
         }));
         const edges = this.cy.$('edge[type="ordin"]').map((edge) => ({
             label: edge.data('label'),
-            source: edge.source().data('label'),
+            source: this.getById(this.getRealSourceId(edge.source().id())).data('label'),
             target: edge.target().data('label'),
             style: edge.data('style'),
+            id: edge.data('id'),
         }));
         return [nodes, edges];
     }
@@ -240,13 +242,31 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         }
     }
 
-    validiateNode(label, style) {
-        return this.validiateComp({ label, style }, this.nodeValidator);
+    validiateNode(label, style, id) {
+        if (id) {
+            const node = this.getById(id);
+            return this.validiateComp({
+                label: label || node.data('label'),
+                style: style || node.data('style'),
+                id,
+            }, this.nodeValidator);
+        }
+        return this.validiateComp({ label, style, id }, this.nodeValidator);
     }
 
-    validiateEdge(label, style, source, target) {
+    validiateEdge(label, style, source, target, id) {
+        if (id) {
+            const edge = this.getById(id);
+            return this.validiateComp({
+                label: label || edge.data('label'),
+                style: style || edge.data('style'),
+                source: this.getById(this.getRealSourceId(edge.source().id())).data('label'),
+                target: edge.target().data('label'),
+                id,
+            }, this.edgeValidator);
+        }
         return this.validiateComp({
-            label, style, source, target,
+            label, style, source, target, id,
         }, this.edgeValidator);
     }
 };
