@@ -15,8 +15,7 @@ function DropDown({
             </MenuButton>
         )}
         >
-            <MenuItem onClick={() => action('JPG')}>JPG</MenuItem>
-            <MenuItem onClick={() => action('PNG')}>PNG</MenuItem>
+            {action().map(({ fn, name }) => <MenuItem onClick={fn} key={name}>{name}</MenuItem>)}
         </Menu>
     );
 }

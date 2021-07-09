@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import {
     FaSave, FaUndo, FaRedo, FaTrash, FaFileImport, FaPlus, FaDownload, FaEdit, FaRegTimesCircle, FaShare, FaRegSun,
 } from 'react-icons/fa';
@@ -26,12 +27,14 @@ const toolbarList = (state) => [
         hotkey: 'Ctrl+O',
     },
     {
-        type: 'action',
+        type: 'menu',
         text: 'Save',
         icon: FaSave,
-        action: saveAction,
+        action: (s, d) => [
+            { fn: () => saveAction(s, d), name: 'Save' },
+            { fn: () => saveAction(s, d, prompt('File Name:')), name: 'Save As' },
+        ],
         active: true,
-        hotkey: 'Ctrl+S',
     },
     {
         type: 'action',
@@ -95,7 +98,10 @@ const toolbarList = (state) => [
         type: 'menu',
         text: 'Export',
         icon: FaDownload,
-        action: downloadImg,
+        action: (s, d) => [
+            { fn: () => downloadImg(s, d, 'JPG'), name: 'JPG' },
+            { fn: () => downloadImg(s, d, 'PNG'), name: 'PNG' },
+        ],
         active: true,
     },
     { type: 'vsep' },

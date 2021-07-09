@@ -74,11 +74,11 @@ const GraphLoadSave = (ParentClass) => class extends ParentClass {
         return `${this.projectDetails.projectName}-${this.projectDetails.author}`;
     }
 
-    saveToDisk() {
+    saveToDisk(fileName) {
         const str = graphmlBuilder(this.jsonifyGraph());
         const bytes = new TextEncoder().encode(str);
         const blob = new Blob([bytes], { type: 'application/json;charset=utf-8' });
-        saveAs(blob, `${this.getName()}-DHGWorkflow-${new Date().getTime()}.graphml`);
+        saveAs(blob, `${fileName || `${this.getName()}-DHGWorkflow`}.graphml`);
     }
 
     loadJson(content) {

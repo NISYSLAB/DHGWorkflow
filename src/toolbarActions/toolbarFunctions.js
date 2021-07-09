@@ -65,8 +65,8 @@ const downloadImg = (state, setState, format) => {
     getGraphFun(state).downloadImg(format);
 };
 
-const saveAction = (state) => {
-    getGraphFun(state).saveToDisk();
+const saveAction = (state, d, fileName) => {
+    getGraphFun(state).saveToDisk(fileName);
 };
 
 const readFile = (state, setState, e) => {
