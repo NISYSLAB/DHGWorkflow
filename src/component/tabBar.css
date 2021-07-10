@@ -9,10 +9,8 @@
     background-color: #ddd;
     border-radius: 5px 5px 0px 0px;
     border: 1px solid #bbb;
-    border-bottom: 0;
     z-index: 1;
     position: relative;
-    flex-shrink: 0;
     line-height: 30px;
     padding: 0px 5px;
     cursor: pointer;
@@ -22,12 +20,15 @@
     border-bottom: 1px solid #888;
     justify-content: center;
     align-items: center;
+    min-width: 30px;
+    margin: 0;
 }
 
 .tab.tab-graph {
     width: 200px;
     margin-left: -1px;
     text-align: left;
+    min-width: 60px;
 }
 
 .tab:hover {
