@@ -93,7 +93,7 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
     }
 
     addEdge(source, target, label, rawStyle = {}, type = 'ordin', id, tid = this.getTid()) {
-        if (type === 'ordin' && label) {
+        if (type !== 'ordin' || label) {
             return this.addEdgeWithLabel(source, target, label, rawStyle, type, id, tid);
         }
         this.dispatcher({

@@ -16,14 +16,22 @@ import TabBar from './component/TabBar';
 import { edgeValidator, nodeValidator } from './config/defaultValidators';
 
 const GraphComp = (props) => {
-    const graphContainerRef = React.createRef();
+    const graphContainerRef = React.useRef();
     const { dispatcher, superState } = props;
+    const setConatinerDim = (element) => {
+        /* eslint-disable no-param-reassign */
+        element.style.width = `${graphContainerRef.current.offsetWidth - 2}px`;
+        element.style.height = `${graphContainerRef.current.offsetHeight - 2}px`;
+        /* eslint-disable no-param-reassign */
+    };
+
+    useEffect(() => {
+        window.addEventListener('resize', () => graphContainerRef.current.childNodes
+            .forEach((el) => el.classList.contains('graph-element') && setConatinerDim(el)));
+    }, []);
 
     const initialiseNewGraph = (element, id, projectDetails) => {
-        // eslint-disable-next-line no-param-reassign
-        element.style.width = `${graphContainerRef.current.offsetWidth - 2}px`;
-        // eslint-disable-next-line no-param-reassign
-        element.style.height = `${graphContainerRef.current.offsetHeight - 2}px`;
+        setConatinerDim(element);
         const cy = cytoscape({ ...cyOptions, container: element });
         cy.nodeEditing({
             resizeToContentCueEnabled: () => false,
@@ -115,6 +123,7 @@ const GraphComp = (props) => {
                         style={{ zIndex: 1, display: superState.curGraphIndex === i ? 'block' : 'none' }}
                         id={el.id}
                         key={el.id}
+                        className="graph-element"
                     />
                 ))}
                 <ZoomComp dispatcher={dispatcher} superState={superState} />
