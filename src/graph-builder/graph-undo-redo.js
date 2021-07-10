@@ -16,6 +16,7 @@ const GraphUndoRedo = (ParentClass) => class GUR extends GraphComponent(ParentCl
             [GA.DEL_EDGE]: (...args) => super.deleteEdge.bind(this)(...args, 0),
             [GA.SET_POS]: (...args) => super.setPos.bind(this)(...args, 0),
             [GA.SET_DIM]: (...args) => super.setDim.bind(this)(...args, 0),
+            [GA.SET_BENDW]: (...args) => this.setBendWightDist.bind(this)(...args, 0),
         };
 
         this.actionArr = [];
@@ -40,6 +41,14 @@ const GraphUndoRedo = (ParentClass) => class GUR extends GraphComponent(ParentCl
         this.addAction(
             { actionName: GA.SET_DIM, parameters: [id, prevDim, prevPos] },
             { actionName: GA.SET_DIM, parameters: [id, curDim, curPos] }, tid,
+        );
+    }
+
+    addBendChange(id, prevDW, curDW) {
+        const tid = new Date().getTime();
+        this.addAction(
+            { actionName: GA.SET_BENDW, parameters: [id, prevDW] },
+            { actionName: GA.SET_BENDW, parameters: [id, curDW] }, tid,
         );
     }
 

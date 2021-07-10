@@ -55,12 +55,12 @@ const CoreGraph = (ParentClass) => class CG extends
     regesterEvents() {
         if (super.regesterEvents) super.regesterEvents();
         this.cy.on('select unselect', () => this.selectDeselectEventHandler());
-        this.cy.on('grab', (e) => {
+        this.cy.on('grab', 'node[type = "ordin"]', (e) => {
             e.target.forEach((node) => {
                 node.scratch('position', { ...node.position() });
             });
         });
-        this.cy.on('dragfree', (e) => {
+        this.cy.on('dragfree', 'node[type = "ordin"]', (e) => {
             e.target.forEach((node) => {
                 this.addPositionChange(node.id(), node.scratch('position'), { ...node.position() });
             });
@@ -81,7 +81,7 @@ const CoreGraph = (ParentClass) => class CG extends
         });
 
         this.cy.on('hide-bend remove', () => {
-            this.bendNode.removeListener('drag'); this.bendNode.addClass('hidden');
+            this.bendNode.removeListener('drag grab dragfree'); this.bendNode.addClass('hidden');
         });
 
         this.cy.on('grabon', (evt) => (evt.target[0].data('type') !== 'bend' ? this.cy.emit('hide-bend') : 0));
@@ -113,8 +113,25 @@ const CoreGraph = (ParentClass) => class CG extends
                 el.data('style', { ...el.data('style'), bendDistance: DW.d, bendWeight: DW.w });
                 ev.target.emit('bending');
             });
+            this.bendNode.on('grab', () => {
+                const node = el;
+                node.scratch('bendDistWeight', {
+                    bendDistance: el.data('style').bendDistance, bendWeight: el.data('style').bendWeight,
+                });
+            });
+            this.bendNode.on('dragfree', () => {
+                const node = el;
+                this.addBendChange(node.id(), node.scratch('bendDistWeight'), {
+                    bendDistance: el.data('style').bendDistance, bendWeight: el.data('style').bendWeight,
+                });
+            });
             this.bendNode.removeClass('hidden');
         });
+    }
+
+    setBendWightDist(id, DW) {
+        const style = this.getById(id).data('style');
+        this.getById(id).data('style', { ...style, bendDistance: DW.bendDistance, bendWeight: DW.bendWeight });
     }
 
     static getBendEdgePoint(el) {

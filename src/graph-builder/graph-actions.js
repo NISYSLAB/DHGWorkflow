@@ -8,4 +8,5 @@ export default {
     DEL_EDGE: 'DEL_EDGE',
     SET_POS: 'SET_POS',
     SET_DIM: 'SET_DIM',
+    SET_BENDW: 'SET_BENDW',
 };
