@@ -18,8 +18,10 @@ const GraphLoadSave = (ParentClass) => class extends ParentClass {
     }
 
     downloadImg(format) {
-        if (format === 'PNG') saveAs(this.cy.png(), `${this.getName()}-DHGWorkflow.png`);
-        if (format === 'JPG') saveAs(this.cy.jpg(), `${this.getName()}-DHGWorkflow.jpg`);
+        this.cy.emit('hide-bend');
+        this.cy.$('.eh-handle').remove();
+        if (format === 'PNG') saveAs(this.cy.png({ full: true }), `${this.getName()}-DHGWorkflow.png`);
+        if (format === 'JPG') saveAs(this.cy.jpg({ full: true }), `${this.getName()}-DHGWorkflow.jpg`);
     }
 
     shouldNodeBeSaved(nodeID) {
