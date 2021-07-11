@@ -52,7 +52,12 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
         const ed = super.addEdgeWithLabel(
             sourceID, targetID,
             juncNode.data('edgeLabel'),
-            { ...juncNode.data('edgeStyle'), bendDistance: edgeStyle.bendDistance, bendWeight: edgeStyle.bendWeight },
+            {
+                ...juncNode.data('edgeStyle'),
+                bendDistance: edgeStyle.bendDistance,
+                bendWeight: edgeStyle.bendWeight,
+                bendPoint: edgeStyle.bendPoint,
+            },
             'ordin',
             undefined, tid,
         );
