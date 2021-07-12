@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/DHGWorkflow/static/css/main.df66a1b1.chunk.css",
-    "main.js": "/DHGWorkflow/static/js/main.ea0be0bb.chunk.js",
-    "main.js.map": "/DHGWorkflow/static/js/main.ea0be0bb.chunk.js.map",
+    "main.css": "/DHGWorkflow/static/css/main.f84a545c.chunk.css",
+    "main.js": "/DHGWorkflow/static/js/main.0a22a6b4.chunk.js",
+    "main.js.map": "/DHGWorkflow/static/js/main.0a22a6b4.chunk.js.map",
     "runtime-main.js": "/DHGWorkflow/static/js/runtime-main.9504b409.js",
     "runtime-main.js.map": "/DHGWorkflow/static/js/runtime-main.9504b409.js.map",
     "static/css/2.2c1e88b0.chunk.css": "/DHGWorkflow/static/css/2.2c1e88b0.chunk.css",
@@ -14,14 +14,14 @@
     "service-worker.js": "/DHGWorkflow/service-worker.js",
     "service-worker.js.map": "/DHGWorkflow/service-worker.js.map",
     "static/css/2.2c1e88b0.chunk.css.map": "/DHGWorkflow/static/css/2.2c1e88b0.chunk.css.map",
-    "static/css/main.df66a1b1.chunk.css.map": "/DHGWorkflow/static/css/main.df66a1b1.chunk.css.map",
+    "static/css/main.f84a545c.chunk.css.map": "/DHGWorkflow/static/css/main.f84a545c.chunk.css.map",
     "static/js/2.3a6f1051.chunk.js.LICENSE.txt": "/DHGWorkflow/static/js/2.3a6f1051.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.9504b409.js",
     "static/css/2.2c1e88b0.chunk.css",
     "static/js/2.3a6f1051.chunk.js",
-    "static/css/main.df66a1b1.chunk.css",
-    "static/js/main.ea0be0bb.chunk.js"
+    "static/css/main.f84a545c.chunk.css",
+    "static/js/main.0a22a6b4.chunk.js"
   ]
 }
