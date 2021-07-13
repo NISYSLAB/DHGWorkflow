@@ -22,7 +22,7 @@ const GraphComp = (props) => {
         /* eslint-disable no-param-reassign */
         element.style.width = `${graphContainerRef.current.offsetWidth - 2}px`;
         element.style.height = `${graphContainerRef.current.offsetHeight - 2}px`;
-        /* eslint-disable no-param-reassign */
+        /* eslint-enable no-param-reassign */
     };
 
     useEffect(() => {

@@ -25,4 +25,20 @@ const edgeValidator = (edge, nodes, edges) => {
     return message;
 };
 
-export { nodeValidator, edgeValidator };
+/* eslint-disable max-len */
+const nodeValidatorFormat = `Takes **\`node\`** details under validation, existing **\`nodes\`** and existing **\`edges\`**
+
+**Node:** { label: String, style: Object, id: String | undefined },
+**Nodes:** [{ label: String, style: Object, id: String }],
+**Edges:** [{ label: String, sourceLabel: String, targetLabel: String, style: Object, id: String }],`;
+
+const edgeValidatorFormat = `Takes **\`edge\`** details under validation, existing **\`nodes\`** and existing **\`edges\`**
+
+**Edge:** { label: String, sourceLabel: String, targetLabel: String, style: Object, id: String | undefined },
+**Nodes:** [{ label: String, style: Object, id: String }],
+**Edges:** [{ label: String, sourceLabel: String, targetLabel: String, style: Object, id: String }],`;
+/* eslint-enable max-len */
+
+export {
+    nodeValidator, edgeValidator, nodeValidatorFormat, edgeValidatorFormat,
+};

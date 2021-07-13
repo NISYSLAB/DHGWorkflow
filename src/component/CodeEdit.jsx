@@ -2,9 +2,13 @@ import React from 'react';
 import './codeEdit.css';
 
 const CodeEdit = ({
-    pre, post, value, onChange, height,
+    pre, post, value, onChange, height, docString,
 }) => {
     const inputRef = React.createRef();
+    const parseMD = (s) => s.split('**').map((e, i) => {
+        if (i % 2) return <span><b>{e}</b></span>;
+        return <span>{e}</span>;
+    });
     return (
         <div
             className="textField"
@@ -13,6 +17,8 @@ const CodeEdit = ({
             role="textbox"
             tabIndex={0}
         >
+            <div className="docStr">{parseMD(docString)}</div>
+            <br />
             <textarea
                 className="preTextField"
                 value={pre}

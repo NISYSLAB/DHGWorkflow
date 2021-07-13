@@ -3,6 +3,7 @@ import Modal from './ParentModal';
 import './settings.css';
 import { actionType as T } from '../../reducer';
 import CodeEdit from '../CodeEdit';
+import { nodeValidatorFormat, edgeValidatorFormat } from '../../config/defaultValidators';
 
 const SettingsModal = ({ superState, dispatcher }) => {
     const [nodeValidator, setNodeValidator] = useState('');
@@ -37,7 +38,8 @@ const SettingsModal = ({ superState, dispatcher }) => {
                         post="}"
                         value={nodeValidator}
                         onChange={(e) => setNodeValidator(e.target.value)}
-                        height={150}
+                        height={200}
+                        docString={nodeValidatorFormat}
                     />
                 </div>
                 <div>
@@ -47,7 +49,8 @@ const SettingsModal = ({ superState, dispatcher }) => {
                         post="}"
                         value={edgeValidator}
                         onChange={(e) => setEdgeValidator(e.target.value)}
-                        height={150}
+                        height={200}
+                        docString={edgeValidatorFormat}
                     />
                 </div>
                 <div className="footer">
