@@ -145,6 +145,28 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
             .map((r) => r.outgoers('node[type="special"]').union(r));
         return c1.edgesWith(c2);
     }
+
+    getNodesEdges() {
+        const nodes = this.cy.$('node[type="ordin"]').map((node) => ({
+            label: node.data('label'),
+            style: node.data('style'),
+            id: node.data('id'),
+        }));
+        const edges = {};
+        this.cy.$('edge[type="ordin"]').forEach((edge) => {
+            const label = edge.data('label');
+            const source = this.getById(this.getRealSourceId(edge.source().id())).data('label');
+            const target = edge.target().data('label');
+            const style = edge.data('style');
+            const id = edge.data('id');
+            if (!edges[label]) {
+                edges[label] = {
+                    target: [target], source, id, label, style,
+                };
+            } else edges[label].target.push(target);
+        });
+        return [nodes, Object.values(edges)];
+    }
 };
 
 export default TailoredGraph;
