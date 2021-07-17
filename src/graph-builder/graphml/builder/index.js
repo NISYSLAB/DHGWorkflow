@@ -19,6 +19,7 @@ const builder = (G) => {
         lineColor: edg.style.backgroundColor,
         lineWidth: edg.style.thickness,
         bendPoint: edg.style.bendPoint,
+        type: edg.style.shape,
     }));
     const X = graphML({
         nodes, edges, projectName: G.projectDetails.projectName, author: G.projectDetails.author, id: G.id,
