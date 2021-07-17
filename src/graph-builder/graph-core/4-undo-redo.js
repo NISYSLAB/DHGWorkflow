@@ -1,22 +1,28 @@
-import GraphComponent from './graph-component';
+import GraphComponent from './3-component';
 import GA from '../graph-actions';
 import { actionType as T } from '../../reducer';
 
 class GraphUndoRedo extends GraphComponent {
+    static methodsMapped
+
+    actionArr
+
+    curActionIndex
+
     constructor(...props) {
         super(...props);
 
         GraphUndoRedo.methodsMapped = {
-            [GA.ADD_NODE]: (...args) => super.addNode.bind(this)(...args, 0),
-            [GA.ADD_EDGE]: (...args) => super.addEdge.bind(this)(...args, 0),
-            [GA.UPDATE_NODE]: (...args) => super.updateNode.bind(this)(...args, 0),
-            [GA.UPDATE_EDGE]: (...args) => super.updateEdge.bind(this)(...args, 0),
-            [GA.UPDATE_DATA]: (...args) => super.updateData.bind(this)(...args, 0),
-            [GA.DEL_NODE]: (...args) => super.deleteNode.bind(this)(...args, 0),
-            [GA.DEL_EDGE]: (...args) => super.deleteEdge.bind(this)(...args, 0),
-            [GA.SET_POS]: (...args) => super.setPos.bind(this)(...args, 0),
-            [GA.SET_DIM]: (...args) => super.setDim.bind(this)(...args, 0),
-            [GA.SET_BENDW]: (...args) => this.setBendWightDist.bind(this)(...args, 0),
+            [GA.ADD_NODE]: (...args) => super.addNode(...args, 0),
+            [GA.ADD_EDGE]: (...args) => super.addEdge(...args, 0),
+            [GA.UPDATE_NODE]: (...args) => super.updateNode(...args, 0),
+            [GA.UPDATE_EDGE]: (...args) => super.updateEdge(...args, 0),
+            [GA.UPDATE_DATA]: (...args) => super.updateData(...args, 0),
+            [GA.DEL_NODE]: (...args) => super.deleteNode(...args, 0),
+            [GA.DEL_EDGE]: (...args) => super.deleteEdge(...args, 0),
+            [GA.SET_POS]: (...args) => super.setPos(...args, 0),
+            [GA.SET_DIM]: (...args) => super.setDim(...args, 0),
+            [GA.SET_BENDW]: (...args) => this.setBendWightDist(...args),
         };
 
         this.actionArr = [];
@@ -84,9 +90,27 @@ class GraphUndoRedo extends GraphComponent {
     }
 
     setCurStatus() {
-        if (super.setCurStatus) super.setCurStatus();
+        super.setCurStatus();
         this.dispatcher({ type: T.SET_UNDO, payload: this.curActionIndex !== 0 });
         this.dispatcher({ type: T.SET_REDO, payload: this.curActionIndex !== this.actionArr.length });
+    }
+
+    regesterEvents() {
+        super.regesterEvents();
+        this.cy.on('dragfree', 'node[type = "ordin"]', (e) => {
+            e.target.forEach((node) => {
+                this.addPositionChange(node.id(), node.scratch('position'), { ...node.position() });
+            });
+        });
+        this.cy.on('nodeediting.resizeend', (e, type, node) => {
+            this.addDimensionChange(
+                node.id(),
+                { height: node.scratch('height'), width: node.scratch('width') },
+                node.scratch('position'),
+                { height: node.data('style').height, width: node.data('style').width },
+                { ...node.position() },
+            );
+        });
     }
 }
 

@@ -1,6 +1,9 @@
-import GraphUndoRedo from './graph-undo-redo';
+// import GraphUndoRedo from './graph-undo-redo';
+import Core from './1-core';
 
-class GraphCanvas extends GraphUndoRedo {
+class GraphCanvas extends Core {
+    setZoomUI;
+
     resetZoom() {
         this.cy.reset();
     }
@@ -19,7 +22,7 @@ class GraphCanvas extends GraphUndoRedo {
         this.cy.zoom(v / 100);
     }
 
-    getZoom(): number {
+    getZoom() {
         return Math.round(this.cy.zoom() * 100);
     }
 
@@ -33,7 +36,7 @@ class GraphCanvas extends GraphUndoRedo {
     }
 
     setCurStatus() {
-        if (super.setCurStatus) super.setCurStatus();
+        super.setCurStatus();
         this.setZoomUI(Math.round(this.cy.zoom() * 100));
     }
 }

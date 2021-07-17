@@ -5,7 +5,7 @@ import getBoundaryPoint from './calculations/boundary-point';
 class TailoredGraph extends CoreGraph {
     regesterEvents() {
         super.regesterEvents();
-        this.cy.on('drag data', 'node[type="ordin"]', (evt) => {
+        this.cy.on('drag data moved', 'node[type="ordin"]', (evt) => {
             evt.target.connectedEdges().connectedNodes('node[type="special"]').forEach((juncNode) => {
                 juncNode.position(TailoredGraph.calJuncNodePos(juncNode));
             });

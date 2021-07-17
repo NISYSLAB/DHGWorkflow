@@ -1,10 +1,24 @@
 import BendingDistanceWeight from '../calculations/bending-dist-weight';
 import GA from '../graph-actions';
 import { actionType as T } from '../../reducer';
+import GraphCanvas from './2-canvas';
 
-class GraphComponent {
+class GraphComponent extends GraphCanvas {
+    getTid;
+
+    nodeValidator;
+
+    edgeValidator;
+
+    addAction;
+
+    getRealSourceId;
+
     constructor(...args) {
-        [,,,,, this.nodeValidator, this.edgeValidator] = args;
+        super(...args);
+        const [,,,,, nodeValidator, edgeValidator] = args;
+        this.nodeValidator = nodeValidator;
+        this.edgeValidator = edgeValidator;
         this.getTid = () => new Date().getTime();
     }
 
@@ -26,7 +40,8 @@ class GraphComponent {
         return start;
     }
 
-    addNode(label, style, type = 'ordin', position = this.getPos(), data = {}, id, tid = this.getTid()) {
+    addNode(label, style, type = 'ordin', position = this.getPos(),
+        data = {}, id, tid = this.getTid()) {
         const node = this.cy.add({
             group: 'nodes',
             data: {
@@ -74,7 +89,8 @@ class GraphComponent {
         return { ...rawStyle, bendDistance: this.getBendingD(sourceId, targetId), bendWeight: 0.5 };
     }
 
-    addEdgeWithLabel(source, target, label, rawStyle = {}, type = 'ordin', id, tid = this.getTid()) {
+    addEdgeWithLabel(source, target, label, rawStyle = {}, type = 'ordin',
+        id, tid = this.getTid()) {
         const style = this.parseBendinDW(rawStyle, source, target, type);
         const edge = this.cy.add({
             group: 'edges',
@@ -91,7 +107,8 @@ class GraphComponent {
         return edge;
     }
 
-    addEdge(source, target, label, rawStyle = {}, type = 'ordin', id, tid = this.getTid()) {
+    addEdge(source, target, label, rawStyle = {}, type = 'ordin', id,
+        tid = this.getTid()) {
         if (type !== 'ordin' || label) {
             return this.addEdgeWithLabel(source, target, label, rawStyle, type, id, tid);
         }

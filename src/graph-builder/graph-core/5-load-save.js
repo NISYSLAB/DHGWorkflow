@@ -3,19 +3,21 @@ import { actionType as T } from '../../reducer';
 import localStorageManager from '../local-storage-manager';
 import graphmlBuilder from '../graphml/builder';
 import BendingDistanceWeight from '../calculations/bending-dist-weight';
-import GraphCanvas from './graph-canvas';
+import GraphUndoRedo from './4-undo-redo';
 
-class GraphLoadSave extends GraphCanvas {
+class GraphLoadSave extends GraphUndoRedo {
+    autoSaveIntervalId
+
     constructor(...args) {
         super(...args);
         this.autoSaveIntervalId = null;
     }
 
     regesterEvents() {
-        if (super.regesterEvents) super.regesterEvents();
-        this.cy.on('add remove data dragfreeon', 'node[type="ordin"]', this.saveLocalStorage.bind(this));
-        this.cy.on('add remove data', 'edge[type="ordin"]', this.saveLocalStorage.bind(this));
-        this.cy.on('nodeediting.resizeend graph-modified', this.saveLocalStorage.bind(this));
+        super.regesterEvents();
+        this.cy.on('add remove data dragfreeon', 'node[type="ordin"]', () => this.saveLocalStorage());
+        this.cy.on('add remove data', 'edge[type="ordin"]', () => this.saveLocalStorage());
+        this.cy.on('nodeediting.resizeend graph-modified', () => this.saveLocalStorage());
     }
 
     downloadImg(format) {
@@ -49,6 +51,7 @@ class GraphLoadSave extends GraphCanvas {
                     label: all.data.label,
                     id: all.data.id,
                     position: all.position,
+                    style: {},
                 };
                 nodeJson.style = this.getStyle(node.id());
                 graph.nodes.push(nodeJson);
@@ -61,6 +64,7 @@ class GraphLoadSave extends GraphCanvas {
                     source: this.getRealSourceId(edge.source().id()),
                     target: all.data.target,
                     label: all.data.label,
+                    style: {},
                 };
                 edgeJson.style = this.getStyle(edge.id());
                 edgeJson.style.bendPoint = BendingDistanceWeight.getCoordinate(
@@ -103,7 +107,7 @@ class GraphLoadSave extends GraphCanvas {
     }
 
     saveLocalStorage() {
-        if (this.autoSaveTimeoutId !== null) clearTimeout(this.autoSaveIntervalId);
+        if (this.autoSaveIntervalId !== null) clearTimeout(this.autoSaveIntervalId);
         this.autoSaveIntervalId = setTimeout(() => localStorageManager.save(this.id, this.jsonifyGraph()), 1000);
     }
 
