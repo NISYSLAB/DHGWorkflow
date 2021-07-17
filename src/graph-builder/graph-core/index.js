@@ -1,11 +1,8 @@
-import { actionType as T } from '../reducer';
+import { actionType as T } from '../../reducer';
 import GraphLoadSave from './graph-load-save';
-import GraphCanvas from './graph-canvas';
-import GraphUndoRedo from './graph-undo-redo';
-import BendingDistanceWeight from './calculations/bending-dist-weight';
+import BendingDistanceWeight from '../calculations/bending-dist-weight';
 
-const CoreGraph = (ParentClass) => class CG extends
-    GraphLoadSave(GraphCanvas(GraphUndoRedo(ParentClass))) {
+class CoreGraph extends GraphLoadSave {
     constructor(id, cy, dispatcher, superState, projectDetails, nodeValidator, edgeValidator) {
         super(id, cy, dispatcher, superState, projectDetails, nodeValidator, edgeValidator);
         if (dispatcher) this.dispatcher = dispatcher;
@@ -105,7 +102,7 @@ const CoreGraph = (ParentClass) => class CG extends
         this.cy.on('bend-edge', 'edge', (ev) => {
             if (!this.bendNode.hasClass('hidden')) this.cy.emit('hide-bend');
             const el = ev.target;
-            this.bendNode.position(CG.getBendEdgePoint(el));
+            this.bendNode.position(CoreGraph.getBendEdgePoint(el));
             this.bendNode.on('drag', () => {
                 const DW = BendingDistanceWeight.getWeightDistance(
                     this.bendNode.position(), el.source().position(), el.target().position(),
@@ -145,6 +142,6 @@ const CoreGraph = (ParentClass) => class CG extends
         if (super.setCurStatus) super.setCurStatus();
         this.selectDeselectEventHandler();
     }
-};
+}
 
 export default CoreGraph;

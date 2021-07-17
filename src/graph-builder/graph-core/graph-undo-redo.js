@@ -1,12 +1,12 @@
 import GraphComponent from './graph-component';
-import GA from './graph-actions';
-import { actionType as T } from '../reducer';
+import GA from '../graph-actions';
+import { actionType as T } from '../../reducer';
 
-const GraphUndoRedo = (ParentClass) => class GUR extends GraphComponent(ParentClass) {
+class GraphUndoRedo extends GraphComponent {
     constructor(...props) {
         super(...props);
 
-        GUR.methodsMapped = {
+        GraphUndoRedo.methodsMapped = {
             [GA.ADD_NODE]: (...args) => super.addNode.bind(this)(...args, 0),
             [GA.ADD_EDGE]: (...args) => super.addEdge.bind(this)(...args, 0),
             [GA.UPDATE_NODE]: (...args) => super.updateNode.bind(this)(...args, 0),
@@ -24,7 +24,7 @@ const GraphUndoRedo = (ParentClass) => class GUR extends GraphComponent(ParentCl
     }
 
     static performAction({ actionName, parameters }) {
-        const action = GUR.methodsMapped[actionName];
+        const action = GraphUndoRedo.methodsMapped[actionName];
         action(...parameters);
     }
 
@@ -66,7 +66,7 @@ const GraphUndoRedo = (ParentClass) => class GUR extends GraphComponent(ParentCl
         if (this.curActionIndex !== 0) curTid = this.actionArr[this.curActionIndex - 1].tid;
         while (this.curActionIndex !== 0 && this.actionArr[this.curActionIndex - 1].tid === curTid) {
             this.curActionIndex -= 1;
-            GUR.performAction(this.actionArr[this.curActionIndex].inverse);
+            GraphUndoRedo.performAction(this.actionArr[this.curActionIndex].inverse);
         }
         this.dispatcher({ type: T.SET_UNDO, payload: this.curActionIndex !== 0 });
         this.dispatcher({ type: T.SET_REDO, payload: this.curActionIndex !== this.actionArr.length });
@@ -76,7 +76,7 @@ const GraphUndoRedo = (ParentClass) => class GUR extends GraphComponent(ParentCl
         let curTid = null;
         if (this.curActionIndex !== this.actionArr.length) curTid = this.actionArr[this.curActionIndex].tid;
         while (this.curActionIndex !== this.actionArr.length && this.actionArr[this.curActionIndex].tid === curTid) {
-            GUR.performAction(this.actionArr[this.curActionIndex].equivalent);
+            GraphUndoRedo.performAction(this.actionArr[this.curActionIndex].equivalent);
             this.curActionIndex += 1;
         }
         this.dispatcher({ type: T.SET_UNDO, payload: this.curActionIndex !== 0 });
@@ -88,6 +88,6 @@ const GraphUndoRedo = (ParentClass) => class GUR extends GraphComponent(ParentCl
         this.dispatcher({ type: T.SET_UNDO, payload: this.curActionIndex !== 0 });
         this.dispatcher({ type: T.SET_REDO, payload: this.curActionIndex !== this.actionArr.length });
     }
-};
+}
 
 export default GraphUndoRedo;

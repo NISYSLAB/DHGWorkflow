@@ -50,7 +50,7 @@ const GraphComp = (props) => {
             zoomDash: true,
             panGrid: true,
         });
-        const myGraph = new (MyGraph(Object))(
+        const myGraph = new MyGraph(
             id, cy, dispatcher, superState, projectDetails, nodeValidator, edgeValidator,
         );
         cy.edgehandles({

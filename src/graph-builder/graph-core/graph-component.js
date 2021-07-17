@@ -1,10 +1,9 @@
-import BendingDistanceWeight from './calculations/bending-dist-weight';
-import GA from './graph-actions';
-import { actionType as T } from '../reducer';
+import BendingDistanceWeight from '../calculations/bending-dist-weight';
+import GA from '../graph-actions';
+import { actionType as T } from '../../reducer';
 
-const GraphComponent = (ParentClass) => class GC extends ParentClass {
+class GraphComponent {
     constructor(...args) {
-        super(...args);
         [,,,,, this.nodeValidator, this.edgeValidator] = args;
         this.getTid = () => new Date().getTime();
     }
@@ -273,6 +272,6 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
             id,
         }, this.edgeValidator, type);
     }
-};
+}
 
 export default GraphComponent;

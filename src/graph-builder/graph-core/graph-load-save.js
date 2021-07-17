@@ -1,10 +1,11 @@
 import { saveAs } from 'file-saver';
-import { actionType as T } from '../reducer';
-import localStorageManager from './local-storage-manager';
-import graphmlBuilder from './graphml/builder';
-import BendingDistanceWeight from './calculations/bending-dist-weight';
+import { actionType as T } from '../../reducer';
+import localStorageManager from '../local-storage-manager';
+import graphmlBuilder from '../graphml/builder';
+import BendingDistanceWeight from '../calculations/bending-dist-weight';
+import GraphCanvas from './graph-canvas';
 
-const GraphLoadSave = (ParentClass) => class extends ParentClass {
+class GraphLoadSave extends GraphCanvas {
     constructor(...args) {
         super(...args);
         this.autoSaveIntervalId = null;
@@ -116,6 +117,6 @@ const GraphLoadSave = (ParentClass) => class extends ParentClass {
     serializeGraph() {
         return btoa(JSON.stringify(this.jsonifyGraph()));
     }
-};
+}
 
 export default GraphLoadSave;

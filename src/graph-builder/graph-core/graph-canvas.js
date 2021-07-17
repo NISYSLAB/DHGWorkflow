@@ -1,4 +1,6 @@
-const GraphCanvas = (ParentClass) => class extends ParentClass {
+import GraphUndoRedo from './graph-undo-redo';
+
+class GraphCanvas extends GraphUndoRedo {
     resetZoom() {
         this.cy.reset();
     }
@@ -17,7 +19,7 @@ const GraphCanvas = (ParentClass) => class extends ParentClass {
         this.cy.zoom(v / 100);
     }
 
-    getZoom() {
+    getZoom(): number {
         return Math.round(this.cy.zoom() * 100);
     }
 
@@ -34,6 +36,6 @@ const GraphCanvas = (ParentClass) => class extends ParentClass {
         if (super.setCurStatus) super.setCurStatus();
         this.setZoomUI(Math.round(this.cy.zoom() * 100));
     }
-};
+}
 
 export default GraphCanvas;

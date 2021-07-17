@@ -1,18 +1,18 @@
-import CoreGraph from './core-graph-builder';
+import CoreGraph from './graph-core';
 import { actionType as T } from '../reducer';
 import getBoundaryPoint from './calculations/boundary-point';
 
-const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
+class TailoredGraph extends CoreGraph {
     regesterEvents() {
         super.regesterEvents();
         this.cy.on('drag data', 'node[type="ordin"]', (evt) => {
             evt.target.connectedEdges().connectedNodes('node[type="special"]').forEach((juncNode) => {
-                juncNode.position(TG.calJuncNodePos(juncNode));
+                juncNode.position(TailoredGraph.calJuncNodePos(juncNode));
             });
         });
         this.cy.on('bending', (evt) => {
             const juncNode = evt.target.source();
-            juncNode.position(TG.calJuncNodePos(juncNode));
+            juncNode.position(TailoredGraph.calJuncNodePos(juncNode));
         });
     }
 
@@ -21,7 +21,7 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
         const meanNbrPosition = { x: 0, y: 0 };
         const setOfPos = new Set();
         juncNode.outgoers('edge[type="ordin"]')
-            .forEach((edge) => setOfPos.add(JSON.stringify(TG.getBendEdgePoint(edge))));
+            .forEach((edge) => setOfPos.add(JSON.stringify(TailoredGraph.getBendEdgePoint(edge))));
         setOfPos.forEach((posStr) => {
             const pos = JSON.parse(posStr);
             meanNbrPosition.x += pos.x;
@@ -61,7 +61,7 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
             'ordin',
             undefined, tid,
         );
-        juncNode.position(TG.calJuncNodePos(juncNode));
+        juncNode.position(TailoredGraph.calJuncNodePos(juncNode));
         return ed;
     }
 
@@ -167,6 +167,6 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
         });
         return [nodes, Object.values(edges)];
     }
-};
+}
 
 export default TailoredGraph;
