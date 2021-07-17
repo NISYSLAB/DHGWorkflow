@@ -99,7 +99,7 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         this.dispatcher({
             type: T.Model_Open_Create_Edge,
             cb: (edgeLabel, edgeStyle) => {
-                const message = this.validiateEdge(edgeLabel, edgeStyle, source, target);
+                const message = this.validiateEdge(edgeLabel, edgeStyle, source, target, null, 'New');
                 if (message.ok) this.addEdgeWithLabel(source, target, edgeLabel, edgeStyle, type, id, tid);
                 return message;
             },
@@ -231,10 +231,10 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         return [nodes, edges];
     }
 
-    validiateComp(comp, validator) {
+    validiateComp(comp, validator, type) {
         const [nodes, edges] = this.getNodesEdges();
         try {
-            const message = validator(comp, nodes, edges);
+            const message = validator(comp, nodes, edges, type);
             if (message && message.ok !== undefined && message.err !== undefined) return message;
             return { ok: false, err: 'Invalid return format from the defined node validator.' };
         } catch (e) {
@@ -242,19 +242,19 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         }
     }
 
-    validiateNode(label, style, id) {
+    validiateNode(label, style, id, type) {
         if (id) {
             const node = this.getById(id);
             return this.validiateComp({
                 label: label || node.data('label'),
                 style: style || node.data('style'),
                 id,
-            }, this.nodeValidator);
+            }, this.nodeValidator, type);
         }
-        return this.validiateComp({ label, style, id }, this.nodeValidator);
+        return this.validiateComp({ label, style, id }, this.nodeValidator, type);
     }
 
-    validiateEdge(label, style, sourceId, targetId, id) {
+    validiateEdge(label, style, sourceId, targetId, id, type) {
         if (id) {
             const edge = this.getById(id);
             return this.validiateComp({
@@ -263,7 +263,7 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
                 sourceLabel: this.getById(this.getRealSourceId(edge.source().id())).data('label'),
                 targetLabel: edge.target().data('label'),
                 id,
-            }, this.edgeValidator);
+            }, this.edgeValidator, type);
         }
         return this.validiateComp({
             label,
@@ -271,7 +271,7 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
             sourceLabel: this.getById(this.getRealSourceId(sourceId)).data('label'),
             targetLabel: this.getById(targetId).data('label'),
             id,
-        }, this.edgeValidator);
+        }, this.edgeValidator, type);
     }
 };
 

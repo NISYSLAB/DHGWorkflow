@@ -1,7 +1,7 @@
 const nodeValidator = (node, nodes) => {
     let message = { ok: true, err: null };
     nodes.forEach((n) => {
-        if (n.label === node.label) {
+        if (n.id !== node.id && n.label === node.label) {
             message = {
                 ok: false,
                 err: 'Node with same label exists.',
@@ -24,17 +24,19 @@ const edgeValidator = (edge, nodes, edges) => {
 };
 
 /* eslint-disable max-len */
-const nodeValidatorFormat = `Takes **\`node\`** details under validation, existing **\`nodes\`** and existing **\`edges\`**
+const nodeValidatorFormat = `Takes **\`node\`** details under validation, existing **\`nodes\`**, existing **\`edges\`** and **\`type\`**
 
 **Node:** { label: String, style: Object, id: String | undefined },
 **Nodes:** [{ label: String, style: Object, id: String }],
-**Edges:** [{ label: String, sourceLabel: String, targetLabel: String, style: Object, id: String }],`;
+**Edges:** [{ label: String, sourceLabel: String, targetLabel: String, style: Object, id: String }],
+**Type:** \`New\` | \`Update\``;
 
-const edgeValidatorFormat = `Takes **\`edge\`** details under validation, existing **\`nodes\`** and existing **\`edges\`**
+const edgeValidatorFormat = `Takes **\`edge\`** details under validation, existing **\`nodes\`** and existing **\`edges\`** and **\`type\`**
 
 **Edge:** { label: String, sourceLabel: String, targetLabel: String, style: Object, id: String | undefined },
 **Nodes:** [{ label: String, style: Object, id: String }],
-**Edges:** [{ label: String, sourceLabel: String, targetLabel: String, style: Object, id: String }],`;
+**Edges:** [{ label: String, sourceLabel: String, targetLabel: String, style: Object, id: String }],
+**Type:** \`New\` | \`Update\``;
 /* eslint-enable max-len */
 
 export {

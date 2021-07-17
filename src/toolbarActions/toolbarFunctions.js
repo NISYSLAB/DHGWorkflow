@@ -9,7 +9,7 @@ const createNode = (state, setState) => {
     setState({
         type: T.Model_Open_Create_Node,
         cb: (label, style) => {
-            const message = getGraphFun(state).validiateNode(label, style);
+            const message = getGraphFun(state).validiateNode(label, style, null, 'New');
             if (message.ok) getGraphFun(state).addNode(label, style);
             return message;
         },
@@ -22,9 +22,22 @@ const editElement = (state, setState) => {
     if (state.eleSelectedPayload.type === 'NODE') {
         setState({
             type: T.Model_Open_Update_Node,
-            cb: (label, style) => state.eleSelectedPayload.ids.forEach(
-                (id) => getGraphFun(state).updateNode(id, style, label, shouldUpdateLabel, tid),
-            ),
+            cb: (label, style) => {
+                const retMessage = { ok: true, err: null };
+                state.eleSelectedPayload.ids.forEach((id) => {
+                    const message = getGraphFun(state).validiateNode(
+                        shouldUpdateLabel ? label : null, style, id, 'Update',
+                    );
+                    retMessage.ok = retMessage.ok && message.ok;
+                    retMessage.err = retMessage.err || message.err;
+                });
+                if (retMessage.ok) {
+                    state.eleSelectedPayload.ids.forEach(
+                        (id) => getGraphFun(state).updateNode(id, style, label, shouldUpdateLabel, tid),
+                    );
+                }
+                return retMessage;
+            },
             labelAllowed: shouldUpdateLabel,
             label: getGraphFun(state).getLabel(state.eleSelectedPayload.ids[0]),
             style: getGraphFun(state).getStyle(state.eleSelectedPayload.ids[0]),
@@ -37,7 +50,7 @@ const editElement = (state, setState) => {
                 const retMessage = { ok: true, err: null };
                 state.eleSelectedPayload.ids.forEach((id) => {
                     const message = getGraphFun(state).validiateEdge(
-                        shouldUpdateLabel ? label : null, style, null, null, id,
+                        shouldUpdateLabel ? label : null, style, null, null, id, 'Update',
                     );
                     retMessage.ok = retMessage.ok && message.ok;
                     retMessage.err = retMessage.err || message.err;

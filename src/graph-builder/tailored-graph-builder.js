@@ -99,7 +99,7 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
         this.dispatcher({
             type: T.Model_Open_Create_Edge,
             cb: (edgeLabel, edgeStyle) => {
-                const message = this.validiateEdge(edgeLabel, edgeStyle, sourceID, targetID);
+                const message = this.validiateEdge(edgeLabel, edgeStyle, sourceID, targetID, null, 'New');
                 if (message.ok) this.addEdge(sourceID, targetID, edgeLabel, edgeStyle, tid);
                 return message;
             },

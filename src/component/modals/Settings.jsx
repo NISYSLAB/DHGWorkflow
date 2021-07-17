@@ -18,8 +18,8 @@ const SettingsModal = ({ superState, dispatcher }) => {
     const close = () => dispatcher({ type: T.SET_SETTING_MODAL, payload: false });
     const submit = () => {
         superState.graphs[superState.curGraphIndex].instance.setEdgeNodeValidator({
-            nodeValidator: `(node, nodes, edges)=>{${nodeValidator}}`,
-            edgeValidator: `(edge, nodes, edges)=>{${nodeValidator}}`,
+            nodeValidator: `(node, nodes, edges, type)=>{${nodeValidator}}`,
+            edgeValidator: `(edge, nodes, edges, type)=>{${nodeValidator}}`,
         });
         dispatcher({ type: T.SET_SETTING_MODAL, payload: false });
     };
@@ -34,7 +34,7 @@ const SettingsModal = ({ superState, dispatcher }) => {
                 <div>
                     <h3>Node Validator</h3>
                     <CodeEdit
-                        pre="function validateNode(node, nodes, edges) {"
+                        pre="function validateNode(node, nodes, edges, type) {"
                         post="}"
                         value={nodeValidator}
                         onChange={(e) => setNodeValidator(e.target.value)}
@@ -45,7 +45,7 @@ const SettingsModal = ({ superState, dispatcher }) => {
                 <div>
                     <h3>Edge  Validator</h3>
                     <CodeEdit
-                        pre="function validateEdge(edge, nodes, edges) {"
+                        pre="function validateEdge(edge, nodes, edges, type) {"
                         post="}"
                         value={edgeValidator}
                         onChange={(e) => setEdgeValidator(e.target.value)}
