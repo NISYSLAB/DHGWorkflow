@@ -100,7 +100,7 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
             type: T.Model_Open_Create_Edge,
             cb: (edgeLabel, edgeStyle) => {
                 const message = this.validiateEdge(edgeLabel, edgeStyle, sourceID, targetID);
-                if (message.ok) this.addEdgeWithoutJuncNode(sourceID, targetID, edgeLabel, edgeStyle, tid);
+                if (message.ok) this.addEdge(sourceID, targetID, edgeLabel, edgeStyle, tid);
                 return message;
             },
         });
@@ -155,15 +155,15 @@ const TailoredGraph = (ParentClass) => class TG extends CoreGraph(ParentClass) {
         const edges = {};
         this.cy.$('edge[type="ordin"]').forEach((edge) => {
             const label = edge.data('label');
-            const source = this.getById(this.getRealSourceId(edge.source().id())).data('label');
-            const target = edge.target().data('label');
+            const sourceLabel = this.getById(this.getRealSourceId(edge.source().id())).data('label');
+            const targetLabel = edge.target().data('label');
             const style = edge.data('style');
             const id = edge.data('id');
             if (!edges[label]) {
                 edges[label] = {
-                    target: [target], source, id, label, style,
+                    targetLabel: [targetLabel], sourceLabel, id, label, style,
                 };
-            } else edges[label].target.push(target);
+            } else edges[label].targetLabel.push(targetLabel);
         });
         return [nodes, Object.values(edges)];
     }

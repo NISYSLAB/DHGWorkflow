@@ -13,7 +13,7 @@ const nodeValidator = (node, nodes) => {
 const edgeValidator = (edge, nodes, edges) => {
     let message = { ok: true, err: null };
     edges.forEach((e) => {
-        if (e.label === edge.label && e.source !== edge.source) {
+        if (e.label === edge.label && e.sourceLabel !== edge.sourceLabel) {
             message = {
                 ok: false,
                 err: 'Edge with same label exists.',

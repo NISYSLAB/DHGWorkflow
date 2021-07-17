@@ -223,8 +223,8 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         }));
         const edges = this.cy.$('edge[type="ordin"]').map((edge) => ({
             label: edge.data('label'),
-            source: this.getById(this.getRealSourceId(edge.source().id())).data('label'),
-            target: edge.target().data('label'),
+            sourceLabel: this.getById(this.getRealSourceId(edge.source().id())).data('label'),
+            targetLabel: edge.target().data('label'),
             style: edge.data('style'),
             id: edge.data('id'),
         }));
@@ -254,19 +254,23 @@ const GraphComponent = (ParentClass) => class GC extends ParentClass {
         return this.validiateComp({ label, style, id }, this.nodeValidator);
     }
 
-    validiateEdge(label, style, source, target, id) {
+    validiateEdge(label, style, sourceId, targetId, id) {
         if (id) {
             const edge = this.getById(id);
             return this.validiateComp({
                 label: label || edge.data('label'),
                 style: style || edge.data('style'),
-                source: this.getById(this.getRealSourceId(edge.source().id())).data('label'),
-                target: edge.target().data('label'),
+                sourceLabel: this.getById(this.getRealSourceId(edge.source().id())).data('label'),
+                targetLabel: edge.target().data('label'),
                 id,
             }, this.edgeValidator);
         }
         return this.validiateComp({
-            label, style, source, target, id,
+            label,
+            style,
+            sourceLabel: this.getById(this.getRealSourceId(sourceId)).data('label'),
+            targetLabel: this.getById(targetId).data('label'),
+            id,
         }, this.edgeValidator);
     }
 };
