@@ -1,5 +1,10 @@
 import PropFromArr from './PropFromArr';
 
+const mapByDefault = (x, arr, def) => {
+    if (arr.includes(x)) return x;
+    return def;
+};
+
 const parseNode = (node) => {
     const p = new PropFromArr(node).parseProps('data.y:ShapeNode', 2);
     return {
@@ -13,7 +18,7 @@ const parseNode = (node) => {
             width: parseFloat(p.parseProps('y:Geometry.$.width')),
             height: parseFloat(p.parseProps('y:Geometry.$.height')),
             opacity: parseInt(p.parseProps('y:Fill.$.opacity'), 10) || 1,
-            shape: p.parseProps('y:Shape.$.type'),
+            shape: mapByDefault(p.parseProps('y:Shape.$.type'), ['rectangle', 'ellipse'], 'rectangle'),
             backgroundColor: p.parseProps('y:Fill.$.color'),
             borderColor: p.parseProps('y:BorderStyle.$.color'),
             borderWidth: parseInt(p.parseProps('y:BorderStyle.$.width'), 10),
@@ -30,7 +35,8 @@ const parseEdge = (edge) => ({
         backgroundColor: new PropFromArr(edge).parseProps('data.*.y:LineStyle.$.color'),
         thickness: parseFloat(new PropFromArr(edge).parseProps('data.*.y:LineStyle.$.width')),
         bendPoint: new PropFromArr(edge).parseProps('data.*.y:Path.y:Point.$'),
-        shape: new PropFromArr(edge).parseProps('data.*.y:LineStyle.$.type'),
+        shape: mapByDefault(new PropFromArr(edge).parseProps('data.*.y:LineStyle.$.type'),
+            ['dashed', 'dotted'], 'solid'),
     },
 });
 
