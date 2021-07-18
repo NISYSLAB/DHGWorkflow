@@ -8,7 +8,7 @@ const parser = (graphMlCnt) => new Promise((resolve) => {
         const nodes = grahML.parseProps('graphml.graph.node', 1).map(parseNode);
         const edges = grahML.parseProps('graphml.graph.edge', 1).map(parseEdge);
         const { id, projectName, author } = parseDetails(grahML);
-        const projectDetails = { projectName, author, set: Boolean(projectName && author) };
+        const projectDetails = { projectName, author, set: Boolean(projectName) };
         resolve({
             id, projectDetails, edges, nodes,
         });

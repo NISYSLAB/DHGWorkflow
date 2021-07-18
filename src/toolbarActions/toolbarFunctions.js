@@ -88,6 +88,13 @@ const readFile = (state, setState, e) => {
         fr.onload = (x) => {
             graphMLParser(x.target.result).then((graphContent) => {
                 const id = new Date().getTime();
+                if (!graphContent.projectDetails.projectName) {
+                    /* eslint-disable no-param-reassign */
+                    [graphContent.projectDetails.projectName] = e.target.files[0]
+                        .name.split('.').slice(0, -1).join('.').split('-');
+                    graphContent.projectDetails.set = true;
+                    /* eslint-enable no-param-reassign */
+                }
                 localStorageManager.save(id, graphContent);
                 setState({
                     type: T.ADD_GRAPH,

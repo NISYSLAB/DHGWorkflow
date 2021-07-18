@@ -78,7 +78,8 @@ class GraphLoadSave extends GraphUndoRedo {
     }
 
     getName() {
-        return `${this.projectDetails.projectName}-${this.projectDetails.author}`;
+        return `${this.projectDetails.projectName}\
+${this.projectDetails.author ? `-${this.projectDetails.author}` : ''}`;
     }
 
     saveToDisk(fileName) {
