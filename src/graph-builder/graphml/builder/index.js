@@ -18,7 +18,7 @@ const builder = (G) => {
         target: edg.target,
         lineColor: edg.style.backgroundColor,
         lineWidth: edg.style.thickness,
-        bendPoint: edg.style.bendPoint,
+        bendPoint: edg.bendData.bendPoint,
         type: edg.style.shape,
     }));
     const X = graphML({

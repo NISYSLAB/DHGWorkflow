@@ -104,32 +104,27 @@ class CoreGraph {
                 const DW = BendingDistanceWeight.getWeightDistance(
                     this.bendNode.position(), el.source().position(), el.target().position(),
                 );
-                el.data('style', { ...el.data('style'), bendDistance: DW.d, bendWeight: DW.w });
+                el.data('bendData', { bendDistance: DW.d, bendWeight: DW.w });
                 ev.target.emit('bending');
             });
             this.bendNode.on('grab', () => {
                 const node = el;
-                node.scratch('bendDistWeight', {
-                    bendDistance: el.data('style').bendDistance, bendWeight: el.data('style').bendWeight,
-                });
+                node.scratch('bendDistWeight', el.data('bendData'));
             });
             this.bendNode.on('dragfree', () => {
                 const node = el;
-                this.addBendChange(node.id(), node.scratch('bendDistWeight'), {
-                    bendDistance: el.data('style').bendDistance, bendWeight: el.data('style').bendWeight,
-                });
+                this.addBendChange(node.id(), node.scratch('bendDistWeight'), el.data('bendData'));
             });
             this.bendNode.removeClass('hidden');
         });
     }
 
     setBendWightDist(id, DW) {
-        const style = this.getById(id).data('style');
-        this.getById(id).data('style', { ...style, bendDistance: DW.bendDistance, bendWeight: DW.bendWeight });
+        this.getById(id).data('bendData', DW);
     }
 
     static getBendEdgePoint(el) {
-        const { bendWeight, bendDistance } = el.data('style');
+        const { bendWeight, bendDistance } = el.data('bendData');
         const w = parseFloat(bendWeight);
         const d = parseFloat(bendDistance);
         return BendingDistanceWeight.getCoordinate(w, d, el.source().position(), el.target().position());

@@ -68,7 +68,7 @@ class GraphComponent extends GraphCanvas {
         const edges = this.getEdgesBetweenNodes(sourceID, targetID);
         const dists = new Set();
         edges.forEach((edge) => {
-            dists.add(edge.data('style').bendDistance);
+            dists.add(edge.data('bendData').bendDistance);
         });
         for (let d = 0; ;d += 20) {
             if (!dists.has(d)) return d;
@@ -92,20 +92,12 @@ class GraphComponent extends GraphCanvas {
     }
 
     addEdgeWithLabel(edgeData, tid = this.getTid()) {
-        const {
-            sourceID, targetID, label, style = {}, type = 'ordin', id,
-        } = edgeData;
-        const { bendDistance, bendWeight } = this.parseBendinDW({ ...edgeData, ...edgeData.style });
+        const { type = 'ordin' } = edgeData;
+        const bendData = this.parseBendinDW({ ...edgeData, ...edgeData.bendData });
         const edge = this.cy.add({
             group: 'edges',
             data: {
-                source: sourceID,
-                target: targetID,
-                label,
-                type,
-                id,
-                style:
-                { ...style, bendDistance, bendWeight },
+                ...edgeData, source: edgeData.sourceID, target: edgeData.targetID, type, bendData,
             },
         });
         this.addAction(

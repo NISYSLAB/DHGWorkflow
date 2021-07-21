@@ -34,9 +34,11 @@ const parseEdge = (edge) => ({
     style: {
         backgroundColor: new PropFromArr(edge).parseProps('data.*.y:LineStyle.$.color'),
         thickness: parseFloat(new PropFromArr(edge).parseProps('data.*.y:LineStyle.$.width')),
-        bendPoint: new PropFromArr(edge).parseProps('data.*.y:Path.y:Point.$'),
         shape: mapByDefault(new PropFromArr(edge).parseProps('data.*.y:LineStyle.$.type'),
             ['dashed', 'dotted'], 'solid'),
+    },
+    bendData: {
+        bendPoint: new PropFromArr(edge).parseProps('data.*.y:Path.y:Point.$'),
     },
 });
 

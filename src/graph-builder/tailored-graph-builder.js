@@ -47,26 +47,19 @@ class TailoredGraph extends CoreGraph {
         return this;
     }
 
-    addEdgeWithJuncNode({ sourceID, targetID, style = {} }, tid) {
-        const juncNode = this.getById(sourceID);
+    addEdgeWithJuncNode(edgeData, tid) {
+        const juncNode = this.getById(edgeData.sourceID);
         const ed = super.addEdge({
-            sourceID,
-            targetID,
+            ...edgeData,
             label: juncNode.data('edgeLabel'),
-            style: {
-                ...juncNode.data('edgeStyle'),
-                bendDistance: style.bendDistance,
-                bendWeight: style.bendWeight,
-                bendPoint: style.bendPoint,
-            },
+            style: juncNode.data('edgeStyle'),
         }, tid);
         juncNode.position(TailoredGraph.calJuncNodePos(juncNode));
         return ed;
     }
 
-    addEdgeWithoutJuncNode({
-        sourceID, targetID, label, style,
-    }, tid) {
+    addEdgeWithoutJuncNode(edgeData, tid) {
+        const { sourceID, targetID, style } = edgeData;
         const [sourceNode, targetNode] = [sourceID, targetID].map(this.getById.bind(this));
         const sourceNodeStyle = sourceNode.data('style');
         const juncNodePos = getBoundaryPoint(
@@ -77,7 +70,7 @@ class TailoredGraph extends CoreGraph {
             sourceNodeStyle.shape,
         );
         const juncNode = super.addNode('', { backgroundColor: style.backgroundColor },
-            'special', juncNodePos, { edgeLabel: label, edgeStyle: style }, undefined, tid);
+            'special', juncNodePos, { edgeLabel: edgeData.label, edgeStyle: style }, undefined, tid);
         juncNode.ungrabify();
         super.addEdge({
             sourceID,
@@ -87,9 +80,9 @@ class TailoredGraph extends CoreGraph {
                 'target-arrow-shape': 'none',
             },
             type: 'special',
-        }, undefined, tid);
+        }, tid);
         this.addAutoMove(juncNode, sourceNode);
-        return this.addEdgeWithJuncNode({ sourceID: juncNode.id(), targetID, style }, tid);
+        return this.addEdgeWithJuncNode({ ...edgeData, sourceID: juncNode.id() }, tid);
     }
 
     addEdge(edgeData, tid = this.getTid()) {
@@ -117,7 +110,7 @@ class TailoredGraph extends CoreGraph {
         const junctionNode = this.getById(id).source();
         if (shouldUpdateLabel) this.updateData(junctionNode.data('id'), 'edgeLabel', label, tid);
         this.updateData(junctionNode.data('id'), 'edgeStyle', style, tid);
-        this.updateNode([junctionNode.data('id')], { backgroundColor: style.backgroundColor }, '', false, tid);
+        this.updateNode(junctionNode.data('id'), { backgroundColor: style.backgroundColor }, '', false, tid);
 
         junctionNode
             .outgoers('edge')

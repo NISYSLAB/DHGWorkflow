@@ -59,16 +59,11 @@ class GraphLoadSave extends GraphUndoRedo {
         });
         this.cy.edges().forEach((edge) => {
             if (this.shouldEdgeBeSaved(edge.id())) {
-                const all = edge.json();
-                const edgeJson = {
-                    source: this.getRealSourceId(edge.source().id()),
-                    target: all.data.target,
-                    label: all.data.label,
-                    style: {},
-                };
+                const edgeJson = edge.json().data;
+                edgeJson.source = this.getRealSourceId(edge.source().id());
                 edgeJson.style = this.getStyle(edge.id());
-                edgeJson.style.bendPoint = BendingDistanceWeight.getCoordinate(
-                    edgeJson.style.bendWeight, edgeJson.style.bendDistance,
+                edgeJson.bendData.bendPoint = BendingDistanceWeight.getCoordinate(
+                    edgeJson.bendData.bendWeight, edgeJson.bendData.bendDistance,
                     edge.source().position(), edge.target().position(),
                 );
                 graph.edges.push(edgeJson);
