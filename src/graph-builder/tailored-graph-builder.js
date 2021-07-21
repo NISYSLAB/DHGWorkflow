@@ -47,27 +47,27 @@ class TailoredGraph extends CoreGraph {
         return this;
     }
 
-    addEdgeWithJuncNode(sourceID, targetID, edgeStyle = {}, tid) {
+    addEdgeWithJuncNode({ sourceID, targetID, style = {} }, tid) {
         const juncNode = this.getById(sourceID);
-        const ed = super.addEdgeWithLabel(
-            sourceID, targetID,
-            juncNode.data('edgeLabel'),
-            {
+        const ed = super.addEdge({
+            sourceID,
+            targetID,
+            label: juncNode.data('edgeLabel'),
+            style: {
                 ...juncNode.data('edgeStyle'),
-                bendDistance: edgeStyle.bendDistance,
-                bendWeight: edgeStyle.bendWeight,
-                bendPoint: edgeStyle.bendPoint,
+                bendDistance: style.bendDistance,
+                bendWeight: style.bendWeight,
+                bendPoint: style.bendPoint,
             },
-            'ordin',
-            undefined, tid,
-        );
+        }, tid);
         juncNode.position(TailoredGraph.calJuncNodePos(juncNode));
         return ed;
     }
 
-    addEdgeWithoutJuncNode(sourceID, targetID, label, style, tid) {
-        const sourceNode = this.getById(sourceID);
-        const targetNode = this.getById(targetID);
+    addEdgeWithoutJuncNode({
+        sourceID, targetID, label, style,
+    }, tid) {
+        const [sourceNode, targetNode] = [sourceID, targetID].map(this.getById.bind(this));
         const sourceNodeStyle = sourceNode.data('style');
         const juncNodePos = getBoundaryPoint(
             sourceNode.position(),
@@ -79,28 +79,34 @@ class TailoredGraph extends CoreGraph {
         const juncNode = super.addNode('', { backgroundColor: style.backgroundColor },
             'special', juncNodePos, { edgeLabel: label, edgeStyle: style }, undefined, tid);
         juncNode.ungrabify();
-        super.addEdgeWithLabel(sourceID, juncNode.id(), '', {
-            ...style,
-            'target-arrow-shape': 'none',
-        }, 'special', undefined, tid);
+        super.addEdge({
+            sourceID,
+            targetID: juncNode.id(),
+            style: {
+                ...style,
+                'target-arrow-shape': 'none',
+            },
+            type: 'special',
+        }, undefined, tid);
         this.addAutoMove(juncNode, sourceNode);
-        return this.addEdgeWithJuncNode(juncNode.id(), targetID, style, tid);
+        return this.addEdgeWithJuncNode({ sourceID: juncNode.id(), targetID, style }, tid);
     }
 
-    addEdge(sourceID, targetID, label = '', style, type = 'ordin', id, tid = this.getTid()) {
-        if (this.getById(targetID).data('type') !== 'ordin') return this;
-        const sourceNode = this.getById(sourceID);
-        // ↓ Condition never statisfies ↓
-        if (type === 'special') return super.addEdgeWithLabel(sourceID, targetID, label, style, type, id, tid);
-        if (sourceNode.data('type') === 'special') return this.addEdgeWithJuncNode(sourceID, targetID, style, tid);
-        const juncNodes = sourceNode.outgoers('node').filter((node) => node.data('edgeLabel') === label);
-        if (juncNodes.length) return this.addEdgeWithJuncNode(juncNodes[0].id(), targetID, style, tid);
-        if (label.length) return this.addEdgeWithoutJuncNode(sourceID, targetID, label, style, tid);
+    addEdge(edgeData, tid = this.getTid()) {
+        const { sourceID, targetID, label } = edgeData;
+        const [sourceNode, targetNode] = [sourceID, targetID].map(this.getById.bind(this));
+        const juncNodes = sourceNode.outgoers('node').filter((node) => label && node.data('edgeLabel') === label);
+
+        if (targetNode.data('type') !== 'ordin') return this; // Don't Add Node
+        if (sourceNode.data('type') === 'special') return this.addEdgeWithJuncNode(edgeData, tid);
+        if (juncNodes.length) return this.addEdgeWithJuncNode({ ...edgeData, sourceID: juncNodes[0].id() }, tid);
+        if (label && label.length) return this.addEdgeWithoutJuncNode(edgeData, tid);
+
         this.dispatcher({
             type: T.Model_Open_Create_Edge,
             cb: (edgeLabel, edgeStyle) => {
                 const message = this.validiateEdge(edgeLabel, edgeStyle, sourceID, targetID, null, 'New');
-                if (message.ok) this.addEdge(sourceID, targetID, edgeLabel, edgeStyle, tid);
+                if (message.ok) this.addEdge({ ...edgeData, label: edgeLabel, style: edgeStyle }, tid);
                 return message;
             },
         });

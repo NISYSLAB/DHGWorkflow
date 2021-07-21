@@ -59,7 +59,7 @@ const GraphComp = (props) => {
                 return 'none';
             },
             handleNodes: 'node[type = "ordin"],node[type = "special"]',
-            complete: (a, b, c) => { c.remove(); myGraph.addEdge(a.id(), b.id()); },
+            complete: (a, b, c) => { c.remove(); myGraph.addEdge({ sourceID: a.id(), targetID: b.id() }); },
         });
         myGraph.loadGraphFromLocalStorage();
         return myGraph;

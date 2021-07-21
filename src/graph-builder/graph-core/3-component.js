@@ -60,12 +60,12 @@ class GraphComponent extends GraphCanvas {
         return node;
     }
 
-    getEdgesBetweenNodes(sourceId, targetId) {
-        return this.getById(sourceId).edgesWith(this.getById(targetId));
+    getEdgesBetweenNodes(sourceID, targetID) {
+        return this.getById(sourceID).edgesWith(this.getById(targetID));
     }
 
-    getBendingD(sourceId, targetId) {
-        const edges = this.getEdgesBetweenNodes(sourceId, targetId);
+    getBendingD(sourceID, targetID) {
+        const edges = this.getEdgesBetweenNodes(sourceID, targetID);
         const dists = new Set();
         edges.forEach((edge) => {
             dists.add(edge.data('style').bendDistance);
@@ -76,47 +76,57 @@ class GraphComponent extends GraphCanvas {
         }
     }
 
-    parseBendinDW(rawStyle, sourceId, targetId, type) {
-        if (type !== 'ordin') return { ...rawStyle, bendDistance: 0, bendWeight: 0 };
-        if (rawStyle.bendDistance && rawStyle.bendWeight) return rawStyle;
-        if (rawStyle.bendPoint) {
-            const { x, y } = rawStyle.bendPoint;
+    parseBendinDW({
+        sourceID, targetID, type, bendWeight, bendDistance, bendPoint,
+    }) {
+        if (type !== 'ordin') return { bendDistance: 0, bendWeight: 0 };
+        if (bendDistance && bendWeight) return { bendDistance, bendWeight };
+        if (bendPoint) {
+            const { x, y } = bendPoint;
             const { d, w } = BendingDistanceWeight.getWeightDistance(
-                { x, y }, this.getById(sourceId).position(), this.getById(targetId).position(),
+                { x, y }, this.getById(sourceID).position(), this.getById(targetID).position(),
             );
-            return { ...rawStyle, bendDistance: d, bendWeight: w };
+            return { bendDistance: d, bendWeight: w };
         }
-        return { ...rawStyle, bendDistance: this.getBendingD(sourceId, targetId), bendWeight: 0.5 };
+        return { bendDistance: this.getBendingD(sourceID, targetID), bendWeight: 0.5 };
     }
 
-    addEdgeWithLabel(source, target, label, rawStyle = {}, type = 'ordin',
-        id, tid = this.getTid()) {
-        const style = this.parseBendinDW(rawStyle, source, target, type);
+    addEdgeWithLabel(edgeData, tid = this.getTid()) {
+        const {
+            sourceID, targetID, label, style = {}, type = 'ordin', id,
+        } = edgeData;
+        const { bendDistance, bendWeight } = this.parseBendinDW({ ...edgeData, ...edgeData.style });
         const edge = this.cy.add({
             group: 'edges',
             data: {
-                source, target, label, type, id, style,
+                source: sourceID,
+                target: targetID,
+                label,
+                type,
+                id,
+                style:
+                { ...style, bendDistance, bendWeight },
             },
         });
         this.addAction(
             { actionName: GA.DEL_EDGE, parameters: [edge.id()] },
-            { actionName: GA.ADD_EDGE, parameters: [source, target, label, style, type, edge.id()] },
+            { actionName: GA.ADD_EDGE, parameters: [{ ...edgeData, id: edge.id() }] },
             tid,
         );
 
         return edge;
     }
 
-    addEdge(source, target, label, rawStyle = {}, type = 'ordin', id,
-        tid = this.getTid()) {
-        if (type !== 'ordin' || label) {
-            return this.addEdgeWithLabel(source, target, label, rawStyle, type, id, tid);
+    addEdge(edgeData, tid = this.getTid()) {
+        if ((edgeData.type && edgeData.type !== 'ordin') || edgeData.label) {
+            return this.addEdgeWithLabel({ ...edgeData, type: edgeData.type || 'ordin' }, tid);
         }
         this.dispatcher({
             type: T.Model_Open_Create_Edge,
             cb: (edgeLabel, edgeStyle) => {
-                const message = this.validiateEdge(edgeLabel, edgeStyle, source, target, null, 'New');
-                if (message.ok) this.addEdgeWithLabel(source, target, edgeLabel, edgeStyle, type, id, tid);
+                const message = this.validiateEdge(edgeLabel, edgeStyle,
+                    edgeData.targetID, edgeData.targetID, null, 'New');
+                if (message.ok) this.addEdgeWithLabel({ ...edgeData, type: edgeData.type || 'ordin' }, tid);
                 return message;
             },
         });
@@ -189,9 +199,9 @@ class GraphComponent extends GraphCanvas {
         this.addAction(
             {
                 actionName: GA.ADD_EDGE,
-                parameters: [
-                    jsonEd.data.source, jsonEd.data.target, jsonEd.data.label, this.getStyle(id), jsonEd.data.type, id,
-                ],
+                parameters: [{
+                    ...jsonEd.data, sourceID: jsonEd.data.source, targetID: jsonEd.data.target,
+                }],
             },
             { actionName: GA.DEL_EDGE, parameters: [id] }, tid,
         );
@@ -270,7 +280,7 @@ class GraphComponent extends GraphCanvas {
         return this.validiateComp({ label, style, id }, this.nodeValidator, type);
     }
 
-    validiateEdge(label, style, sourceId, targetId, id, type) {
+    validiateEdge(label, style, sourceID, targetID, id, type) {
         if (id) {
             const edge = this.getById(id);
             return this.validiateComp({
@@ -284,8 +294,8 @@ class GraphComponent extends GraphCanvas {
         return this.validiateComp({
             label,
             style,
-            sourceLabel: this.getById(this.getRealSourceId(sourceId)).data('label'),
-            targetLabel: this.getById(targetId).data('label'),
+            sourceLabel: this.getById(this.getRealSourceId(sourceID)).data('label'),
+            targetLabel: this.getById(targetID).data('label'),
             id,
         }, this.edgeValidator, type);
     }

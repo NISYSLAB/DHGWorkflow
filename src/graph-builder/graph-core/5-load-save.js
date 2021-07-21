@@ -95,7 +95,7 @@ ${this.projectDetails.author ? `-${this.projectDetails.author}` : ''}`;
             this.addNode(node.label, node.style, 'ordin', node.position, { }, node.id, tid);
         });
         content.edges.forEach((edge) => {
-            this.addEdge(edge.source, edge.target, edge.label, edge.style, 'ordin', undefined, tid);
+            this.addEdge({ ...edge, sourceID: edge.source, targetID: edge.target }, tid);
         });
         this.projectDetails = content.projectDetails;
         this.dispatcher({
