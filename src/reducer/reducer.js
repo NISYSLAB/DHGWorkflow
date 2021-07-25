@@ -127,6 +127,10 @@ const reducer = (state, action) => {
         return { ...state, settingsModal: action.payload };
     }
 
+    case T.SET_FILE_REF: {
+        return { ...state, fileRef: action.payload };
+    }
+
     default:
         return state;
     }

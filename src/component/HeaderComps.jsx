@@ -21,19 +21,13 @@ function DropDown({
 }
 
 const FileUploader = ({
-    Icon, text, action, active, tabIndex, hotkey,
-}) => {
-    const fileRef = React.createRef();
-    return (
-        <>
-            <input type="file" ref={fileRef} style={{ display: 'none' }} accept=".graphml" onChange={action} />
-            <ActionButton {...{
-                Icon, text, active, tabIndex, action: () => fileRef.current.click(), hotkey,
-            }}
-            />
-        </>
-    );
-};
+    Icon, text, active, tabIndex, hotkey, superState,
+}) => (
+    <ActionButton {...{
+        Icon, text, active, tabIndex, action: () => superState.fileRef.current.click(), hotkey,
+    }}
+    />
+);
 
 const Switcher = ({
     text, action, active, tabIndex,

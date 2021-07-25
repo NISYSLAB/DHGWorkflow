@@ -8,6 +8,7 @@ import { reducer, initialState, actionType as T } from './reducer';
 import ProjectDetails from './component/modals/ProjectDetails';
 import ShareModal from './component/modals/ShareModal';
 import SettingsModal from './component/modals/Settings';
+import FileDragDrop from './component/File-drag-drop';
 
 const app = () => {
     const [superState, dispatcher] = useReducer(reducer, initialState);
@@ -20,7 +21,8 @@ const app = () => {
                 closeModal={() => dispatcher({ type: T.Model_Close })}
                 superState={superState}
             />
-            <Header state={superState} dispatcher={dispatcher} />
+            <FileDragDrop dispatcher={dispatcher} />
+            <Header superState={superState} dispatcher={dispatcher} />
             <section className="body" style={{ display: 'flex', overflow: 'hidden' }}>
                 <GraphComp dispatcher={dispatcher} superState={superState} />
             </section>

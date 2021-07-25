@@ -28,18 +28,19 @@ const setHotKeys = (actions) => {
     });
 };
 
-const Header = ({ state, dispatcher }) => {
-    const actions = toolbarList(state);
+const Header = ({ superState, dispatcher }) => {
+    const actions = toolbarList(superState);
     React.useEffect(() => {
-        setHotKeys(actions, state, dispatcher);
+        setHotKeys(actions, superState, dispatcher);
     }, []);
 
     return (
         <header className="header">
             <section className="middle titlebar">
                 {
-                    state.graphs[state.curGraphIndex]
-                        ? `${state.graphs[state.curGraphIndex].projectDetails.projectName} - DHGWorkflow Editor` : ''
+                    superState.graphs[superState.curGraphIndex] ? `${
+                        superState.graphs[superState.curGraphIndex].projectDetails.projectName
+                    } - DHGWorkflow Editor` : ''
                 }
             </section>
             <section className="toolbar">
@@ -52,7 +53,7 @@ const Header = ({ state, dispatcher }) => {
                             active,
                             tabIndex: i + 1,
                             key: text,
-                            action: (e) => action(state, dispatcher, e),
+                            action: (e) => action(superState, dispatcher, e),
                             Icon: icon,
                             hotkey,
                         };
@@ -61,13 +62,12 @@ const Header = ({ state, dispatcher }) => {
                         case 'space': return <Space key={`${`s${i}`}`} />;
                         case 'switch': return <Switcher {...props} />;
                         case 'menu': return <DropDown {...props} />;
-                        case 'file-upload': return <FileUploader {...props} />;
+                        case 'file-upload': return <FileUploader {...props} superState={superState} />;
                         case 'action': return <ActionButton {...props} />;
                         default: return <></>;
                         }
                     })
                 }
-                <input type="file" id="fileUploader" style={{ display: 'none' }} accept=".jpg, .jpeg, .png" />
             </section>
             <Hsep />
         </header>

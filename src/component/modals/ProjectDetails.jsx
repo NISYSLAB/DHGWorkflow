@@ -41,7 +41,7 @@ const ProjectDetails = ({ superState, dispatcher }) => {
     };
 
     const openExisting = () => {
-        document.querySelector('input[type="file"]').click();
+        superState.fileRef.current.click();
     };
     const closeModal = () => {
         if (!curGraph) dispatcher({ type: T.CHANGE_TAB, payload: 0 });
