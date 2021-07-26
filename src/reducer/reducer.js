@@ -131,6 +131,10 @@ const reducer = (state, action) => {
         return { ...state, fileRef: action.payload };
     }
 
+    case T.SET_HISTORY_MODAL: {
+        return { ...state, viewHistory: action.payload };
+    }
+
     default:
         return state;
     }

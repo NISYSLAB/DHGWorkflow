@@ -57,7 +57,7 @@ const app = ({ superState, dispatcher }) => {
                         onChange={(e) => readFile(superState, dispatcher, e)}
                     />
                     <span className="arrow">&#10230;</span>
-                    <h1 className="text">Drop the File anywhere to read</h1>
+                    <h1 className="text">Drop the File anywhere to open</h1>
                 </div>
             </div>
         </div>

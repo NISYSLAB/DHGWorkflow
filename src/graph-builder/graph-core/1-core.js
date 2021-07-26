@@ -38,6 +38,10 @@ class CoreGraph {
         return this.cy.getElementById(x);
     }
 
+    getLabelFromID(x) {
+        return this.getById(x).data('label');
+    }
+
     set({ cy, dispatcher, superState }) {
         if (dispatcher) this.dispatcher = dispatcher;
         if (superState) this.superState = superState;

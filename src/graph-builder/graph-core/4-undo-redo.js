@@ -37,8 +37,8 @@ class GraphUndoRedo extends GraphComponent {
     addPositionChange(id, prevPos, curPos) {
         const tid = new Date().getTime();
         this.addAction(
-            { actionName: GA.SET_POS, parameters: [id, prevPos] },
-            { actionName: GA.SET_POS, parameters: [id, curPos] }, tid,
+            { actionName: GA.SET_POS, parameters: [id, prevPos, curPos] },
+            { actionName: GA.SET_POS, parameters: [id, curPos, prevPos] }, tid,
         );
     }
 

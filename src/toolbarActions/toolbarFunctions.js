@@ -138,8 +138,12 @@ const openSettingModal = (state, setState) => {
     setState({ type: T.SET_SETTING_MODAL, payload: true });
 };
 
+const viewHistory = (state, setState) => {
+    setState({ type: T.SET_HISTORY_MODAL, payload: true });
+};
+
 export {
     createNode, editElement, deleteElem, downloadImg, saveAction,
     readFile, newProject, clearAll, editDetails, undo, redo,
-    openShareModal, openSettingModal,
+    openShareModal, openSettingModal, viewHistory,
 };

@@ -23,6 +23,7 @@ const actionType = {
     SET_SHARE_MODAL: 'SET_SHARE_MODAL',
     SET_SETTING_MODAL: 'SET_SETTING_MODAL',
     SET_FILE_REF: 'SET_FILE_REF',
+    SET_HISTORY_MODAL: 'SET_HISTORY_MODAL',
 };
 
 export default zealit(actionType);

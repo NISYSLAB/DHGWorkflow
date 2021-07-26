@@ -17,6 +17,7 @@ const initialState = {
     graphs: [],
     curGraphIndex: 0,
     settingsModal: false,
+    viewHistory: false,
 };
 
 const initialGraphState = {

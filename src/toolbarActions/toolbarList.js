@@ -1,11 +1,13 @@
 /* eslint-disable no-alert */
 import {
     FaSave, FaUndo, FaRedo, FaTrash, FaFileImport, FaPlus, FaDownload, FaEdit, FaRegTimesCircle, FaShare, FaRegSun,
+    FaHistory,
 } from 'react-icons/fa';
 
 import {
     createNode, editElement, deleteElem, downloadImg, saveAction,
     readFile, clearAll, undo, redo, openShareModal, openSettingModal,
+    viewHistory,
 } from './toolbarFunctions';
 
 const toolbarList = (state) => [
@@ -77,6 +79,15 @@ const toolbarList = (state) => [
         action: deleteElem,
         active: state.eleSelected,
         hotkey: 'Delete,Backspace,Del,Clear',
+    },
+    { type: 'vsep' },
+    {
+        type: 'action',
+        text: 'History',
+        icon: FaHistory,
+        action: viewHistory,
+        active: true,
+        // hotkey: 'Delete,Backspace,Del,Clear',
     },
     { type: 'vsep' },
     { type: 'space' },
