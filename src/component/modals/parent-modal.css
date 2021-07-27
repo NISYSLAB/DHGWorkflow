@@ -16,6 +16,7 @@
     transform: translateX(-50%);
     min-width: 50%;
     background-color: rgba(255, 255, 255, 0);
+    max-height: calc(100vh - 20%);
 }
 
 .ReactModalPortal .Overlay {
@@ -42,6 +43,11 @@
     line-height: 1.5;
 }
 
+.modal-body{
+    max-height: calc( 80vh - 70px);
+    overflow: auto;
+}
+
 .ReactModalPortal .modal-content {
     position: relative;
     display: flex;
@@ -53,6 +59,7 @@
     border: 1px solid rgba(0, 0, 0, .2);
     border-radius: .3rem;
     outline: 0;
+    max-height: 100%;
 }
 
 .ReactModalPortal .modal-header {

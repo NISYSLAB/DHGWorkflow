@@ -8,7 +8,19 @@ import './history.css';
 const HistoryModal = ({ superState, dispatcher }) => {
     const [historyList, setHistoryList] = useState([]);
     const [historyView, setHistoryView] = useState([]);
-    // const [getLabelFromID, setgetLabelFromID] = useState('null');
+    const actions = [
+        GA.ADD_NODE, GA.ADD_EDGE,
+        GA.UPDATE_NODE, GA.UPDATE_EDGE,
+        GA.DEL_NODE, GA.DEL_EDGE,
+        GA.SET_DIM, GA.SET_BENDW,
+    ];
+    const mapActionToTrue = () => {
+        const res = {};
+        actions.forEach((action) => { res[action] = true; });
+        return res;
+    };
+    const [filterAction, setFilterAction] = useState(mapActionToTrue());
+
     const getLabelFromID = (x) => {
         if (superState.graphs[superState.curGraphIndex] && superState.graphs[superState.curGraphIndex].instance) {
             return superState.graphs[superState.curGraphIndex].instance.getLabelFromID(x);
@@ -21,13 +33,6 @@ const HistoryModal = ({ superState, dispatcher }) => {
         }
     }, [superState.viewHistory, superState.graphs, superState.curGraphIndex]);
 
-    const filterAction = ({ equivalent }) => [
-        GA.ADD_NODE, GA.ADD_EDGE,
-        GA.UPDATE_NODE, GA.UPDATE_EDGE,
-        GA.DEL_NODE, GA.DEL_EDGE,
-        GA.SET_DIM, GA.SET_BENDW,
-    ].includes(equivalent.actionName);
-
     const stringifyAction = (equivalent) => {
         const par = equivalent.parameters;
         switch (equivalent.actionName) {
@@ -37,7 +42,6 @@ const HistoryModal = ({ superState, dispatcher }) => {
         } between ${getLabelFromID(par[0].sourceID)} and ${getLabelFromID(par[0].targetID)}`;
         case GA.UPDATE_NODE: return `Updated Label/Style for ${getLabelFromID(par[0])} node`;
         case GA.UPDATE_EDGE: return `Updated Edge ${getLabelFromID(par[0])}`;
-        // case GA.UPDATE_DATA: return `${par}`;
         case GA.DEL_NODE: return `Deleted Node: ${getLabelFromID(par[0])}`;
         case GA.DEL_EDGE: return `Deleted Edge: ${getLabelFromID(par[0])}`;
         case GA.SET_POS: return `Moved node ${getLabelFromID(par[0])} on canvas`;
@@ -47,18 +51,36 @@ const HistoryModal = ({ superState, dispatcher }) => {
         }
     };
 
+    const stringifyActionType = {
+        [GA.ADD_NODE]: 'NodeAddition:',
+        [GA.ADD_EDGE]: 'EdgeAddition',
+        [GA.UPDATE_NODE]: 'NodeUpdates',
+        [GA.UPDATE_EDGE]: 'EdgeUpdates',
+        [GA.DEL_NODE]: 'NodeDeletion',
+        [GA.DEL_EDGE]: 'EdgeDeletion',
+        [GA.SET_POS]: 'NodePosChange',
+        [GA.SET_DIM]: 'NodeDimensionChange',
+        [GA.SET_BENDW]: 'EdgeBend',
+    };
+
     const prefixTid = (tid, str) => {
         const DT = new Date(parseInt(tid, 10));
         const date = DT.toLocaleDateString();
         const time = DT.toLocaleTimeString();
-        return `${date} ${time}: ${str}`;
+        return (
+            <span>
+                <span>{`${date}-${time}`}</span>
+                {' --- '}
+                <span style={{ fontWeight: 100 }}>{str}</span>
+            </span>
+        );
     };
 
     const parseAction = ({ equivalent, tid }) => prefixTid(tid, stringifyAction(equivalent));
 
     useEffect(() => {
-        setHistoryView(historyList.filter(filterAction).map(parseAction));
-    }, [historyList]);
+        setHistoryView(historyList.filter((action) => filterAction[action.equivalent.actionName]).map(parseAction));
+    }, [filterAction, historyList]);
 
     const close = () => dispatcher({ type: T.SET_HISTORY_MODAL, payload: false });
 
@@ -69,9 +91,30 @@ const HistoryModal = ({ superState, dispatcher }) => {
             title="History"
         >
             <div className="hist-container">
-                <ul style={{ listStyleType: 'circle' }}>
-                    {historyView.map((h) => <li>{h}</li>)}
-                </ul>
+                <fieldset>
+                    <legend>Filters</legend>
+                    {
+                        actions.map((action) => (
+                            <label htmlFor={action} className="filter_checkbox" key={action}>
+                                <input
+                                    type="checkbox"
+                                    name="filter"
+                                    checked={filterAction[action]}
+                                    onChange={() => setFilterAction({
+                                        ...filterAction,
+                                        [action]: !filterAction[action],
+                                    })}
+                                />
+                                {stringifyActionType[action]}
+                            </label>
+                        ))
+                    }
+                </fieldset>
+                <div className="hist-list">
+                    <ul style={{ listStyleType: 'circle' }}>
+                        {historyView.map((h) => <li className="hist-element" key="h">{h}</li>)}
+                    </ul>
+                </div>
             </div>
         </Modal>
     );

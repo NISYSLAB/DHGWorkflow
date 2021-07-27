@@ -1,4 +1,23 @@
+.hist-list{
+    /* overflow: auto; */
+    /* max-height: 60vh; */
+}
 .hist-container{
-    overflow: auto;
-    height: 75vh;
+    padding: 20px;
+}
+ fieldset{
+    border-color: rgba(0,0,0,0.1);
+    border-style: solid;
+    text-align: center;
+}
+
+.hist-container label{
+    white-space: nowrap;
+    margin: 5px 10px;
+    display: inline-block;
+}
+
+.hist-element{
+    /* list-style-type: 'circle'; */
+    line-height: 25px;
 }

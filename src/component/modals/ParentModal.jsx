@@ -45,7 +45,9 @@ const Modal = ({
                         <span className="sr-only">Close</span>
                     </button>
                 </div>
-                {children}
+                <div className="modal-body">
+                    {children}
+                </div>
             </div>
         </ReactModal>
     );
