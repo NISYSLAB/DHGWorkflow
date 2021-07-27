@@ -1,7 +1,3 @@
-.hist-list{
-    /* overflow: auto; */
-    /* max-height: 60vh; */
-}
 .hist-container{
     padding: 20px;
 }
@@ -20,4 +16,12 @@
 .hist-element{
     /* list-style-type: 'circle'; */
     line-height: 25px;
+}
+
+.hist-element .a-link{
+    color: #0044cc;
+    text-decoration: underline;
+    border: none;
+    background: none;
+    cursor: pointer;
 }
