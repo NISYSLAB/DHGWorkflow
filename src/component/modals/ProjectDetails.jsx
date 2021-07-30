@@ -13,14 +13,13 @@ const ProjectDetails = ({ superState, dispatcher }) => {
             setProjectName(''); setAuthor('');
         } else {
             setProjectName(curGraph.projectDetails.projectName || '');
-            setAuthor(curGraph.projectDetails.author || '');
         }
     }, [!curGraph || !curGraph.projectDetails.set]);
 
     const addNewGraph = () => {
         dispatcher({
             type: T.ADD_GRAPH,
-            payload: { id: new Date().getTime(), projectDetails: { projectName, author, set: true } },
+            payload: { id: new Date().getTime(), projectDetails: { projectName, set: true } },
         });
     };
 
@@ -37,7 +36,7 @@ const ProjectDetails = ({ superState, dispatcher }) => {
     const submit = (e) => {
         e.preventDefault();
         if (!curGraph) addNewGraph();
-        else setProjectDetails({ projectName, author, set: true });
+        else setProjectDetails({ projectName, set: true });
     };
 
     const openExisting = () => {
@@ -48,7 +47,7 @@ const ProjectDetails = ({ superState, dispatcher }) => {
         else {
             setProjectDetails({
                 ...curGraph.projectDetails,
-                set: Boolean(curGraph.projectDetails.author && curGraph.projectDetails.projectName),
+                set: Boolean(curGraph.projectDetails.projectName),
             });
         }
     };

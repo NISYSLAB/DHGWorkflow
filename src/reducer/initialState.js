@@ -18,12 +18,12 @@ const initialState = {
     curGraphIndex: 0,
     settingsModal: false,
     viewHistory: false,
+    author: null,
 };
 
 const initialGraphState = {
     projectDetails: {
         projectName: '',
-        author: '',
         set: false,
     },
     component: null,

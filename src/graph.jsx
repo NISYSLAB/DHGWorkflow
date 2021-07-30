@@ -99,7 +99,7 @@ const GraphComp = (props) => {
         }
         const allSavedGs = localStorageManager.getAllGraphs().map((graphId) => ({
             id: graphId,
-            projectDetails: { projectName: '', author: '', set: true },
+            projectDetails: { projectName: '', set: true },
         }));
         dispatcher({
             type: T.ADD_GRAPH_BULK,

@@ -1,5 +1,5 @@
 const graphML = ({
-  nodes, edges, id, projectName, author,
+  nodes, edges, id, projectName,
 }) => ({
   graphml: {
     $: {
@@ -30,7 +30,6 @@ const graphML = ({
           edgedefault: 'directed',
           id,
           projectName,
-          author,
         },
         node: nodes,
         edge: edges,

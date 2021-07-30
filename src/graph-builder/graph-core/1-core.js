@@ -1,5 +1,4 @@
 import { actionType as T } from '../../reducer';
-// import GraphLoadSave from './graph-load-save';
 import BendingDistanceWeight from '../calculations/bending-dist-weight';
 
 class CoreGraph {
@@ -39,7 +38,7 @@ class CoreGraph {
     }
 
     getLabelFromID(x) {
-        return this.getById(x).data('label');
+        return this.getById(x).data('label') || '**Deleted El**';
     }
 
     set({ cy, dispatcher, superState }) {
