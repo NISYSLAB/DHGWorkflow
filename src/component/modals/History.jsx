@@ -76,11 +76,11 @@ const HistoryModal = ({ superState, dispatcher }) => {
         if (window.confirm('Are you sure to restore the selected state?')) {
             let tempCurState = curState;
             while (index > tempCurState) {
-                superState.graphs[superState.curGraphIndex].instance.undo();
+                superState.graphs[superState.curGraphIndex].instance.undoSingleAction();
                 tempCurState += 1;
             }
             while (index < tempCurState) {
-                superState.graphs[superState.curGraphIndex].instance.redo();
+                superState.graphs[superState.curGraphIndex].instance.redoSingleAction();
                 tempCurState -= 1;
             }
             setcurState(tempCurState);

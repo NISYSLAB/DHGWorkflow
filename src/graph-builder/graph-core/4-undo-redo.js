@@ -13,20 +13,25 @@ class GraphUndoRedo extends GraphComponent {
         super(...props);
 
         GraphUndoRedo.methodsMapped = {
-            [GA.ADD_NODE]: (...args) => super.addNode(...args, 0),
-            [GA.ADD_EDGE]: (...args) => super.addEdge(...args, 0),
-            [GA.UPDATE_NODE]: (...args) => super.updateNode(...args, 0),
-            [GA.UPDATE_EDGE]: (...args) => super.updateEdge(...args, 0),
-            [GA.UPDATE_DATA]: (...args) => super.updateData(...args, 0),
-            [GA.DEL_NODE]: (...args) => super.deleteNode(...args, 0),
-            [GA.DEL_EDGE]: (...args) => super.deleteEdge(...args, 0),
-            [GA.SET_POS]: (...args) => super.setPos(...args, 0),
-            [GA.SET_DIM]: (...args) => super.setDim(...args, 0),
+            [GA.ADD_NODE]: (...args) => this.addNode(...args, 0),
+            [GA.ADD_EDGE]: (...args) => this.addEdge(...args, 0),
+            [GA.UPDATE_NODE]: (...args) => this.updateNode(...args, 0),
+            [GA.UPDATE_EDGE]: (...args) => this.updateEdge(...args, 0),
+            [GA.UPDATE_DATA]: (...args) => this.updateData(...args, 0),
+            [GA.DEL_NODE]: (...args) => this.deleteNode(...args, 0),
+            [GA.DEL_EDGE]: (...args) => this.deleteElem(...args, 0),
+            [GA.SET_POS]: (...args) => this.setPos(...args, 0),
+            [GA.SET_DIM]: (...args) => this.setDim(...args, 0),
             [GA.SET_BENDW]: (...args) => this.setBendWightDist(...args),
         };
 
         this.actionArr = [];
         this.curActionIndex = 0;
+    }
+
+    informUI() {
+        this.dispatcher({ type: T.SET_UNDO, payload: this.curActionIndex !== 0 });
+        this.dispatcher({ type: T.SET_REDO, payload: this.curActionIndex !== this.actionArr.length });
     }
 
     static performAction({ actionName, parameters }) {
@@ -63,8 +68,23 @@ class GraphUndoRedo extends GraphComponent {
         this.actionArr.splice(this.curActionIndex);
         this.actionArr.push({ tid, inverse, equivalent });
         this.curActionIndex += 1;
-        this.dispatcher({ type: T.SET_UNDO, payload: this.curActionIndex !== 0 });
-        this.dispatcher({ type: T.SET_REDO, payload: this.curActionIndex !== this.actionArr.length });
+        this.informUI();
+    }
+
+    undoSingleAction() {
+        if (this.curActionIndex !== 0) {
+            this.curActionIndex -= 1;
+            GraphUndoRedo.performAction(this.actionArr[this.curActionIndex].inverse);
+            this.informUI();
+        }
+    }
+
+    redoSingleAction() {
+        if (this.curActionIndex !== this.actionArr.length) {
+            GraphUndoRedo.performAction(this.actionArr[this.curActionIndex].equivalent);
+            this.curActionIndex += 1;
+            this.informUI();
+        }
     }
 
     undo() {
@@ -74,8 +94,7 @@ class GraphUndoRedo extends GraphComponent {
             this.curActionIndex -= 1;
             GraphUndoRedo.performAction(this.actionArr[this.curActionIndex].inverse);
         }
-        this.dispatcher({ type: T.SET_UNDO, payload: this.curActionIndex !== 0 });
-        this.dispatcher({ type: T.SET_REDO, payload: this.curActionIndex !== this.actionArr.length });
+        this.informUI();
     }
 
     redo() {
@@ -85,14 +104,12 @@ class GraphUndoRedo extends GraphComponent {
             GraphUndoRedo.performAction(this.actionArr[this.curActionIndex].equivalent);
             this.curActionIndex += 1;
         }
-        this.dispatcher({ type: T.SET_UNDO, payload: this.curActionIndex !== 0 });
-        this.dispatcher({ type: T.SET_REDO, payload: this.curActionIndex !== this.actionArr.length });
+        this.informUI();
     }
 
     setCurStatus() {
         super.setCurStatus();
-        this.dispatcher({ type: T.SET_UNDO, payload: this.curActionIndex !== 0 });
-        this.dispatcher({ type: T.SET_REDO, payload: this.curActionIndex !== this.actionArr.length });
+        this.informUI();
     }
 
     regesterEvents() {

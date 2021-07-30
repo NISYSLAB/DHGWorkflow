@@ -1,6 +1,7 @@
 import CoreGraph from './graph-core';
 import { actionType as T } from '../reducer';
 import getBoundaryPoint from './calculations/boundary-point';
+import GA from './graph-actions';
 
 class TailoredGraph extends CoreGraph {
     regesterEvents() {
@@ -85,50 +86,99 @@ class TailoredGraph extends CoreGraph {
         return this.addEdgeWithJuncNode({ ...edgeData, sourceID: juncNode.id() }, tid);
     }
 
-    addEdge(edgeData, tid = this.getTid()) {
+    addEdgeAction(id, edgeData, tid) {
+        this.addAction(
+            { actionName: GA.DEL_EDGE, parameters: [id] },
+            {
+                actionName: GA.ADD_EDGE,
+                parameters: [{ ...edgeData, sourceID: this.getRealSourceId(edgeData.sourceID), id }],
+            },
+            tid,
+        );
+    }
+
+    addEdge(edgeData, tidd = this.getTid()) {
+        const tid = 0;
         const { sourceID, targetID, label } = edgeData;
         const [sourceNode, targetNode] = [sourceID, targetID].map(this.getById.bind(this));
         const juncNodes = sourceNode.outgoers('node').filter((node) => label && node.data('edgeLabel') === label);
 
-        if (targetNode.data('type') !== 'ordin') return this; // Don't Add Node
-        if (sourceNode.data('type') === 'special') return this.addEdgeWithJuncNode(edgeData, tid);
-        if (juncNodes.length) return this.addEdgeWithJuncNode({ ...edgeData, sourceID: juncNodes[0].id() }, tid);
-        if (label && label.length) return this.addEdgeWithoutJuncNode(edgeData, tid);
-
-        this.dispatcher({
-            type: T.Model_Open_Create_Edge,
-            cb: (edgeLabel, edgeStyle) => {
-                const message = this.validiateEdge(edgeLabel, edgeStyle, sourceID, targetID, null, 'New');
-                if (message.ok) this.addEdge({ ...edgeData, label: edgeLabel, style: edgeStyle }, tid);
-                return message;
-            },
-        });
-        return this;
+        let edge;
+        if (targetNode.data('type') !== 'ordin') return edge; // Don't Add Node
+        if (sourceNode.data('type') === 'special') edge = this.addEdgeWithJuncNode(edgeData, tid);
+        else if (juncNodes.length) edge = this.addEdgeWithJuncNode({ ...edgeData, sourceID: juncNodes[0].id() }, tid);
+        else if (label && label.length) edge = this.addEdgeWithoutJuncNode(edgeData, tid);
+        else {
+            this.dispatcher({
+                type: T.Model_Open_Create_Edge,
+                cb: (edgeLabel, edgeStyle) => {
+                    const message = this.validiateEdge(edgeLabel, edgeStyle, sourceID, targetID, null, 'New');
+                    if (message.ok) edge = this.addEdge({ ...edgeData, label: edgeLabel, style: edgeStyle }, tid);
+                    if (edge) this.addEdgeAction(edge.id(), { ...edgeData, label: edgeLabel, style: edgeStyle }, tidd);
+                    return message;
+                },
+            });
+        }
+        if (edge) this.addEdgeAction(edge.id(), edgeData, tidd);
+        return edge;
     }
 
     updateEdge(id, style, label, shouldUpdateLabel, tid = this.getTid()) {
+        this.addAction(
+            {
+                actionName: GA.UPDATE_EDGE,
+                parameters: [id, this.getStyle(id), this.getById(id).data('label'), shouldUpdateLabel],
+            },
+            { actionName: GA.UPDATE_EDGE, parameters: [id, style, label, shouldUpdateLabel] },
+            tid,
+        );
         const junctionNode = this.getById(id).source();
-        if (shouldUpdateLabel) this.updateData(junctionNode.data('id'), 'edgeLabel', label, tid);
-        this.updateData(junctionNode.data('id'), 'edgeStyle', style, tid);
-        this.updateNode(junctionNode.data('id'), { backgroundColor: style.backgroundColor }, '', false, tid);
+        if (shouldUpdateLabel) this.updateData(junctionNode.data('id'), 'edgeLabel', label, 0);
+        this.updateData(junctionNode.data('id'), 'edgeStyle', style, 0);
+        this.updateNode(junctionNode.data('id'), { backgroundColor: style.backgroundColor }, '', false, 0);
 
         junctionNode
             .outgoers('edge')
-            .forEach((edge) => super.updateEdge(edge.data('id'), style, label, shouldUpdateLabel, tid));
+            .forEach((edge) => super.updateEdge(edge.data('id'), style, label, shouldUpdateLabel, 0));
     }
 
     deleteElem(id, tid = this.getTid()) {
         const el = this.getById(id);
         if (el.isNode()) {
             if (el.removed()) return;
-            el.outgoers('node').forEach((x) => super.deleteElem(x.id(), tid));
-            el.connectedEdges().forEach((x) => this.deleteElem(x.id(), tid));
-            super.deleteNode(id, tid);
+            el.outgoers('node[type="special"]')
+                .connectedEdges('edge[type="ordin"]')
+                .forEach((edge) => this.deleteElem(edge.id(), tid));
+            el.connectedEdges('edge[type="ordin"]')
+                .forEach((edge) => this.deleteElem(edge.id(), tid));
+
+            const node = this.getById(id);
+            this.addAction(
+                {
+                    actionName: GA.ADD_NODE,
+                    parameters: [
+                        node.data('label'), this.getStyle(node.id()), node.data('type'),
+                        node.position(), node.json().data, id,
+                    ],
+                },
+                { actionName: GA.DEL_NODE, parameters: [id] }, tid,
+            );
+            super.deleteNode(id, 0);
         } else {
-            if (el.removed()) return;
+            if (!this.getById(id).length || el.removed()) return;
+            const jsonEd = this.getById(id).json().data;
+            this.addAction(
+                {
+                    actionName: GA.ADD_EDGE,
+                    parameters: [{
+                        ...jsonEd, sourceID: this.getRealSourceId(jsonEd.source), targetID: jsonEd.target,
+                    }],
+                },
+                { actionName: GA.DEL_EDGE, parameters: [id] }, tid,
+            );
             const junctionNode = el.source();
-            super.deleteEdge(id, tid);
-            if (junctionNode) if (junctionNode.outgoers().length === 0) this.deleteNode(junctionNode.id(), tid);
+            super.deleteEdge(id, 0);
+            if (junctionNode) if (junctionNode.outgoers().length === 0) this.deleteNode(junctionNode.id(), 0);
         }
     }
 
