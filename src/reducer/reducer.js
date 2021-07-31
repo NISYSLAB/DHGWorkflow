@@ -135,6 +135,10 @@ const reducer = (state, action) => {
         return { ...state, viewHistory: action.payload };
     }
 
+    case T.SET_AUTHOR: {
+        return { ...state, authorName: action.payload };
+    }
+
     default:
         return state;
     }

@@ -30,6 +30,12 @@ const GraphComp = (props) => {
             .forEach((el) => el.classList.contains('graph-element') && setConatinerDim(el)));
     }, []);
 
+    useEffect(() => {
+        superState.graphs.forEach((g) => {
+            if (g.instance) g.instance.set({ superState });
+        });
+    }, [superState]);
+
     const initialiseNewGraph = (element, id, projectDetails) => {
         setConatinerDim(element);
         const cy = cytoscape({ ...cyOptions, container: element });

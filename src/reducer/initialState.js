@@ -18,7 +18,7 @@ const initialState = {
     curGraphIndex: 0,
     settingsModal: false,
     viewHistory: false,
-    author: null,
+    authorName: '',
 };
 
 const initialGraphState = {

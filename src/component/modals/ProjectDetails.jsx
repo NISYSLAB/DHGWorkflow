@@ -2,26 +2,13 @@ import React, { useEffect, useState, useCallback } from 'react';
 import Modal from './ParentModal';
 import './project-details.css';
 import { actionType as T } from '../../reducer';
+import localStorageManager from '../../graph-builder/local-storage-manager';
 
 const ProjectDetails = ({ superState, dispatcher }) => {
     const curGraph = superState.graphs[superState.curGraphIndex];
     const [projectName, setProjectName] = useState('');
-    const [author, setAuthor] = useState('');
+    const [authorName, setAuthorName] = useState('');
     const inputRef = useCallback((node) => node && node.focus(), []);
-    useEffect(() => {
-        if (!curGraph) {
-            setProjectName(''); setAuthor('');
-        } else {
-            setProjectName(curGraph.projectDetails.projectName || '');
-        }
-    }, [!curGraph || !curGraph.projectDetails.set]);
-
-    const addNewGraph = () => {
-        dispatcher({
-            type: T.ADD_GRAPH,
-            payload: { id: new Date().getTime(), projectDetails: { projectName, set: true } },
-        });
-    };
 
     const setProjectDetails = (projectDetails) => {
         dispatcher({
@@ -33,10 +20,38 @@ const ProjectDetails = ({ superState, dispatcher }) => {
         });
     };
 
+    const setProjAuthorName = (author) => {
+        dispatcher({
+            type: T.SET_AUTHOR,
+            payload: author,
+        });
+    };
+
+    useEffect(() => {
+        if (!curGraph) setProjectName('');
+        else setProjectName(curGraph.projectDetails.projectName || '');
+
+        if (superState.authorName) setAuthorName(superState.authorName);
+        else {
+            const authorNameE = localStorageManager.getAuthorName();
+            setAuthorName(authorNameE);
+            setProjAuthorName(authorNameE);
+        }
+    }, [curGraph, !curGraph || !curGraph.projectDetails.set]);
+
+    const addNewGraph = () => {
+        dispatcher({
+            type: T.ADD_GRAPH,
+            payload: { id: new Date().getTime(), projectDetails: { projectName, set: true } },
+        });
+    };
+
     const submit = (e) => {
         e.preventDefault();
         if (!curGraph) addNewGraph();
         else setProjectDetails({ projectName, set: true });
+        setProjAuthorName(authorName);
+        localStorageManager.setAuthorName(authorName);
     };
 
     const openExisting = () => {
@@ -53,7 +68,7 @@ const ProjectDetails = ({ superState, dispatcher }) => {
     };
     return (
         <Modal
-            ModelOpen={!curGraph || !curGraph.projectDetails.set}
+            ModelOpen={!superState.authorName || !curGraph || !curGraph.projectDetails.set}
             closeModal={!curGraph && superState.curGraphIndex === 0 ? null : closeModal}
             title="Project Details"
         >
@@ -69,8 +84,9 @@ const ProjectDetails = ({ superState, dispatcher }) => {
                 <span>Author</span>
                 <input
                     placeholder="Author of workflow"
-                    value={author}
-                    onChange={(e) => setAuthor(e.target.value)}
+                    value={authorName}
+                    onChange={(e) => setAuthorName(e.target.value)}
+                    required
                 />
                 <div className="expand">
                     <button type="submit" className="btn btn-primary">Save</button>

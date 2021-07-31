@@ -25,3 +25,12 @@
     background: none;
     cursor: pointer;
 }
+
+.hist-element td{
+    padding: 0 5px;
+}
+
+.hist-element.active{
+    background-color: rgba(0, 0, 0, 0.01);
+    text-decoration: underline;
+}

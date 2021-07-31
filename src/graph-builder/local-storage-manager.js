@@ -1,5 +1,4 @@
-const getSet = () => {
-    const ALL_GRAPHS = 'ALL_GRAPHS';
+const getSet = (ALL_GRAPHS) => {
     if (!window.localStorage.getItem(ALL_GRAPHS)) {
         window.localStorage.setItem(ALL_GRAPHS, window.btoa(JSON.stringify([])));
     }
@@ -7,9 +6,10 @@ const getSet = () => {
 };
 
 const localStorageManager = {
-    ALL_GRAPHS: 'ALL_GRAPHS',
+    ALL_GRAPHS: window.btoa('ALL_GRAPHS'),
+    AUTHOR_NAME: window.btoa('AUTHOR_NAME'),
 
-    allgs: getSet(),
+    allgs: getSet(window.btoa('ALL_GRAPHS')),
 
     saveAllgs() {
         window.localStorage.setItem(this.ALL_GRAPHS, window.btoa(JSON.stringify(Array.from(this.allgs))));
@@ -48,6 +48,12 @@ const localStorageManager = {
         const Garr = JSON.parse(window.atob(window.localStorage.getItem(this.ALL_GRAPHS)));
         Garr.unshift(id);
         window.localStorage.setItem(this.ALL_GRAPHS, window.btoa(JSON.stringify(Garr)));
+    },
+    getAuthorName() {
+        return localStorage.getItem(this.AUTHOR_NAME) || '';
+    },
+    setAuthorName(authorName) {
+        localStorage.setItem(this.AUTHOR_NAME, authorName);
     },
 };
 export default localStorageManager;

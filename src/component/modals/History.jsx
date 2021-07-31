@@ -86,35 +86,39 @@ const HistoryModal = ({ superState, dispatcher }) => {
             setcurState(tempCurState);
         }
     };
-    const prefixTid = (tid, str, index) => {
+    const prefixTid = (tid, str, authorName, index) => {
         const DT = new Date(parseInt(tid, 10));
         const date = DT.toLocaleDateString();
         const time = DT.toLocaleTimeString();
         const c = (
-            <span>
-                {
-                    index === curState ? '[Current]'
-                        : (
-                            <button
-                                className="a-link"
-                                type="button"
-                                onClick={() => restoreState(index)}
-                            >
+            <>
+                <td>
+                    {
+                        index === curState ? '[Current]' : (
+                            <button className="a-link" type="button" onClick={() => restoreState(index)}>
                                 [Restore]
                             </button>
                         )
-                }
-                {' '}
-                <span>{`${date}-${time}`}</span>
-                {' --- '}
-                <span style={{ fontWeight: 100 }}>{str}</span>
-            </span>
+                    }
+                </td>
+                <td>{`${date}-${time}`}</td>
+                <td>
+                    [
+                    <b>{`${authorName}`}</b>
+                    ]
+                </td>
+                <td style={{ fontWeight: 100 }}>{str}</td>
+            </>
         );
-        if (index === curState) return <u>{c}</u>;
+        // if (index === curState) return <u>{c}</u>;
         return c;
     };
 
-    const parseAction = ({ equivalent, tid, i }) => prefixTid(tid, stringifyAction(equivalent), i);
+    const parseAction = ({
+        equivalent, tid, i, authorName,
+    }) => prefixTid(
+        tid, stringifyAction(equivalent), authorName, i,
+    );
 
     useEffect(() => {
         setHistoryView(historyList.filter((action) => filterAction[action.equivalent.actionName]).map(parseAction));
@@ -149,10 +153,19 @@ const HistoryModal = ({ superState, dispatcher }) => {
                     }
                 </fieldset>
                 <div className="hist-list">
-                    <ul style={{ listStyleType: 'circle' }}>
-                        {/* eslint-disable-next-line react/no-array-index-key */}
-                        {historyView.map((h, i) => <li className="hist-element" key={i}>{h}</li>)}
-                    </ul>
+                    <table style={{ listStyleType: 'circle' }}>
+                        <tbody>
+                            {historyView.map((h, i) => (
+                                <tr
+                                    className={`hist-element ${i === curState ? 'active' : ''}`}
+                                    // eslint-disable-next-line react/no-array-index-key
+                                    key={i}
+                                >
+                                    {h}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </Modal>

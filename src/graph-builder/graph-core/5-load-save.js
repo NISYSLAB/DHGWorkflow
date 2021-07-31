@@ -40,9 +40,17 @@ class GraphLoadSave extends GraphUndoRedo {
         return nodeID;
     }
 
+    static stringifyAction({ actionName, parameters }) {
+        return { actionName, parameters: window.btoa(JSON.stringify(parameters)) };
+    }
+
+    static parseAction({ actionName, parameters }) {
+        return { actionName, parameters: JSON.parse(window.atob(parameters)) };
+    }
+
     jsonifyGraph() {
         const graph = {
-            nodes: [], edges: [], projectDetails: this.projectDetails, id: this.id,
+            nodes: [], edges: [], projectDetails: this.projectDetails, id: this.id, actionHistory: [],
         };
         this.cy.nodes().forEach((node) => {
             if (this.shouldNodeBeSaved(node.id())) {
@@ -69,6 +77,14 @@ class GraphLoadSave extends GraphUndoRedo {
                 graph.edges.push(edgeJson);
             }
         });
+        graph.actionHistory = this.actionArr.map(({
+            tid, inverse, equivalent, authorName,
+        }) => ({
+            tid,
+            authorName,
+            inverse: GraphLoadSave.stringifyAction(inverse),
+            equivalent: GraphLoadSave.stringifyAction(equivalent),
+        }));
         return graph;
     }
 
@@ -84,12 +100,16 @@ class GraphLoadSave extends GraphUndoRedo {
     }
 
     loadJson(content) {
-        const tid = new Date().getTime();
         content.nodes.forEach((node) => {
-            this.addNode(node.label, node.style, 'ordin', node.position, { }, node.id, tid);
+            this.addNode(node.label, node.style, 'ordin', node.position, { }, node.id, 0);
         });
         content.edges.forEach((edge) => {
-            this.addEdge({ ...edge, sourceID: edge.source, targetID: edge.target }, tid);
+            this.addEdge({ ...edge, sourceID: edge.source, targetID: edge.target }, 0);
+        });
+        content.actionHistory.forEach(({
+            inverse, equivalent, tid, authorName,
+        }) => {
+            this.addAction(GraphLoadSave.parseAction(inverse), GraphLoadSave.parseAction(equivalent), tid, authorName);
         });
         this.projectDetails = content.projectDetails;
         this.dispatcher({

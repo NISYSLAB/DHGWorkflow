@@ -63,10 +63,12 @@ class GraphUndoRedo extends GraphComponent {
         );
     }
 
-    addAction(inverse, equivalent, tid) {
+    addAction(inverse, equivalent, tid, authorName = this.superState.authorName) {
         if (tid === 0) return;
         this.actionArr.splice(this.curActionIndex);
-        this.actionArr.push({ tid, inverse, equivalent });
+        this.actionArr.push({
+            tid, inverse, equivalent, authorName,
+        });
         this.curActionIndex += 1;
         this.informUI();
     }
