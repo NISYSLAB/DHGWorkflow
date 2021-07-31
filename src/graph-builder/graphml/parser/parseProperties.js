@@ -42,6 +42,20 @@ const parseEdge = (edge) => ({
     },
 });
 
+const parseActionML = (({ actionName, parameters }) => ({ actionName: actionName[0], parameters: parameters[0] }));
+
+const parseActionHistory = (grahML) => grahML.parseProps('graphml.graph.actionHistory', 1)
+    .map(({
+        authorName, equivalent, inverse, tid,
+    }) => ({
+        authorName: authorName[0],
+        equivalent: parseActionML(equivalent[0]),
+        inverse: parseActionML(inverse[0]),
+        tid: tid[0],
+    }));
+
 const parseDetails = (grahML) => grahML.parseProps('graphml.graph.$');
 
-export { parseNode, parseEdge, parseDetails };
+export {
+    parseNode, parseEdge, parseDetails, parseActionHistory,
+};

@@ -22,7 +22,7 @@ const builder = (G) => {
         type: edg.style.shape,
     }));
     const X = graphML({
-        nodes, edges, projectName: G.projectDetails.projectName, id: G.id,
+        nodes, edges, projectName: G.projectDetails.projectName, id: G.id, actionHistory: G.actionHistory,
     });
     const xml = new xml2js.Builder().buildObject(X);
     return xml;

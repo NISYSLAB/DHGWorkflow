@@ -1,6 +1,8 @@
 import xml2js from 'xml2js';
 import PropFromArr from './PropFromArr';
-import { parseNode, parseEdge, parseDetails } from './parseProperties';
+import {
+    parseNode, parseEdge, parseDetails, parseActionHistory,
+} from './parseProperties';
 
 const parser = (graphMlCnt) => new Promise((resolve) => {
     new xml2js.Parser().parseString(graphMlCnt, (err, grahMLObj) => {
@@ -9,8 +11,9 @@ const parser = (graphMlCnt) => new Promise((resolve) => {
         const edges = grahML.parseProps('graphml.graph.edge', 1).map(parseEdge);
         const { id, projectName } = parseDetails(grahML);
         const projectDetails = { projectName, set: Boolean(projectName) };
+        const actionHistory = parseActionHistory(grahML);
         resolve({
-            id, projectDetails, edges, nodes,
+            id, projectDetails, edges, nodes, actionHistory,
         });
     });
 });

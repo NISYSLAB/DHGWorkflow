@@ -1,5 +1,5 @@
 const graphML = ({
-  nodes, edges, id, projectName,
+  nodes, edges, id, projectName, actionHistory,
 }) => ({
   graphml: {
     $: {
@@ -33,6 +33,7 @@ const graphML = ({
         },
         node: nodes,
         edge: edges,
+        actionHistory,
       },
     ],
   },
