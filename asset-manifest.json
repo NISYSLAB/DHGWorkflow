@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/DHGWorkflow/static/css/main.13b395f4.chunk.css",
-    "main.js": "/DHGWorkflow/static/js/main.4dbd73e3.chunk.js",
-    "main.js.map": "/DHGWorkflow/static/js/main.4dbd73e3.chunk.js.map",
+    "main.js": "/DHGWorkflow/static/js/main.bc9891a9.chunk.js",
+    "main.js.map": "/DHGWorkflow/static/js/main.bc9891a9.chunk.js.map",
     "runtime-main.js": "/DHGWorkflow/static/js/runtime-main.b401662e.js",
     "runtime-main.js.map": "/DHGWorkflow/static/js/runtime-main.b401662e.js.map",
     "static/css/2.2c1e88b0.chunk.css": "/DHGWorkflow/static/css/2.2c1e88b0.chunk.css",
@@ -22,6 +22,6 @@
     "static/css/2.2c1e88b0.chunk.css",
     "static/js/2.27137aa6.chunk.js",
     "static/css/main.13b395f4.chunk.css",
-    "static/js/main.4dbd73e3.chunk.js"
+    "static/js/main.bc9891a9.chunk.js"
   ]
 }
