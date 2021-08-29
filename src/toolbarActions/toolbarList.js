@@ -7,7 +7,7 @@ import {
 import {
     createNode, editElement, deleteElem, downloadImg, saveAction,
     readFile, clearAll, undo, redo, openShareModal, openSettingModal,
-    viewHistory,
+    viewHistory, saveOnServerAction,
 } from './toolbarFunctions';
 
 const toolbarList = (state) => [
@@ -33,6 +33,7 @@ const toolbarList = (state) => [
         text: 'Save',
         icon: FaSave,
         action: (s, d) => [
+            { fn: () => saveOnServerAction(s, d), name: 'Save on Server' },
             { fn: () => saveAction(s, d), name: 'Save' },
             { fn: () => saveAction(s, d, prompt('File Name:')), name: 'Save As' },
         ],

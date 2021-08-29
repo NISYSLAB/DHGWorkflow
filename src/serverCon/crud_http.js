@@ -18,7 +18,7 @@ function postGraph(graphml) {
             body: graphml,
 
         }).then((x) => {
-            resolve(x);
+            resolve(x.json());
         }).catch((e) => reject(e));
     });
 }
@@ -33,7 +33,7 @@ function updateGraph(id, graphml, writeTime) {
             },
             body: graphml,
         }).then((x) => {
-            resolve(x);
+            resolve(x.text());
         }).catch((e) => reject(e));
     });
 }

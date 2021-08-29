@@ -99,6 +99,10 @@ class GraphLoadSave extends GraphUndoRedo {
         saveAs(blob, `${fileName || `${this.getName()}-DHGWorkflow`}.graphml`);
     }
 
+    getGraphML() {
+        return graphmlBuilder(this.jsonifyGraph());
+    }
+
     loadJson(content) {
         content.nodes.forEach((node) => {
             this.addNode(node.label, node.style, 'ordin', node.position, { }, node.id, 0);
