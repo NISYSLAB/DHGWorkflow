@@ -19,10 +19,9 @@ def postWorkflow():
 @workFlow.route("/<id>")
 def getWorkflow(id):
     res = workFlowModel.get(id)
-    if not res:
-        "Not Found", 404
+    if res is None: return "Not Found", 404
     r = make_response(res["graphml"])
-    r.headers.set('x-write-time', str(res["writeTime"]))
+    r.headers.set('X-Write-Time', str(res["writeTime"]))
     r.headers.set('Content-Type', "application/xml")
     return r
 
@@ -34,7 +33,7 @@ def updateWorkflow(id):
     except:
         return "Invalid GraphML", 400
     graphML = request.data.decode('utf')
-    writeTime = float(request.headers['x-write-time'])
+    writeTime = float(request.headers['X-Write-Time'])
     newWriteTime = workFlowModel.update(id, writeTime, graphML)
     if not newWriteTime:
         return "WriteTime or GraphID do not match", 400
