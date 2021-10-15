@@ -17,8 +17,7 @@ class GraphComponent extends GraphCanvas {
     constructor(...args) {
         super(...args);
         const [,,,,, nodeValidator, edgeValidator] = args;
-        this.nodeValidator = nodeValidator;
-        this.edgeValidator = edgeValidator;
+        this.setEdgeNodeValidator({ nodeValidator, edgeValidator });
         this.getTid = () => new Date().getTime();
     }
 
@@ -254,9 +253,9 @@ class GraphComponent extends GraphCanvas {
         try {
             const message = validator(comp, nodes, edges, type);
             if (message && message.ok !== undefined && message.err !== undefined) return message;
-            return { ok: false, err: 'Invalid return format from the defined node validator.' };
+            return { ok: false, err: 'Invalid return format from the defined validator.' };
         } catch (e) {
-            return { ok: false, err: `Error raised at node validator: ${e.message}` };
+            return { ok: false, err: `Error raised at validator: ${e.message}` };
         }
     }
 

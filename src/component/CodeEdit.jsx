@@ -6,8 +6,8 @@ const CodeEdit = ({
 }) => {
     const inputRef = React.createRef();
     const parseMD = (s) => s.split('**').map((e, i) => {
-        if (i % 2) return <span><b>{e}</b></span>;
-        return <span>{e}</span>;
+        if (i % 2) return <span key={e}><b>{e}</b></span>;
+        return <span key={e}>{e}</span>;
     });
     return (
         <div
