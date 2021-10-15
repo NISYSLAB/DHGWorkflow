@@ -29,6 +29,11 @@ class GraphUndoRedo extends GraphComponent {
         this.curActionIndex = 0;
     }
 
+    resetAllAction() {
+        this.actionArr = [];
+        this.curActionIndex = 0;
+    }
+
     informUI() {
         this.dispatcher({ type: T.SET_UNDO, payload: this.curActionIndex !== 0 });
         this.dispatcher({ type: T.SET_REDO, payload: this.curActionIndex !== this.actionArr.length });
@@ -67,7 +72,7 @@ class GraphUndoRedo extends GraphComponent {
         if (tid === 0) return;
         this.actionArr.splice(this.curActionIndex);
         this.actionArr.push({
-            tid, inverse, equivalent, authorName,
+            tid, inverse, equivalent, authorName, onServer: false,
         });
         this.curActionIndex += 1;
         this.informUI();

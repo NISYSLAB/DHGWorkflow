@@ -49,7 +49,6 @@ class CoreGraph {
         if (cy) this.cy = cy;
         if (serverID) this.serverID = serverID;
         if (serverWriteTime) this.serverWriteTime = serverWriteTime;
-        console.log(serverID, serverWriteTime);
     }
 
     selectDeselectEventHandler() {
@@ -140,6 +139,11 @@ class CoreGraph {
 
     setCurStatus() {
         this.selectDeselectEventHandler();
+    }
+
+    reset() {
+        this.resetAllComp();
+        this.resetAllAction();
     }
 }
 

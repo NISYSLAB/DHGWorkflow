@@ -130,7 +130,17 @@ class GraphLoadSave extends GraphUndoRedo {
         this.autoSaveIntervalId = setTimeout(() => localStorageManager.save(this.id, this.jsonifyGraph()), 1000);
     }
 
+    setGraphML(graphML) {
+        localStorageManager.save(this.id, graphML);
+        this.loadGraphFromLocalStorage();
+    }
+
+    resetLocalStorage() {
+        localStorageManager.clearGraph(this.id);
+    }
+
     loadGraphFromLocalStorage() {
+        this.reset();
         const graphContent = localStorageManager.get(this.id);
         if (!graphContent) return false;
         this.loadJson(graphContent);

@@ -3,6 +3,7 @@ export default {
     getGraph: (id) => `workflow/${id}`,
     postGraph: 'workflow',
     updateGraph: (id) => `workflow/${id}`,
+    forceUpdateGraph: (id) => `workflow/${id}?force=true`,
 };
 
 /*
@@ -26,6 +27,15 @@ updateGraph:
     Method: POST
     Request:
         Header: X-Write-Time: 'writeTime'
+        Body: graphML data
+        BodyType: application/xml
+    Response:
+        Body: newWriteTime
+
+forceUpdateGraph:
+    Force update the graph without validating the write time.
+    Method: POST
+    Request:
         Body: graphML data
         BodyType: application/xml
     Response:

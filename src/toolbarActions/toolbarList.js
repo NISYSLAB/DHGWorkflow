@@ -5,10 +5,18 @@ import {
 } from 'react-icons/fa';
 
 import {
+    FiChevronDown, FiChevronsDown, FiChevronsUp, FiChevronUp,
+} from 'react-icons/fi';
+
+import {
     createNode, editElement, deleteElem, downloadImg, saveAction,
     readFile, clearAll, undo, redo, openShareModal, openSettingModal,
-    viewHistory, saveOnServerAction,
+    viewHistory,
 } from './toolbarFunctions';
+
+import {
+    pushToServer, forcePushToServer, pullFromServer, forcePullFromServer,
+} from './serverActions';
 
 const toolbarList = (state) => [
     {
@@ -33,7 +41,7 @@ const toolbarList = (state) => [
         text: 'Save',
         icon: FaSave,
         action: (s, d) => [
-            { fn: () => saveOnServerAction(s, d), name: 'Save on Server' },
+            { fn: () => pushToServer(s, d), name: 'Save on Server' },
             { fn: () => saveAction(s, d), name: 'Save' },
             { fn: () => saveAction(s, d, prompt('File Name:')), name: 'Save As' },
         ],
@@ -88,7 +96,35 @@ const toolbarList = (state) => [
         icon: FaHistory,
         action: viewHistory,
         active: true,
-        // hotkey: 'Delete,Backspace,Del,Clear',
+    },
+    { type: 'vsep' },
+    {
+        type: 'action',
+        text: 'Push',
+        icon: FiChevronUp,
+        action: pushToServer,
+        active: true,
+    },
+    {
+        type: 'action',
+        text: 'Force Push',
+        icon: FiChevronsUp,
+        action: forcePushToServer,
+        active: true,
+    },
+    {
+        type: 'action',
+        text: 'Pull',
+        icon: FiChevronDown,
+        action: pullFromServer,
+        active: true,
+    },
+    {
+        type: 'action',
+        text: 'Force Pull',
+        icon: FiChevronsDown,
+        action: forcePullFromServer,
+        active: true,
     },
     { type: 'vsep' },
     { type: 'space' },

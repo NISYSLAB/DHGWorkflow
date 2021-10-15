@@ -36,6 +36,10 @@ class GraphCanvas extends Core {
         return true;
     }
 
+    resetAllComp() {
+        this.cy.elements().remove();
+    }
+
     setCurStatus() {
         super.setCurStatus();
         this.setZoomUI(Math.round(this.cy.zoom() * 100));

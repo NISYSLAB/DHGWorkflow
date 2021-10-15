@@ -1,7 +1,6 @@
 import { actionType as T } from '../reducer';
 import localStorageManager from '../graph-builder/local-storage-manager';
 import graphMLParser from '../graph-builder/graphml/parser';
-import { postGraph, updateGraph } from '../serverCon/crud_http';
 
 const getGraphFun = (superState) => superState.graphs[superState.curGraphIndex]
                                         && superState.graphs[superState.curGraphIndex].instance;
@@ -83,19 +82,6 @@ const saveAction = (state, d, fileName) => {
     getGraphFun(state).saveToDisk(fileName);
 };
 
-const saveOnServerAction = (state) => {
-    const curG = getGraphFun(state);
-    if (curG.serverID && curG.serverWriteTime) {
-        updateGraph(curG.serverID, curG.getGraphML(), curG.serverWriteTime).then((res) => {
-            curG.set({ serverWriteTime: res });
-        });
-    } else {
-        postGraph(curG.getGraphML()).then((res) => {
-            curG.set({ serverID: res.workflowId, serverWriteTime: res.writeTime });
-        });
-    }
-};
-
 const readFile = (state, setState, e) => {
     if (e.target && e.target.files && e.target.files[0]) {
         const fr = new FileReader();
@@ -159,5 +145,5 @@ const viewHistory = (state, setState) => {
 export {
     createNode, editElement, deleteElem, downloadImg, saveAction,
     readFile, newProject, clearAll, editDetails, undo, redo,
-    openShareModal, openSettingModal, viewHistory, saveOnServerAction,
+    openShareModal, openSettingModal, viewHistory,
 };

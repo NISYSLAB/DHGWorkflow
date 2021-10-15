@@ -3,7 +3,7 @@ import ec from './config';
 function getGraph(id) {
     return new Promise((resolve, reject) => {
         fetch(`${ec.baseURL + ec.getGraph(id)}`).then((x) => {
-            resolve(x);
+            resolve(x.text());
         }).catch((e) => reject(e));
     });
 }
@@ -38,6 +38,20 @@ function updateGraph(id, graphml, writeTime) {
     });
 }
 
+function forceUpdateGraph(id, graphml) {
+    return new Promise((resolve, reject) => {
+        fetch(ec.baseURL + ec.updateGraph(id), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/xml',
+            },
+            body: graphml,
+        }).then((x) => {
+            resolve(x.text());
+        }).catch((e) => reject(e));
+    });
+}
+
 export {
-    getGraph, postGraph, updateGraph,
+    getGraph, postGraph, updateGraph, forceUpdateGraph,
 };
