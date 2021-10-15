@@ -67,7 +67,8 @@ class GraphComponent extends GraphCanvas {
         const edges = this.getEdgesBetweenNodes(sourceID, targetID);
         const dists = new Set();
         edges.forEach((edge) => {
-            dists.add(edge.data('bendData').bendDistance);
+            if (targetID === edge.target().id()) dists.add(edge.data('bendData').bendDistance);
+            else dists.add(-edge.data('bendData').bendDistance);
         });
         for (let d = 0; ;d += 20) {
             if (!dists.has(d)) return d;
