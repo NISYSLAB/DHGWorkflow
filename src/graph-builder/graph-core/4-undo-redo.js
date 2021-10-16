@@ -1,3 +1,4 @@
+import md5 from 'md5';
 import GraphComponent from './3-component';
 import GA from '../graph-actions';
 import { actionType as T } from '../../reducer';
@@ -68,11 +69,36 @@ class GraphUndoRedo extends GraphComponent {
         );
     }
 
+    static sequencify(obj) {
+        if (!(obj instanceof Object)) return obj;
+        let r = [];
+        if (obj instanceof Array) {
+            r = obj.map(GraphUndoRedo.sequencify);
+        } else {
+            Object.keys(obj).sort().forEach((k) => {
+                r.push(`:${k}:`);
+                r.push(GraphUndoRedo.sequencify(obj[k]));
+            });
+        }
+        return r;
+    }
+
     addAction(inverse, equivalent, tid, authorName = this.superState.authorName) {
         if (tid === 0) return;
         this.actionArr.splice(this.curActionIndex);
+
+        const actionIdentity = GraphUndoRedo.sequencify(equivalent).toString()
+            + GraphUndoRedo.sequencify(equivalent).toString()
+            + tid
+            + authorName;
         this.actionArr.push({
-            tid, inverse, equivalent, authorName, onServer: false,
+            tid,
+            inverse,
+            equivalent,
+            authorName,
+            hash: md5(
+                `${actionIdentity}|${this.actionArr.length ? this.actionArr.at(-1).hash : ''}`,
+            ),
         });
         this.curActionIndex += 1;
         this.informUI();
