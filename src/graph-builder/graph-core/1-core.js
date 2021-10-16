@@ -15,13 +15,13 @@ class CoreGraph {
 
     id;
 
-    projectDetails;
+    projectName;
 
     cy;
 
     bendNode;
 
-    constructor(id, element, dispatcher, superState, projectDetails) {
+    constructor(id, element, dispatcher, superState, projectName) {
         if (dispatcher) this.dispatcher = dispatcher;
         if (superState) this.superState = superState;
         if (typeof cytoscape('core', 'edgehandles') !== 'function') {
@@ -36,7 +36,7 @@ class CoreGraph {
         // if (cy) this.cy = cy;
         this.cy = cytoscape({ ...cyOptions, container: element });
         this.id = id;
-        this.projectDetails = projectDetails;
+        this.projectName = projectName;
         this.cy.emit('graph-modified');
         this.bendNode = this.cy.add(
             { group: 'nodes', data: { type: 'bend' }, classes: ['hidden'] },
@@ -74,11 +74,6 @@ class CoreGraph {
         });
     }
 
-    setProjectDetail(projectDetails) {
-        this.projectDetails = projectDetails;
-        this.cy.emit('graph-modified');
-    }
-
     getById(x) {
         return this.cy.getElementById(x);
     }
@@ -87,10 +82,25 @@ class CoreGraph {
         return this.getById(x).data('label') || '**Deleted El**';
     }
 
-    set({ cy, dispatcher, superState }) {
+    set({
+        cy, dispatcher, superState, projectName,
+    }) {
         if (dispatcher) this.dispatcher = dispatcher;
         if (superState) this.superState = superState;
         if (cy) this.cy = cy;
+        if (projectName) this.projectName = projectName;
+    }
+
+    setProjectName(projectName) {
+        this.projectName = projectName;
+        this.dispatcher({
+            type: T.SET_PROJECT_DETAILS,
+            payload: {
+                projectName,
+                graphID: this.id,
+            },
+        });
+        this.cy.emit('graph-modified');
     }
 
     selectDeselectEventHandler() {

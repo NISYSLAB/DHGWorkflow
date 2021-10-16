@@ -40,7 +40,7 @@ const Header = ({ superState, dispatcher }) => {
             <section className="middle titlebar">
                 {
                     superState.curGraphInstance ? `${
-                        superState.curGraphInstance.projectDetails.projectName
+                        superState.curGraphInstance.projectName
                     } - DHGWorkflow Editor` : ''
                 }
             </section>

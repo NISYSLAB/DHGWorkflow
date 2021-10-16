@@ -22,7 +22,6 @@ const GraphComp = (props) => {
         }
         const allSavedGs = localStorageManager.getAllGraphs().map((graphID) => ({
             graphID,
-            projectDetails: { projectName: '', set: true },
         }));
         dispatcher({
             type: T.ADD_GRAPH_BULK,
@@ -48,12 +47,12 @@ const GraphComp = (props) => {
                         superState={superState}
                         graphContainerRef={graphContainerRef}
                         dispatcher={dispatcher}
-                        key={el.id}
+                        key={el.graphID}
                         active={i === superState.curGraphIndex}
                         graphID={el.graphID}
                         serverID={el.serverID}
                         graphML={el.graphML}
-                        projectDetails={el.projectDetails}
+                        projectName={el.projectName}
                     />
                 ))}
                 <ZoomComp dispatcher={dispatcher} superState={superState} />

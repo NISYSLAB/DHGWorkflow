@@ -115,13 +115,11 @@ const clearAll = (state) => {
 
 const editDetails = (state, setState) => {
     setState({
-        type: T.SET_PROJECT_DETAILS,
-        payload: {
-            projectDetails: { ...getGraphFun(state).projectDetails, set: false },
-            id: getGraphFun(state).id,
-        },
+        type: T.SET_EDIT_DETAILS_MODAL,
+        payload: true,
     });
 };
+
 const undo = (state) => {
     if (getGraphFun(state))getGraphFun(state).undo();
 };

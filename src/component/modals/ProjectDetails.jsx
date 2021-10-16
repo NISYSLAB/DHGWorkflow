@@ -9,47 +9,37 @@ const ProjectDetails = ({ superState, dispatcher }) => {
     const [projectName, setProjectName] = useState('');
     const [authorName, setAuthorName] = useState('');
     const inputRef = useCallback((node) => node && node.focus(), []);
+    const newGraphModal = superState.newGraphModal || superState.graphs.length === 0;
+    const editDetailsModal = superState.editDetailsModal || (curGraph && !curGraph.projectName);
 
-    const setProjectDetails = (projectDetails) => {
-        dispatcher({
-            type: T.SET_PROJECT_DETAILS,
-            payload: {
-                projectDetails,
-                id: curGraph.id,
-            },
-        });
-    };
-
-    const setProjAuthorName = (author) => {
+    const setProjAuthorName = (a) => {
+        setAuthorName(a);
         dispatcher({
             type: T.SET_AUTHOR,
-            payload: author,
+            payload: a,
         });
     };
 
     useEffect(() => {
-        if (!curGraph) setProjectName('');
-        else setProjectName(curGraph.projectDetails.projectName || '');
-
+        if (superState.editDetailsModal && curGraph) {
+            setProjectName(curGraph.projectName);
+        } else setProjectName('');
+    }, [superState.authorName, superState.editDetailsModal, curGraph]);
+    useEffect(() => {
         if (superState.authorName) setAuthorName(superState.authorName);
         else {
             const authorNameE = localStorageManager.getAuthorName();
-            setAuthorName(authorNameE);
             setProjAuthorName(authorNameE);
         }
-    }, [curGraph, !curGraph || !curGraph.projectDetails.set]);
-
-    const addNewGraph = () => {
-        dispatcher({
-            type: T.ADD_GRAPH,
-            payload: { id: new Date().getTime(), projectDetails: { projectName, set: true } },
-        });
-    };
+    }, []);
 
     const submit = (e) => {
         e.preventDefault();
-        if (!curGraph) addNewGraph();
-        else setProjectDetails({ projectName, set: true });
+        if (newGraphModal) dispatcher({ type: T.ADD_GRAPH, payload: { projectName } });
+        else if (editDetailsModal) {
+            superState.curGraphInstance.setProjectName(projectName);
+            dispatcher({ type: T.SET_EDIT_DETAILS_MODAL, payload: false });
+        }
         setProjAuthorName(authorName);
         localStorageManager.setAuthorName(authorName);
     };
@@ -57,19 +47,15 @@ const ProjectDetails = ({ superState, dispatcher }) => {
     const openExisting = () => {
         superState.fileRef.current.click();
     };
+
     const closeModal = () => {
-        if (!curGraph) dispatcher({ type: T.CHANGE_TAB, payload: 0 });
-        else {
-            setProjectDetails({
-                ...curGraph.projectDetails,
-                set: Boolean(curGraph.projectDetails.projectName),
-            });
-        }
+        if (superState.newGraphModal) dispatcher({ type: T.SET_NEW_GRAPH_MODAL, payload: false });
+        else if (superState.editDetailsModal) dispatcher({ type: T.SET_EDIT_DETAILS_MODAL, payload: false });
     };
     return (
         <Modal
-            ModelOpen={!superState.authorName || !curGraph || !curGraph.projectDetails.set}
-            closeModal={!curGraph && superState.curGraphIndex === 0 ? null : closeModal}
+            ModelOpen={newGraphModal || editDetailsModal}
+            closeModal={superState.editDetailsModal || superState.newGraphModal ? closeModal : null}
             title="Project Details"
         >
             <form className="proj-details" onSubmit={submit}>
@@ -90,7 +76,7 @@ const ProjectDetails = ({ superState, dispatcher }) => {
                 />
                 <div className="expand">
                     <button type="submit" className="btn btn-primary">Save</button>
-                    {curGraph ? <></> : (
+                    {newGraphModal && (
                         <>
                             <div className="divider" />
                             <button
