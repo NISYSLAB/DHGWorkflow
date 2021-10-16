@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
 import './App.css';
 import ReactTooltip from 'react-tooltip';
-import GraphComp from './graph';
+import GraphWorkspace from './GraphWorkspace';
 import GraphCompDetails from './component/modals/GraphCompDetails';
 import { Header } from './component/Header';
 import { reducer, initialState, actionType as T } from './reducer';
@@ -26,7 +26,7 @@ const app = () => {
             <FileDragDrop dispatcher={dispatcher} />
             <Header superState={superState} dispatcher={dispatcher} />
             <section className="body" style={{ display: 'flex', overflow: 'hidden' }}>
-                <GraphComp dispatcher={dispatcher} superState={superState} />
+                <GraphWorkspace dispatcher={dispatcher} superState={superState} />
             </section>
             <ReactTooltip place="bottom" type="dark" effect="solid" />
         </div>
