@@ -19,6 +19,7 @@ const initialState = {
     settingsModal: false,
     viewHistory: false,
     authorName: '',
+    isWorkflowOnServer: false,
 };
 
 const initialGraphState = {

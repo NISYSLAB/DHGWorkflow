@@ -41,14 +41,10 @@ class CoreGraph {
         return this.getById(x).data('label') || '**Deleted El**';
     }
 
-    set({
-        cy, dispatcher, superState, serverID, serverWriteTime,
-    }) {
+    set({ cy, dispatcher, superState }) {
         if (dispatcher) this.dispatcher = dispatcher;
         if (superState) this.superState = superState;
         if (cy) this.cy = cy;
-        if (serverID) this.serverID = serverID;
-        if (serverWriteTime) this.serverWriteTime = serverWriteTime;
     }
 
     selectDeselectEventHandler() {

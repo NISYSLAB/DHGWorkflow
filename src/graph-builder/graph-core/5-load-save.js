@@ -50,7 +50,12 @@ class GraphLoadSave extends GraphUndoRedo {
 
     jsonifyGraph() {
         const graph = {
-            nodes: [], edges: [], projectDetails: this.projectDetails, id: this.id, actionHistory: [],
+            nodes: [],
+            edges: [],
+            actionHistory: [],
+            projectDetails: this.projectDetails,
+            id: this.id,
+            serverID: this.serverID,
         };
         this.cy.nodes().forEach((node) => {
             if (this.shouldNodeBeSaved(node.id())) {
@@ -116,6 +121,7 @@ class GraphLoadSave extends GraphUndoRedo {
             this.addAction(GraphLoadSave.parseAction(inverse), GraphLoadSave.parseAction(equivalent), tid, authorName);
         });
         this.projectDetails = content.projectDetails;
+        this.serverID = this.serverID || content.serverID;
         this.dispatcher({
             type: T.SET_PROJECT_DETAILS,
             payload: {
@@ -148,7 +154,7 @@ class GraphLoadSave extends GraphUndoRedo {
     }
 
     serializeGraph() {
-        return btoa(JSON.stringify(this.jsonifyGraph()));
+        return window.btoa(JSON.stringify(this.jsonifyGraph()));
     }
 }
 

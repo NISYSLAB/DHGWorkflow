@@ -25,6 +25,7 @@ const actionType = {
     SET_FILE_REF: 'SET_FILE_REF',
     SET_HISTORY_MODAL: 'SET_HISTORY_MODAL',
     SET_AUTHOR: 'SET_AUTHOR',
+    IS_WORKFLOW_ON_SERVER: 'IS_WORKFLOW_ON_SERVER',
 };
 
 export default zealit(actionType);

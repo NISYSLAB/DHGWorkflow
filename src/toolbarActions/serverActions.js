@@ -15,6 +15,7 @@ function pushToServer(state) {
     } else {
         postGraph(curG.getGraphML()).then((res) => {
             curG.set({ serverID: res.workflowId, serverWriteTime: res.writeTime });
+            curG.cy.emit('graph-modified');
         });
     }
 }

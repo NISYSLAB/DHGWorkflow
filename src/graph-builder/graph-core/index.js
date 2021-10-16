@@ -1,3 +1,3 @@
-import GraphLoadSave from './5-load-save';
+import GraphServer from './6-server';
 
-export default GraphLoadSave;
+export default GraphServer;

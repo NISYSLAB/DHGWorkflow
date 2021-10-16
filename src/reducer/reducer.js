@@ -139,6 +139,10 @@ const reducer = (state, action) => {
         return { ...state, authorName: action.payload };
     }
 
+    case T.IS_WORKFLOW_ON_SERVER: {
+        return { ...state, isWorkflowOnServer: action.payload };
+    }
+
     default:
         return state;
     }
