@@ -50,7 +50,12 @@ class GraphLoadSave extends GraphUndoRedo {
 
     jsonifyGraph() {
         const graph = {
-            nodes: [], edges: [], projectDetails: this.projectDetails, id: this.id, actionHistory: [],
+            nodes: [],
+            edges: [],
+            actionHistory: [],
+            projectDetails: this.projectDetails,
+            id: this.id,
+            serverID: this.serverID,
         };
         this.cy.nodes().forEach((node) => {
             if (this.shouldNodeBeSaved(node.id())) {
@@ -99,6 +104,10 @@ class GraphLoadSave extends GraphUndoRedo {
         saveAs(blob, `${fileName || `${this.getName()}-DHGWorkflow`}.graphml`);
     }
 
+    getGraphML() {
+        return graphmlBuilder(this.jsonifyGraph());
+    }
+
     loadJson(content) {
         content.nodes.forEach((node) => {
             this.addNode(node.label, node.style, 'ordin', node.position, { }, node.id, 0);
@@ -112,6 +121,7 @@ class GraphLoadSave extends GraphUndoRedo {
             this.addAction(GraphLoadSave.parseAction(inverse), GraphLoadSave.parseAction(equivalent), tid, authorName);
         });
         this.projectDetails = content.projectDetails;
+        this.serverID = this.serverID || content.serverID;
         this.dispatcher({
             type: T.SET_PROJECT_DETAILS,
             payload: {
@@ -126,7 +136,17 @@ class GraphLoadSave extends GraphUndoRedo {
         this.autoSaveIntervalId = setTimeout(() => localStorageManager.save(this.id, this.jsonifyGraph()), 1000);
     }
 
+    setGraphML(graphML) {
+        localStorageManager.save(this.id, graphML);
+        this.loadGraphFromLocalStorage();
+    }
+
+    resetLocalStorage() {
+        localStorageManager.clearGraph(this.id);
+    }
+
     loadGraphFromLocalStorage() {
+        this.reset();
         const graphContent = localStorageManager.get(this.id);
         if (!graphContent) return false;
         this.loadJson(graphContent);
@@ -134,7 +154,7 @@ class GraphLoadSave extends GraphUndoRedo {
     }
 
     serializeGraph() {
-        return btoa(JSON.stringify(this.jsonifyGraph()));
+        return window.btoa(JSON.stringify(this.jsonifyGraph()));
     }
 }
 

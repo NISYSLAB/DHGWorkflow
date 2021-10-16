@@ -55,5 +55,8 @@ const localStorageManager = {
     setAuthorName(authorName) {
         localStorage.setItem(this.AUTHOR_NAME, authorName);
     },
+    clearGraph(id) {
+        window.localStorage.removeItem(id);
+    },
 };
 export default localStorageManager;

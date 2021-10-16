@@ -83,7 +83,10 @@ const GraphComp = (props) => {
         if (superState.graphs[superState.curGraphIndex] && superState.graphs[superState.curGraphIndex].instance) {
             superState.graphs[superState.curGraphIndex].instance.setCurStatus();
         }
-    }, [superState.curGraphIndex]);
+    }, [
+        superState.curGraphIndex, superState.graphs.length,
+        superState.graphs[superState.curGraphIndex] && superState.graphs[superState.curGraphIndex].instance,
+    ]);
 
     useEffect(() => {
         if (typeof cytoscape('core', 'edgehandles') !== 'function') {

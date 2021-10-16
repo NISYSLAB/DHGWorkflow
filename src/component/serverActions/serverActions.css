@@ -1,0 +1,21 @@
+.server-actions-container{
+    display: flex;
+    margin: 10px;
+}
+
+.server-actions-container .edit-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.server-actions-container .server-id {
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 3px;
+}
+
+.server-id:read-only{
+    opacity: 0.5;
+}

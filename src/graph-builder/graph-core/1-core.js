@@ -136,6 +136,11 @@ class CoreGraph {
     setCurStatus() {
         this.selectDeselectEventHandler();
     }
+
+    reset() {
+        this.resetAllComp();
+        this.resetAllAction();
+    }
 }
 
 export default CoreGraph;
