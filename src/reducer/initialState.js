@@ -29,6 +29,8 @@ const initialGraphState = {
     },
     component: null,
     instance: null,
+    id: null,
+    serverID: null,
 };
 
 export { initialState, initialGraphState };

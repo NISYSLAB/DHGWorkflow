@@ -1,5 +1,12 @@
-import { actionType as T } from '../../reducer';
+import cytoscape from 'cytoscape';
+import edgehandles from 'cytoscape-edgehandles';
+import gridGuide from 'cytoscape-grid-guide';
+import Konva from 'konva';
+import nodeEditing from 'cytoscape-node-editing';
+import $ from 'jquery';
+import cyOptions from '../../config/cytoscape-options';
 import BendingDistanceWeight from '../calculations/bending-dist-weight';
+import { actionType as T } from '../../reducer';
 
 class CoreGraph {
     dispatcher;
@@ -14,10 +21,20 @@ class CoreGraph {
 
     bendNode;
 
-    constructor(id, cy, dispatcher, superState, projectDetails) {
+    constructor(id, element, dispatcher, superState, projectDetails) {
         if (dispatcher) this.dispatcher = dispatcher;
         if (superState) this.superState = superState;
-        if (cy) this.cy = cy;
+        if (typeof cytoscape('core', 'edgehandles') !== 'function') {
+            cytoscape.use(edgehandles);
+        }
+        if (typeof cytoscape('core', 'nodeEditing') !== 'function') {
+            nodeEditing(cytoscape, $, Konva);
+        }
+        if (typeof cytoscape('core', 'gridGuide') !== 'function') {
+            gridGuide(cytoscape);
+        }
+        // if (cy) this.cy = cy;
+        this.cy = cytoscape({ ...cyOptions, container: element });
         this.id = id;
         this.projectDetails = projectDetails;
         this.cy.emit('graph-modified');
@@ -26,6 +43,35 @@ class CoreGraph {
         );
         this.regesterEvents();
         this.cy.emit('graph-modified');
+        this.initizialize();
+    }
+
+    initizialize() {
+        this.cy.nodeEditing({
+            resizeToContentCueEnabled: () => false,
+            setWidth(node, width) {
+                node.data('style', { ...node.data('style'), width });
+            },
+            setHeight(node, height) {
+                node.data('style', { ...node.data('style'), height });
+            },
+            isNoResizeMode(node) { return node.data('type') !== 'ordin'; },
+            isNoControlsMode(node) { return node.data('type') !== 'ordin'; },
+        });
+
+        this.cy.gridGuide({
+            snapToGridOnRelease: false,
+            zoomDash: true,
+            panGrid: true,
+        });
+        this.cy.edgehandles({
+            preview: false,
+            handlePosition() {
+                return 'none';
+            },
+            handleNodes: 'node[type = "ordin"],node[type = "special"]',
+            complete: (a, b, c) => { c.remove(); this.addEdge({ sourceID: a.id(), targetID: b.id() }); },
+        });
     }
 
     setProjectDetail(projectDetails) {
