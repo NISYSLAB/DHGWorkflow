@@ -96,6 +96,9 @@ const reducer = (state, action) => {
         newState.graphs[action.index].instance = action.instance;
         return { ...newState };
     }
+    case T.SET_CUR_INSTANCE: {
+        return { ...state, curGraphInstance: action.payload };
+    }
 
     case T.NEW_GRAPH: return { ...state, curGraphIndex: state.graphs.length };
     case T.CHANGE_TAB: return { ...state, curGraphIndex: action.payload };
@@ -141,6 +144,9 @@ const reducer = (state, action) => {
 
     case T.IS_WORKFLOW_ON_SERVER: {
         return { ...state, isWorkflowOnServer: action.payload };
+    }
+    case T.SET_ZOOM_LEVEL: {
+        return { ...state, zoomLevel: action.payload };
     }
 
     default:

@@ -20,6 +20,8 @@ const initialState = {
     viewHistory: false,
     authorName: '',
     isWorkflowOnServer: false,
+    curGraphInstance: null,
+    zoomLevel: 100,
 };
 
 const initialGraphState = {

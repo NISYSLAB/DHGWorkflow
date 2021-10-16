@@ -26,6 +26,8 @@ const actionType = {
     SET_HISTORY_MODAL: 'SET_HISTORY_MODAL',
     SET_AUTHOR: 'SET_AUTHOR',
     IS_WORKFLOW_ON_SERVER: 'IS_WORKFLOW_ON_SERVER',
+    SET_CUR_INSTANCE: 'SET_CUR_INSTANCE',
+    SET_ZOOM_LEVEL: 'SET_ZOOM_LEVEL',
 };
 
 export default zealit(actionType);

@@ -1,5 +1,6 @@
 // import GraphUndoRedo from './graph-undo-redo';
 import Core from './1-core';
+import { actionType as T } from '../../reducer';
 
 class GraphCanvas extends Core {
     setZoomUI;
@@ -42,7 +43,7 @@ class GraphCanvas extends Core {
 
     setCurStatus() {
         super.setCurStatus();
-        this.setZoomUI(Math.round(this.cy.zoom() * 100));
+        this.dispatcher({ type: T.SET_ZOOM_LEVEL, payload: Math.round(this.cy.zoom() * 100) });
     }
 }
 

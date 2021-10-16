@@ -27,6 +27,10 @@ function Graph({
     useEffect(() => instance && instance.set({ superState }), [superState]);
     useEffect(() => active && instance && instance.setCurStatus(), [active]);
     useEffect(() => {
+        if (active && instance) dispatcher({ type: T.SET_CUR_INSTANCE, payload: instance });
+    }, [active, instance]);
+
+    useEffect(() => {
         if (ref.current) {
             setConatinerDim(ref.current);
             window.addEventListener('resize', () => setConatinerDim(ref.current));
@@ -38,7 +42,7 @@ function Graph({
 
     return (
         <div
-            style={{ zIndex: 1, display: superState.curGraphIndex === i ? 'block' : 'none' }}
+            style={{ zIndex: 1, display: active ? 'block' : 'none' }}
             key={id}
             className="graph-element"
             ref={ref}

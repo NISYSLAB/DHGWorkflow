@@ -10,16 +10,16 @@ const SettingsModal = ({ superState, dispatcher }) => {
     const [edgeValidator, setEdgeValidator] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     useEffect(() => {
-        if (superState.graphs[superState.curGraphIndex] && superState.graphs[superState.curGraphIndex].instance) {
-            setNodeValidator(superState.graphs[superState.curGraphIndex].instance.getNodeValidator());
-            setEdgeValidator(superState.graphs[superState.curGraphIndex].instance.getEdgeValidator());
+        if (superState.curGraphInstance) {
+            setNodeValidator(superState.curGraphInstance.getNodeValidator());
+            setEdgeValidator(superState.curGraphInstance.getEdgeValidator());
         }
-    }, [superState.graphs[superState.curGraphIndex] && superState.graphs[superState.curGraphIndex].instance]);
+    }, [superState.curGraphInstance]);
 
     const close = () => dispatcher({ type: T.SET_SETTING_MODAL, payload: false });
     const submit = () => {
         try {
-            superState.graphs[superState.curGraphIndex].instance.setEdgeNodeValidator({
+            superState.curGraphInstance.setEdgeNodeValidator({
                 nodeValidator: `(node, nodes, edges, type)=>{${nodeValidator}}`,
                 edgeValidator: `(edge, nodes, edges, type)=>{${edgeValidator}}`,
             });

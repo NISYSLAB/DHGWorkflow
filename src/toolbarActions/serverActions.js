@@ -3,8 +3,7 @@ import {
 } from '../serverCon/crud_http';
 import graphMLParser from '../graph-builder/graphml/parser';
 
-const getGraphFun = (superState) => superState.graphs[superState.curGraphIndex]
-                                        && superState.graphs[superState.curGraphIndex].instance;
+const getGraphFun = (superState) => superState.curGraphInstance;
 
 function pushToServer(state) {
     const curG = getGraphFun(state);

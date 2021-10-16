@@ -2,8 +2,7 @@ import { actionType as T } from '../reducer';
 import localStorageManager from '../graph-builder/local-storage-manager';
 import graphMLParser from '../graph-builder/graphml/parser';
 
-const getGraphFun = (superState) => superState.graphs[superState.curGraphIndex]
-                                        && superState.graphs[superState.curGraphIndex].instance;
+const getGraphFun = (superState) => superState.curGraphInstance;
 
 const createNode = (state, setState) => {
     setState({
