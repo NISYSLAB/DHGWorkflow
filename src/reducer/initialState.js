@@ -29,10 +29,13 @@ const initialGraphState = {
         projectName: '',
         set: false,
     },
+    graphID: null,
+    serverID: null,
+    graphML: null,
+
     component: null,
     instance: null,
     id: null,
-    serverID: null,
 };
 
 export { initialState, initialGraphState };

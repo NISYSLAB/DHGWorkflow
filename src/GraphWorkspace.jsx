@@ -20,8 +20,8 @@ const GraphComp = (props) => {
             localStorageManager.save(gid, graphContent);
             window.history.replaceState({}, document.title, window.location.pathname);
         }
-        const allSavedGs = localStorageManager.getAllGraphs().map((graphId) => ({
-            id: graphId,
+        const allSavedGs = localStorageManager.getAllGraphs().map((graphID) => ({
+            graphID,
             projectDetails: { projectName: '', set: true },
         }));
         dispatcher({
@@ -50,6 +50,10 @@ const GraphComp = (props) => {
                         dispatcher={dispatcher}
                         key={el.id}
                         active={i === superState.curGraphIndex}
+                        graphID={el.graphID}
+                        serverID={el.serverID}
+                        graphML={el.graphML}
+                        projectDetails={el.projectDetails}
                     />
                 ))}
                 <ZoomComp dispatcher={dispatcher} superState={superState} />

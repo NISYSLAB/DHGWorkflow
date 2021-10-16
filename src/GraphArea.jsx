@@ -5,7 +5,7 @@ import MyGraph from './graph-builder';
 import { actionType as T } from './reducer';
 
 function Graph({
-    el, i, superState, dispatcher, graphID, serverID, graphML, graphName, graphContainerRef, active,
+    el, superState, dispatcher, graphID, serverID, graphML, projectDetails, graphContainerRef, active,
 }) {
     const [instance, setInstance] = useState(null);
     const ref = useRef();
@@ -15,26 +15,27 @@ function Graph({
         elToAss.style.height = `${graphContainerRef.current.offsetHeight - 2}px`;
     };
 
-    const initialiseNewGraph = (element, id, projectDetails) => {
+    const initialiseNewGraph = () => {
         const myGraph = new MyGraph(
-            id, element, dispatcher, superState, projectDetails, nodeValidator, edgeValidator,
+            graphID, ref.current, dispatcher, superState, projectDetails, nodeValidator, edgeValidator,
         );
-        myGraph.loadGraphFromLocalStorage();
-        dispatcher({ type: T.ADD_GRAPH_INSTANCE, instance: myGraph, index: i });
+        if (graphID) myGraph.loadGraphFromLocalStorage();
+        if (serverID) myGraph.forcePullFromServer();
+        if (graphML) myGraph.setGraphML(graphML);
         return myGraph;
     };
 
-    useEffect(() => instance && instance.set({ superState }), [superState]);
-    useEffect(() => active && instance && instance.setCurStatus(), [active]);
+    useEffect(() => instance && instance.set({ superState }), [instance, superState]);
+    useEffect(() => active && instance && instance.setCurStatus(), [active && instance]);
     useEffect(() => {
         if (active && instance) dispatcher({ type: T.SET_CUR_INSTANCE, payload: instance });
-    }, [active, instance]);
+    }, [active && instance]);
 
     useEffect(() => {
         if (ref.current) {
             setConatinerDim(ref.current);
             window.addEventListener('resize', () => setConatinerDim(ref.current));
-            setInstance(initialiseNewGraph(ref.current, el.id, { projectName: '', set: true }));
+            setInstance(initialiseNewGraph());
         }
     }, [ref]);
 
