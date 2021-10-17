@@ -74,7 +74,7 @@ const reducer = (state, action) => {
 
     case T.ADD_GRAPH: {
         let foundi = -1;
-        const graphID = action.payload.graphID || new Date().toTimeString();
+        const graphID = action.payload.graphID || new Date().getTime().toString();
         state.graphs.forEach((g, i) => {
             if ((g.graphID && g.graphID === graphID) || (g.serverID && g.serverID === action.payload.serverID)) {
                 foundi = i;

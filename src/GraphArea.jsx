@@ -1,11 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { useState } from 'react/cjs/react.development';
+import path from 'path';
 import { edgeValidator, nodeValidator } from './config/defaultValidators';
 import MyGraph from './graph-builder';
 import { actionType as T } from './reducer';
 
 function Graph({
-    el, superState, dispatcher, graphID, serverID, graphML, projectName, graphContainerRef, active,
+    el, superState, dispatcher, graphID, serverID, graphML, projectName, graphContainerRef, active, loaded,
 }) {
     const [instance, setInstance] = useState(null);
     const ref = useRef();
@@ -28,7 +29,13 @@ function Graph({
         myGraph.setCurStatus();
         return myGraph;
     };
-
+    useEffect(() => {
+        if (active && loaded && serverID) {
+            window.history.pushState(null, null, path.join(process.env.PUBLIC_URL, 's', serverID));
+        } else if (active && loaded && graphID) {
+            window.history.pushState(null, null, path.join(process.env.PUBLIC_URL, 'l', graphID));
+        }
+    }, [active, serverID, loaded, graphID]);
     useEffect(() => instance && instance.set({ superState }), [instance, superState]);
     useEffect(() => active && instance && instance.setCurStatus(), [active && instance]);
     useEffect(() => {

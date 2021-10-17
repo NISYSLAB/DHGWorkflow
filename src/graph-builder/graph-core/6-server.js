@@ -3,7 +3,6 @@ import GraphLoadSave from './5-load-save';
 import {
     postGraph, updateGraph, forceUpdateGraph, getGraph,
 } from '../../serverCon/crud_http';
-import graphMLParser from '../graphml/parser';
 
 class GraphServer extends GraphLoadSave {
     constructor(...args) {
@@ -50,9 +49,7 @@ class GraphServer extends GraphLoadSave {
         const { serverID } = this;
         if (serverID) {
             getGraph(serverID).then((graphXML) => {
-                graphMLParser(graphXML).then((graphObject) => {
-                    this.setGraphML(graphObject);
-                });
+                this.setGraphML(graphXML);
             });
         } else {
             // eslint-disable-next-line no-alert
