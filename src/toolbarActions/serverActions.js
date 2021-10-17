@@ -1,7 +1,6 @@
 import {
     postGraph, updateGraph, forceUpdateGraph, getGraph,
 } from '../serverCon/crud_http';
-import graphMLParser from '../graph-builder/graphml/parser';
 
 const getGraphFun = (superState) => superState.curGraphInstance;
 
@@ -36,13 +35,8 @@ function forcePullFromServer(state) {
     const curG = getGraphFun(state);
     if (curG.serverID) {
         getGraph(curG.serverID).then((graphXML) => {
-            graphMLParser(graphXML).then((graphObject) => {
-                curG.setGraphML(graphObject);
-            });
+            curG.setGraphML(graphXML);
         });
-        // graphMLParser(graphXML);
-        // console.log(graphMLParser(graphXML));
-        // curG.setGraphML(graphMLParser(graphXML));
     } else {
         // eslint-disable-next-line no-alert
         alert('Not on server');

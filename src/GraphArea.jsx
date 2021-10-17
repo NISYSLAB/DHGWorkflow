@@ -20,8 +20,12 @@ function Graph({
             graphID, ref.current, dispatcher, superState, projectName, nodeValidator, edgeValidator,
         );
         if (graphID) myGraph.loadGraphFromLocalStorage();
-        if (serverID) myGraph.forcePullFromServer();
+        if (serverID) {
+            myGraph.set({ serverID });
+            myGraph.forcePullFromServer();
+        }
         if (graphML) myGraph.setGraphML(graphML);
+        myGraph.setCurStatus();
         return myGraph;
     };
 

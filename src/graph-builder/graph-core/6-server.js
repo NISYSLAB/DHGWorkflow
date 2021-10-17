@@ -8,7 +8,6 @@ import graphMLParser from '../graphml/parser';
 class GraphServer extends GraphLoadSave {
     constructor(...args) {
         super(...args);
-        this.serverID = null;
         this.serverWriteTime = null;
     }
 
@@ -17,7 +16,7 @@ class GraphServer extends GraphLoadSave {
         super.set(config);
         if (serverWriteTime) this.serverWriteTime = serverWriteTime;
         if (serverID) {
-            this.serverID = serverID;
+            this.setServerID(serverID);
             this.dispatcher({ type: T.IS_WORKFLOW_ON_SERVER, payload: Boolean(this.serverID) });
         }
     }

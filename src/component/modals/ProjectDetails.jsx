@@ -8,6 +8,7 @@ const ProjectDetails = ({ superState, dispatcher }) => {
     const curGraph = superState.graphs[superState.curGraphIndex];
     const [projectName, setProjectName] = useState('');
     const [authorName, setAuthorName] = useState('');
+    const [serverID, setServerID] = useState('');
     const inputRef = useCallback((node) => node && node.focus(), []);
     const newGraphModal = superState.newGraphModal || superState.graphs.length === 0;
     const editDetailsModal = superState.editDetailsModal || (curGraph && !curGraph.projectName);
@@ -52,6 +53,38 @@ const ProjectDetails = ({ superState, dispatcher }) => {
         if (superState.newGraphModal) dispatcher({ type: T.SET_NEW_GRAPH_MODAL, payload: false });
         else if (superState.editDetailsModal) dispatcher({ type: T.SET_EDIT_DETAILS_MODAL, payload: false });
     };
+    const loadFromServer = () => {
+        dispatcher({ type: T.ADD_GRAPH, payload: { serverID } });
+    };
+    const NewWrokflow = () => (
+        <>
+            <div className="divider" />
+            <input
+                placeholder="Enter the Server ID of Workflow"
+                value={serverID}
+                onChange={(e) => setServerID(e.target.value)}
+                className="serverIDText"
+            />
+            <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={loadFromServer}
+            >
+                Load From Server
+
+            </button>
+            <div className="divider" />
+            <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={openExisting}
+            >
+                Open Existing From GraphML File
+
+            </button>
+        </>
+    );
+
     return (
         <Modal
             ModelOpen={newGraphModal || editDetailsModal}
@@ -76,19 +109,9 @@ const ProjectDetails = ({ superState, dispatcher }) => {
                 />
                 <div className="expand">
                     <button type="submit" className="btn btn-primary">Save</button>
-                    {newGraphModal && (
-                        <>
-                            <div className="divider" />
-                            <button
-                                type="button"
-                                className="btn btn-secondary"
-                                onClick={openExisting}
-                            >
-                                Open Existing
-
-                            </button>
-                        </>
-                    )}
+                </div>
+                <div className="expand">
+                    {newGraphModal && <NewWrokflow />}
                 </div>
             </form>
         </Modal>

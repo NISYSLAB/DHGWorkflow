@@ -91,15 +91,33 @@ class CoreGraph {
         if (projectName) this.projectName = projectName;
     }
 
-    setProjectName(projectName) {
+    setProjectName(projectName, shouldEmit = true) {
         this.projectName = projectName;
-        this.dispatcher({
-            type: T.SET_PROJECT_DETAILS,
-            payload: {
-                projectName,
-                graphID: this.id,
-            },
-        });
+        if (shouldEmit) {
+            this.dispatcher({
+                type: T.SET_PROJECT_DETAILS,
+                payload: {
+                    value: projectName,
+                    graphID: this.id,
+                    type: 'projectName',
+                },
+            });
+        }
+        this.cy.emit('graph-modified');
+    }
+
+    setServerID(serverID, shouldEmit = true) {
+        this.serverID = serverID;
+        if (shouldEmit) {
+            this.dispatcher({
+                type: T.SET_PROJECT_DETAILS,
+                payload: {
+                    value: serverID,
+                    graphID: this.id,
+                    type: 'serverID',
+                },
+            });
+        }
         this.cy.emit('graph-modified');
     }
 

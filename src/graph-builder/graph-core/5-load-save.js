@@ -3,6 +3,7 @@ import localStorageManager from '../local-storage-manager';
 import graphmlBuilder from '../graphml/builder';
 import BendingDistanceWeight from '../calculations/bending-dist-weight';
 import GraphUndoRedo from './4-undo-redo';
+import graphMLParser from '../graphml/parser';
 
 class GraphLoadSave extends GraphUndoRedo {
     autoSaveIntervalId
@@ -120,8 +121,7 @@ class GraphLoadSave extends GraphUndoRedo {
             this.addAction(GraphLoadSave.parseAction(inverse), GraphLoadSave.parseAction(equivalent), tid, authorName);
         });
         this.setProjectName(content.projectName);
-        console.log(this.projectName);
-        this.serverID = this.serverID || content.serverID;
+        this.setServerID(this.serverID || content.serverID);
     }
 
     saveLocalStorage() {
@@ -130,8 +130,10 @@ class GraphLoadSave extends GraphUndoRedo {
     }
 
     setGraphML(graphML) {
-        localStorageManager.save(this.id, graphML);
-        this.loadGraphFromLocalStorage();
+        graphMLParser(graphML).then((graphObject) => {
+            localStorageManager.save(this.id, graphObject);
+            this.loadGraphFromLocalStorage();
+        });
     }
 
     resetLocalStorage() {

@@ -73,6 +73,16 @@ const reducer = (state, action) => {
     case T.SET_REDO: return { ...state, redoEnabled: action.payload };
 
     case T.ADD_GRAPH: {
+        let foundi = -1;
+        const graphID = action.payload.graphID || new Date().toTimeString();
+        state.graphs.forEach((g, i) => {
+            if ((g.graphID && g.graphID === graphID) || (g.serverID && g.serverID === action.payload.serverID)) {
+                foundi = i;
+            }
+        });
+        if (foundi !== -1) {
+            return { ...state, newGraphModal: false, curGraphIndex: foundi };
+        }
         return {
             ...state,
             newGraphModal: false,
@@ -82,7 +92,7 @@ const reducer = (state, action) => {
                 {
                     ...initialGraphState,
                     projectName: action.payload.projectName,
-                    graphID: action.payload.graphID || new Date().toTimeString(),
+                    graphID,
                     serverID: action.payload.serverID,
                     graphML: action.payload.graphML,
                 },
@@ -108,9 +118,10 @@ const reducer = (state, action) => {
 
     case T.SET_PROJECT_DETAILS: {
         const newState = { ...state };
-        newState.graphs = newState.graphs.map(
-            (g) => (g.graphID === action.payload.graphID ? { ...g, projectName: action.payload.projectName } : g),
-        );
+        newState.graphs = newState.graphs.map((g) => (
+            g.graphID === action.payload.graphID ? { ...g, [action.payload.type]: action.payload.value }
+                : g
+        ));
         return { ...newState };
     }
 
