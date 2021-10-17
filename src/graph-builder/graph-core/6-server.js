@@ -1,19 +1,13 @@
 import { actionType as T } from '../../reducer';
 import GraphLoadSave from './5-load-save';
 import {
-    postGraph, updateGraph, forceUpdateGraph, getGraph,
+    postGraph, updateGraph, forceUpdateGraph, getGraph, getGraphWithHashCheck,
 } from '../../serverCon/crud_http';
 
 class GraphServer extends GraphLoadSave {
-    constructor(...args) {
-        super(...args);
-        this.serverWriteTime = null;
-    }
-
     set(config) {
-        const { serverID, serverWriteTime } = config;
+        const { serverID } = config;
         super.set(config);
-        if (serverWriteTime) this.serverWriteTime = serverWriteTime;
         if (serverID) {
             this.setServerID(serverID);
             this.dispatcher({ type: T.IS_WORKFLOW_ON_SERVER, payload: Boolean(this.serverID) });
@@ -21,34 +15,33 @@ class GraphServer extends GraphLoadSave {
     }
 
     pushToServer() {
-        if (this.serverID && this.serverWriteTime) {
-            updateGraph(this.serverID, this.getGraphML(), this.serverWriteTime).then((res) => {
-                this.set({ serverWriteTime: res });
+        if (this.serverID) {
+            updateGraph(this.serverID, this.getGraphML()).then(() => {
+
             });
         } else {
-            postGraph(this.getGraphML()).then((res) => {
-                this.set({ serverID: res.workflowId, serverWriteTime: res.writeTime });
+            postGraph(this.getGraphML()).then((serverID) => {
+                this.set({ serverID });
                 this.cy.emit('graph-modified');
             });
         }
     }
 
     forcePushToServer() {
-        if (this.serverID && this.serverWriteTime) {
-            forceUpdateGraph(this.serverID, this.getGraphML(), this.serverWriteTime).then((res) => {
-                this.set({ serverWriteTime: res });
+        if (this.serverID) {
+            forceUpdateGraph(this.serverID, this.getGraphML()).then(() => {
+
             });
         } else {
-            postGraph(this.getGraphML()).then((res) => {
-                this.set({ serverID: res.workflowId, serverWriteTime: res.writeTime });
+            postGraph(this.getGraphML()).then((serverID) => {
+                this.set({ serverID });
             });
         }
     }
 
     forcePullFromServer() {
-        const { serverID } = this;
-        if (serverID) {
-            getGraph(serverID).then((graphXML) => {
+        if (this.serverID) {
+            getGraph(this.serverID).then((graphXML) => {
                 this.setGraphML(graphXML);
             });
         } else {
@@ -58,7 +51,17 @@ class GraphServer extends GraphLoadSave {
     }
 
     pullFromServer() {
-        this.forcePullFromServer();
+        if (this.actionArr.length === 0) { this.forcePullFromServer(); return; }
+        if (this.serverID) {
+            getGraphWithHashCheck(this.serverID, this.actionArr.at(-1).hash).then((graphXML) => {
+                this.setGraphML(graphXML);
+            }).catch(() => {
+
+            });
+        } else {
+            // eslint-disable-next-line no-alert
+            alert('Not on server');
+        }
     }
 
     setCurStatus() {

@@ -4,33 +4,51 @@ import time
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
 import os
+import xml.etree.ElementTree as ET
+import random
+import string
+
 
 class WorkFlowModel:
     def __init__(self) -> None:
-        self.collection = MongoClient(os.getenv('MongoURL'))[os.getenv('dbName')][os.getenv('tableName')]
+        self.collection = MongoClient(os.getenv('MongoURL'))[
+            os.getenv('dbName')][os.getenv('tableName')]
 
-    def insert(self, graphml):
-        writeTime = time.time()
-        id = self.collection.insert_one(
-            {'graphml': graphml, 'writeTime': writeTime}).inserted_id
-        return {"workflowId": str(id), "writeTime": writeTime}
+    def get_random_string(self, length):
+        letters = string.ascii_letters+string.digits
+        return ''.join(random.choice(letters) for i in range(length))
 
-    def get(self, id):
-        try:
-            cl = self.collection.find_one({'_id': ObjectId(id)})
-            if cl is not None:
-                del cl['_id']
-            return cl
-        except InvalidId:
-            return None
+    def insert(self, graphml, latestHash):
+        serverID = ""
+        while(True):
+            serverID = self.get_random_string(6)
+            if(not self.collection.find_one({'serverID': serverID})):
+                break
+        self.collection.insert_one(
+            {'graphml': graphml, 'latestHash': latestHash, 'serverID': serverID})
+        return serverID
 
-    def update(self, id, writeTime, graphml):
-        try:
-            newWriteTime = time.time()
-            rt = self.collection.find_and_modify(
-                query={'_id': ObjectId(id), "writeTime": writeTime},
-                update={'graphml': graphml, 'writeTime': newWriteTime}
-            )
-            return newWriteTime if rt is not None else None
-        except InvalidId:
-            return None
+    def get(self, serverID):
+        cl = self.collection.find_one({'serverID': serverID})
+        if not cl:
+            return False, 'Record Not Found'
+        return cl['graphml']
+
+    def update(self, serverID, graphml, latestHash, allHash):
+        existingRecord = self.collection.find_one({'serverID': serverID})
+        if existingRecord is None:
+            return False, 'serverID do not exists.'
+        latestExistingHash = existingRecord['latestHash']
+        if latestExistingHash not in allHash:
+            return False, 'Can not update as provided graph do not has latest changes.'
+        self.collection.update_one({'serverID': serverID}, {
+                                   "$set": {'graphml': graphml, 'latestHash': latestHash}})
+        return True, latestHash
+
+    def forceUpdate(self, serverID, graphml, latestHash):
+        existingRecord = self.collection.find_one({'serverID': serverID})
+        if existingRecord is None:
+            return False, 'serverID do not exists.'
+        self.collection.update_one({'serverID': serverID},
+                                   {"$set": {'graphml': graphml, 'latestHash': latestHash}})
+        return True, latestHash

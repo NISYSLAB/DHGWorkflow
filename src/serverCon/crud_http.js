@@ -1,9 +1,22 @@
 import ec from './config';
 
-function getGraph(id) {
+function getGraph(serverID) {
     return new Promise((resolve, reject) => {
-        fetch(`${ec.baseURL + ec.getGraph(id)}`).then((x) => {
+        fetch(`${ec.baseURL + ec.getGraph(serverID)}`).then((x) => {
             resolve(x.text());
+        }).catch((e) => reject(e));
+    });
+}
+
+function getGraphWithHashCheck(serverID, latestHash) {
+    return new Promise((resolve, reject) => {
+        fetch(`${ec.baseURL + ec.getGraph(serverID)}`, {
+            headers: {
+                'X-Latest-Hash': latestHash,
+            },
+        }).then((x) => {
+            if (x.status === 200) resolve(x.text());
+            else reject(x.text());
         }).catch((e) => reject(e));
     });
 }
@@ -18,18 +31,17 @@ function postGraph(graphml) {
             body: graphml,
 
         }).then((x) => {
-            resolve(x.json());
+            resolve(x.text());
         }).catch((e) => reject(e));
     });
 }
 
-function updateGraph(id, graphml, writeTime) {
+function updateGraph(serverID, graphml) {
     return new Promise((resolve, reject) => {
-        fetch(ec.baseURL + ec.updateGraph(id), {
+        fetch(ec.baseURL + ec.updateGraph(serverID), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/xml',
-                'X-Write-Time': writeTime,
             },
             body: graphml,
         }).then((x) => {
@@ -38,9 +50,9 @@ function updateGraph(id, graphml, writeTime) {
     });
 }
 
-function forceUpdateGraph(id, graphml) {
+function forceUpdateGraph(serverID, graphml) {
     return new Promise((resolve, reject) => {
-        fetch(ec.baseURL + ec.updateGraph(id), {
+        fetch(ec.baseURL + ec.forceUpdateGraph(serverID), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/xml',
@@ -53,5 +65,5 @@ function forceUpdateGraph(id, graphml) {
 }
 
 export {
-    getGraph, postGraph, updateGraph, forceUpdateGraph,
+    getGraph, postGraph, updateGraph, forceUpdateGraph, getGraphWithHashCheck,
 };
