@@ -1,9 +1,9 @@
 import { saveAs } from 'file-saver';
-import { actionType as T } from '../../reducer';
 import localStorageManager from '../local-storage-manager';
 import graphmlBuilder from '../graphml/builder';
 import BendingDistanceWeight from '../calculations/bending-dist-weight';
 import GraphUndoRedo from './4-undo-redo';
+import graphMLParser from '../graphml/parser';
 
 class GraphLoadSave extends GraphUndoRedo {
     autoSaveIntervalId
@@ -53,7 +53,7 @@ class GraphLoadSave extends GraphUndoRedo {
             nodes: [],
             edges: [],
             actionHistory: [],
-            projectDetails: this.projectDetails,
+            projectName: this.projectName,
             id: this.id,
             serverID: this.serverID,
         };
@@ -94,7 +94,7 @@ class GraphLoadSave extends GraphUndoRedo {
     }
 
     getName() {
-        return `${this.projectDetails.projectName}`;
+        return `${this.projectName}`;
     }
 
     saveToDisk(fileName) {
@@ -120,15 +120,8 @@ class GraphLoadSave extends GraphUndoRedo {
         }) => {
             this.addAction(GraphLoadSave.parseAction(inverse), GraphLoadSave.parseAction(equivalent), tid, authorName);
         });
-        this.projectDetails = content.projectDetails;
-        this.serverID = this.serverID || content.serverID;
-        this.dispatcher({
-            type: T.SET_PROJECT_DETAILS,
-            payload: {
-                projectDetails: content.projectDetails,
-                id: this.id,
-            },
-        });
+        this.setProjectName(content.projectName);
+        this.setServerID(this.serverID || content.serverID);
     }
 
     saveLocalStorage() {
@@ -137,8 +130,10 @@ class GraphLoadSave extends GraphUndoRedo {
     }
 
     setGraphML(graphML) {
-        localStorageManager.save(this.id, graphML);
-        this.loadGraphFromLocalStorage();
+        graphMLParser(graphML).then((graphObject) => {
+            localStorageManager.save(this.id, graphObject);
+            this.loadGraphFromLocalStorage();
+        });
     }
 
     resetLocalStorage() {

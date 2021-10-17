@@ -73,17 +73,28 @@ const reducer = (state, action) => {
     case T.SET_REDO: return { ...state, redoEnabled: action.payload };
 
     case T.ADD_GRAPH: {
+        let foundi = -1;
+        const graphID = action.payload.graphID || new Date().getTime().toString();
+        state.graphs.forEach((g, i) => {
+            if ((g.graphID && g.graphID === graphID) || (g.serverID && g.serverID === action.payload.serverID)) {
+                foundi = i;
+            }
+        });
+        if (foundi !== -1) {
+            return { ...state, newGraphModal: false, curGraphIndex: foundi };
+        }
         return {
             ...state,
+            newGraphModal: false,
             curGraphIndex: state.graphs.length,
             graphs: [
                 ...state.graphs,
                 {
                     ...initialGraphState,
-                    component: action.payload.component,
-                    projectDetails: action.payload.projectDetails,
-                    id: action.payload.id,
-                    instance: action.payload.instance,
+                    projectName: action.payload.projectName,
+                    graphID,
+                    serverID: action.payload.serverID,
+                    graphML: action.payload.graphML,
                 },
             ],
         };
@@ -91,14 +102,12 @@ const reducer = (state, action) => {
     case T.ADD_GRAPH_BULK: {
         return { ...state, graphs: [...state.graphs, ...action.payload] };
     }
-    case T.ADD_GRAPH_INSTANCE: {
-        const newState = { ...state };
-        newState.graphs[action.index].instance = action.instance;
-        return { ...newState };
+    case T.SET_CUR_INSTANCE: {
+        return { ...state, curGraphInstance: action.payload };
     }
-
-    case T.NEW_GRAPH: return { ...state, curGraphIndex: state.graphs.length };
     case T.CHANGE_TAB: return { ...state, curGraphIndex: action.payload };
+
+    case T.NEW_GRAPH: return { ...state, newGraphModal: true };
     case T.REMOVE_GRAPH: return {
         ...state,
         graphs: state.graphs.filter((e, i) => i !== action.payload),
@@ -109,13 +118,10 @@ const reducer = (state, action) => {
 
     case T.SET_PROJECT_DETAILS: {
         const newState = { ...state };
-        newState.graphs = newState.graphs.map((g) => {
-            if (g.id === action.payload.id) {
-                if (g.instance) g.instance.setProjectDetail(action.payload.projectDetails);
-                return { ...g, projectDetails: action.payload.projectDetails };
-            }
-            return g;
-        });
+        newState.graphs = newState.graphs.map((g) => (
+            g.graphID === action.payload.graphID ? { ...g, [action.payload.type]: action.payload.value }
+                : g
+        ));
         return { ...newState };
     }
 
@@ -141,6 +147,15 @@ const reducer = (state, action) => {
 
     case T.IS_WORKFLOW_ON_SERVER: {
         return { ...state, isWorkflowOnServer: action.payload };
+    }
+    case T.SET_ZOOM_LEVEL: {
+        return { ...state, zoomLevel: action.payload };
+    }
+    case T.SET_EDIT_DETAILS_MODAL: {
+        return { ...state, editDetailsModal: action.payload };
+    }
+    case T.SET_NEW_GRAPH_MODAL: {
+        return { ...state, newGraphModal: action.payload };
     }
 
     default:

@@ -9,26 +9,33 @@ const initialState = {
         defaultLabel: '',
         labelAllowed: null,
     },
+    shareModal: false,
+    settingsModal: false,
+    editDetailsModal: false,
+    newGraphModal: false,
+
     eleSelected: false,
     drawModeOn: true,
     undoEnabled: false,
     redoEnabled: false,
-    shareModal: false,
     graphs: [],
     curGraphIndex: 0,
-    settingsModal: false,
     viewHistory: false,
     authorName: '',
     isWorkflowOnServer: false,
+    curGraphInstance: null,
+    zoomLevel: 100,
 };
 
 const initialGraphState = {
-    projectDetails: {
-        projectName: '',
-        set: false,
-    },
+    projectName: '',
+    graphID: null,
+    serverID: null,
+    graphML: null,
+
     component: null,
     instance: null,
+    id: null,
 };
 
 export { initialState, initialGraphState };

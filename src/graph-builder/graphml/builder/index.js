@@ -24,7 +24,7 @@ const builder = (G) => {
     const X = graphML({
         nodes,
         edges,
-        projectName: G.projectDetails.projectName,
+        projectName: G.projectName,
         id: G.id,
         actionHistory: G.actionHistory,
         serverID: G.serverID,

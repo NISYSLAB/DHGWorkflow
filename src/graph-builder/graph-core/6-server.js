@@ -3,12 +3,10 @@ import GraphLoadSave from './5-load-save';
 import {
     postGraph, updateGraph, forceUpdateGraph, getGraph,
 } from '../../serverCon/crud_http';
-import graphMLParser from '../graphml/parser';
 
 class GraphServer extends GraphLoadSave {
     constructor(...args) {
         super(...args);
-        this.serverID = null;
         this.serverWriteTime = null;
     }
 
@@ -17,7 +15,7 @@ class GraphServer extends GraphLoadSave {
         super.set(config);
         if (serverWriteTime) this.serverWriteTime = serverWriteTime;
         if (serverID) {
-            this.serverID = serverID;
+            this.setServerID(serverID);
             this.dispatcher({ type: T.IS_WORKFLOW_ON_SERVER, payload: Boolean(this.serverID) });
         }
     }
@@ -51,9 +49,7 @@ class GraphServer extends GraphLoadSave {
         const { serverID } = this;
         if (serverID) {
             getGraph(serverID).then((graphXML) => {
-                graphMLParser(graphXML).then((graphObject) => {
-                    this.setGraphML(graphObject);
-                });
+                this.setGraphML(graphXML);
             });
         } else {
             // eslint-disable-next-line no-alert

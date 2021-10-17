@@ -12,7 +12,7 @@ class GraphUndoRedo extends GraphComponent {
     constructor(...props) {
         super(...props);
 
-        GraphUndoRedo.methodsMapped = {
+        this.methodsMapped = {
             [GA.ADD_NODE]: (...args) => this.addNode(...args, 0),
             [GA.ADD_EDGE]: (...args) => this.addEdge(...args, 0),
             [GA.UPDATE_NODE]: (...args) => this.updateNode(...args, 0),
@@ -39,8 +39,8 @@ class GraphUndoRedo extends GraphComponent {
         this.dispatcher({ type: T.SET_REDO, payload: this.curActionIndex !== this.actionArr.length });
     }
 
-    static performAction({ actionName, parameters }) {
-        const action = GraphUndoRedo.methodsMapped[actionName];
+    performAction({ actionName, parameters }) {
+        const action = this.methodsMapped[actionName];
         action(...parameters);
     }
 
@@ -81,14 +81,14 @@ class GraphUndoRedo extends GraphComponent {
     undoSingleAction() {
         if (this.curActionIndex !== 0) {
             this.curActionIndex -= 1;
-            GraphUndoRedo.performAction(this.actionArr[this.curActionIndex].inverse);
+            this.performAction(this.actionArr[this.curActionIndex].inverse);
             this.informUI();
         }
     }
 
     redoSingleAction() {
         if (this.curActionIndex !== this.actionArr.length) {
-            GraphUndoRedo.performAction(this.actionArr[this.curActionIndex].equivalent);
+            this.performAction(this.actionArr[this.curActionIndex].equivalent);
             this.curActionIndex += 1;
             this.informUI();
         }
@@ -99,7 +99,7 @@ class GraphUndoRedo extends GraphComponent {
         if (this.curActionIndex !== 0) curTid = this.actionArr[this.curActionIndex - 1].tid;
         while (this.curActionIndex !== 0 && this.actionArr[this.curActionIndex - 1].tid === curTid) {
             this.curActionIndex -= 1;
-            GraphUndoRedo.performAction(this.actionArr[this.curActionIndex].inverse);
+            this.performAction(this.actionArr[this.curActionIndex].inverse);
         }
         this.informUI();
     }
@@ -108,7 +108,7 @@ class GraphUndoRedo extends GraphComponent {
         let curTid = null;
         if (this.curActionIndex !== this.actionArr.length) curTid = this.actionArr[this.curActionIndex].tid;
         while (this.curActionIndex !== this.actionArr.length && this.actionArr[this.curActionIndex].tid === curTid) {
-            GraphUndoRedo.performAction(this.actionArr[this.curActionIndex].equivalent);
+            this.performAction(this.actionArr[this.curActionIndex].equivalent);
             this.curActionIndex += 1;
         }
         this.informUI();

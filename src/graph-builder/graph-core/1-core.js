@@ -1,5 +1,12 @@
-import { actionType as T } from '../../reducer';
+import cytoscape from 'cytoscape';
+import edgehandles from 'cytoscape-edgehandles';
+import gridGuide from 'cytoscape-grid-guide';
+import Konva from 'konva';
+import nodeEditing from 'cytoscape-node-editing';
+import $ from 'jquery';
+import cyOptions from '../../config/cytoscape-options';
 import BendingDistanceWeight from '../calculations/bending-dist-weight';
+import { actionType as T } from '../../reducer';
 
 class CoreGraph {
     dispatcher;
@@ -8,29 +15,63 @@ class CoreGraph {
 
     id;
 
-    projectDetails;
+    projectName;
 
     cy;
 
     bendNode;
 
-    constructor(id, cy, dispatcher, superState, projectDetails) {
+    constructor(id, element, dispatcher, superState, projectName) {
         if (dispatcher) this.dispatcher = dispatcher;
         if (superState) this.superState = superState;
-        if (cy) this.cy = cy;
+        if (typeof cytoscape('core', 'edgehandles') !== 'function') {
+            cytoscape.use(edgehandles);
+        }
+        if (typeof cytoscape('core', 'nodeEditing') !== 'function') {
+            nodeEditing(cytoscape, $, Konva);
+        }
+        if (typeof cytoscape('core', 'gridGuide') !== 'function') {
+            gridGuide(cytoscape);
+        }
+        // if (cy) this.cy = cy;
+        this.cy = cytoscape({ ...cyOptions, container: element });
         this.id = id;
-        this.projectDetails = projectDetails;
+        this.projectName = projectName;
         this.cy.emit('graph-modified');
         this.bendNode = this.cy.add(
             { group: 'nodes', data: { type: 'bend' }, classes: ['hidden'] },
         );
         this.regesterEvents();
         this.cy.emit('graph-modified');
+        this.initizialize();
     }
 
-    setProjectDetail(projectDetails) {
-        this.projectDetails = projectDetails;
-        this.cy.emit('graph-modified');
+    initizialize() {
+        this.cy.nodeEditing({
+            resizeToContentCueEnabled: () => false,
+            setWidth(node, width) {
+                node.data('style', { ...node.data('style'), width });
+            },
+            setHeight(node, height) {
+                node.data('style', { ...node.data('style'), height });
+            },
+            isNoResizeMode(node) { return node.data('type') !== 'ordin'; },
+            isNoControlsMode(node) { return node.data('type') !== 'ordin'; },
+        });
+
+        this.cy.gridGuide({
+            snapToGridOnRelease: false,
+            zoomDash: true,
+            panGrid: true,
+        });
+        this.cy.edgehandles({
+            preview: false,
+            handlePosition() {
+                return 'none';
+            },
+            handleNodes: 'node[type = "ordin"],node[type = "special"]',
+            complete: (a, b, c) => { c.remove(); this.addEdge({ sourceID: a.id(), targetID: b.id() }); },
+        });
     }
 
     getById(x) {
@@ -41,10 +82,43 @@ class CoreGraph {
         return this.getById(x).data('label') || '**Deleted El**';
     }
 
-    set({ cy, dispatcher, superState }) {
+    set({
+        cy, dispatcher, superState, projectName,
+    }) {
         if (dispatcher) this.dispatcher = dispatcher;
         if (superState) this.superState = superState;
         if (cy) this.cy = cy;
+        if (projectName) this.projectName = projectName;
+    }
+
+    setProjectName(projectName, shouldEmit = true) {
+        this.projectName = projectName;
+        if (shouldEmit) {
+            this.dispatcher({
+                type: T.SET_PROJECT_DETAILS,
+                payload: {
+                    value: projectName,
+                    graphID: this.id,
+                    type: 'projectName',
+                },
+            });
+        }
+        this.cy.emit('graph-modified');
+    }
+
+    setServerID(serverID, shouldEmit = true) {
+        this.serverID = serverID;
+        if (shouldEmit) {
+            this.dispatcher({
+                type: T.SET_PROJECT_DETAILS,
+                payload: {
+                    value: serverID,
+                    graphID: this.id,
+                    type: 'serverID',
+                },
+            });
+        }
+        this.cy.emit('graph-modified');
     }
 
     selectDeselectEventHandler() {

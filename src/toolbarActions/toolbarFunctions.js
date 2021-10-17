@@ -1,9 +1,6 @@
 import { actionType as T } from '../reducer';
-import localStorageManager from '../graph-builder/local-storage-manager';
-import graphMLParser from '../graph-builder/graphml/parser';
 
-const getGraphFun = (superState) => superState.graphs[superState.curGraphIndex]
-                                        && superState.graphs[superState.curGraphIndex].instance;
+const getGraphFun = (superState) => superState.curGraphInstance;
 
 const createNode = (state, setState) => {
     setState({
@@ -85,21 +82,12 @@ const saveAction = (state, d, fileName) => {
 const readFile = (state, setState, e) => {
     if (e.target && e.target.files && e.target.files[0]) {
         const fr = new FileReader();
+        const projectName = e.target.files[0]
+            .name.split('.').slice(0, -1).join('.').split('-')[0];
         fr.onload = (x) => {
-            graphMLParser(x.target.result).then((graphContent) => {
-                const id = new Date().getTime();
-                if (!graphContent.projectDetails.projectName) {
-                    /* eslint-disable no-param-reassign */
-                    [graphContent.projectDetails.projectName] = e.target.files[0]
-                        .name.split('.').slice(0, -1).join('.').split('-');
-                    graphContent.projectDetails.set = true;
-                    /* eslint-enable no-param-reassign */
-                }
-                localStorageManager.save(id, graphContent);
-                setState({
-                    type: T.ADD_GRAPH,
-                    payload: { id, projectDetails: { ...graphContent.projectDetails, set: true } },
-                });
+            setState({
+                type: T.ADD_GRAPH,
+                payload: { projectName, graphML: x.target.result },
             });
         };
         fr.readAsText(e.target.files[0]);
@@ -116,13 +104,11 @@ const clearAll = (state) => {
 
 const editDetails = (state, setState) => {
     setState({
-        type: T.SET_PROJECT_DETAILS,
-        payload: {
-            projectDetails: { ...getGraphFun(state).projectDetails, set: false },
-            id: getGraphFun(state).id,
-        },
+        type: T.SET_EDIT_DETAILS_MODAL,
+        payload: true,
     });
 };
+
 const undo = (state) => {
     if (getGraphFun(state))getGraphFun(state).undo();
 };

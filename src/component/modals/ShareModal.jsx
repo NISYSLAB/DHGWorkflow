@@ -6,11 +6,10 @@ import { actionType as T } from '../../reducer';
 const ShareModal = ({ superState, dispatcher }) => {
     const [serializedGraph, setSerializedGraph] = useState('');
     const [copyText, setCopyText] = useState('Copy');
-    const cond = superState.shareModal
-    && superState.graphs[superState.curGraphIndex] && superState.graphs[superState.curGraphIndex].instance;
+    const cond = superState.shareModal && superState.curGraphInstance;
     useEffect(() => {
         if (cond) {
-            setSerializedGraph(superState.graphs[superState.curGraphIndex].instance.serializeGraph());
+            setSerializedGraph(superState.curGraphInstance.serializeGraph());
             setCopyText('Copy');
         }
     }, [cond]);
