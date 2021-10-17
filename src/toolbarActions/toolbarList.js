@@ -103,16 +103,16 @@ const toolbarList = (state) => [
     },
     {
         type: 'action',
-        text: 'Force Push',
-        icon: FiChevronsUp,
-        action: () => state.curGraphInstance && state.curGraphInstance.forcePushToServer(),
+        text: 'Pull',
+        icon: FiChevronDown,
+        action: () => state.curGraphInstance && state.curGraphInstance.pullFromServer(),
         active: state.curGraphInstance && state.isWorkflowOnServer,
     },
     {
         type: 'action',
-        text: 'Pull',
-        icon: FiChevronDown,
-        action: () => state.curGraphInstance && state.curGraphInstance.pullFromServer(),
+        text: 'Force Push',
+        icon: FiChevronsUp,
+        action: () => state.curGraphInstance && state.curGraphInstance.forcePushToServer(),
         active: state.curGraphInstance && state.isWorkflowOnServer,
     },
     {

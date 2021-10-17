@@ -83,12 +83,13 @@ class GraphLoadSave extends GraphUndoRedo {
             }
         });
         graph.actionHistory = this.actionArr.map(({
-            tid, inverse, equivalent, authorName,
+            tid, inverse, equivalent, authorName, hash,
         }) => ({
             tid,
             authorName,
             inverse: GraphLoadSave.stringifyAction(inverse),
             equivalent: GraphLoadSave.stringifyAction(equivalent),
+            hash,
         }));
         return graph;
     }

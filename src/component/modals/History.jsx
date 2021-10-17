@@ -86,7 +86,7 @@ const HistoryModal = ({ superState, dispatcher }) => {
             setcurState(tempCurState);
         }
     };
-    const prefixTid = (tid, str, authorName, index) => {
+    const prefixTid = (tid, str, authorName, index, hash) => {
         const DT = new Date(parseInt(tid, 10));
         const date = DT.toLocaleDateString();
         const time = DT.toLocaleTimeString();
@@ -108,6 +108,7 @@ const HistoryModal = ({ superState, dispatcher }) => {
                     ]
                 </td>
                 <td style={{ fontWeight: 100 }}>{str}</td>
+                <td style={{ fontWeight: 100 }}>{hash}</td>
             </>
         );
         // if (index === curState) return <u>{c}</u>;
@@ -115,9 +116,9 @@ const HistoryModal = ({ superState, dispatcher }) => {
     };
 
     const parseAction = ({
-        equivalent, tid, i, authorName,
+        equivalent, tid, i, authorName, hash,
     }) => prefixTid(
-        tid, stringifyAction(equivalent), authorName, i,
+        tid, stringifyAction(equivalent), authorName, i, hash,
     );
 
     useEffect(() => {
@@ -125,7 +126,6 @@ const HistoryModal = ({ superState, dispatcher }) => {
     }, [filterAction, historyList]);
 
     const close = () => dispatcher({ type: T.SET_HISTORY_MODAL, payload: false });
-
     return (
         <Modal
             ModelOpen={superState.viewHistory}
