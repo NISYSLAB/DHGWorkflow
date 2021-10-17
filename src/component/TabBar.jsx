@@ -14,7 +14,7 @@ const TabBar = ({ superState, dispatcher }) => {
         e.stopPropagation();
         // eslint-disable-next-line no-alert
         if (!window.confirm('Do you confirm to close the tab? This action is irreversable.')) return;
-        localStorageManager.remove(superState.graphs[i] ? superState.graphs[i].id : null);
+        localStorageManager.remove(superState.graphs[i] ? superState.graphs[i].graphID : null);
         dispatcher({ type: T.REMOVE_GRAPH, payload: i });
     };
     const editCur = (e) => {
@@ -51,7 +51,7 @@ const TabBar = ({ superState, dispatcher }) => {
             </button>
             {superState.graphs.map((el, i) => (
                 <div
-                    key={el.id}
+                    key={el.graphID}
                     className={`tab tab-graph ${superState.curGraphIndex === i ? 'selected' : 'none'}`}
                     onClick={() => dispatcher({ type: T.CHANGE_TAB, payload: i })}
                     onKeyDown={(ev) => ev.key === ' ' && dispatcher({ type: T.CHANGE_TAB, payload: i })}
@@ -60,7 +60,7 @@ const TabBar = ({ superState, dispatcher }) => {
                     id={`tab_${i}`}
                 >
                     <span className="tab-text">
-                        {el.projectDetails.projectName}
+                        {el.projectName}
                     </span>
 
                     {superState.curGraphIndex === i ? (

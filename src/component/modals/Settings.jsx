@@ -8,20 +8,26 @@ import { nodeValidatorFormat, edgeValidatorFormat } from '../../config/defaultVa
 const SettingsModal = ({ superState, dispatcher }) => {
     const [nodeValidator, setNodeValidator] = useState('');
     const [edgeValidator, setEdgeValidator] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     useEffect(() => {
-        if (superState.graphs[superState.curGraphIndex] && superState.graphs[superState.curGraphIndex].instance) {
-            setNodeValidator(superState.graphs[superState.curGraphIndex].instance.getNodeValidator());
-            setEdgeValidator(superState.graphs[superState.curGraphIndex].instance.getEdgeValidator());
+        if (superState.curGraphInstance) {
+            setNodeValidator(superState.curGraphInstance.getNodeValidator());
+            setEdgeValidator(superState.curGraphInstance.getEdgeValidator());
         }
-    }, [superState.graphs[superState.curGraphIndex] && superState.graphs[superState.curGraphIndex].instance]);
+    }, [superState.curGraphInstance]);
 
     const close = () => dispatcher({ type: T.SET_SETTING_MODAL, payload: false });
     const submit = () => {
-        superState.graphs[superState.curGraphIndex].instance.setEdgeNodeValidator({
-            nodeValidator: `(node, nodes, edges, type)=>{${nodeValidator}}`,
-            edgeValidator: `(edge, nodes, edges, type)=>{${nodeValidator}}`,
-        });
-        dispatcher({ type: T.SET_SETTING_MODAL, payload: false });
+        try {
+            superState.curGraphInstance.setEdgeNodeValidator({
+                nodeValidator: `(node, nodes, edges, type)=>{${nodeValidator}}`,
+                edgeValidator: `(edge, nodes, edges, type)=>{${edgeValidator}}`,
+            });
+            dispatcher({ type: T.SET_SETTING_MODAL, payload: false });
+            setErrorMessage('');
+        } catch (e) {
+            setErrorMessage(e.message);
+        }
     };
 
     return (
@@ -53,6 +59,8 @@ const SettingsModal = ({ superState, dispatcher }) => {
                         docString={edgeValidatorFormat}
                     />
                 </div>
+                <div className="error">{errorMessage}</div>
+
                 <div className="footer">
                     <button type="submit" className="btn btn-primary" onClick={submit}>Save</button>
                 </div>

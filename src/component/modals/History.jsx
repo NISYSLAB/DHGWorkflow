@@ -23,23 +23,23 @@ const HistoryModal = ({ superState, dispatcher }) => {
     const [filterAction, setFilterAction] = useState(mapActionToTrue());
 
     const getLabelFromID = (x) => {
-        if (superState.graphs[superState.curGraphIndex] && superState.graphs[superState.curGraphIndex].instance) {
-            return superState.graphs[superState.curGraphIndex].instance.getLabelFromID(x);
+        if (superState.curGraphInstance) {
+            return superState.curGraphInstance.getLabelFromID(x);
         }
         return '';
     };
     useEffect(() => {
-        if (superState.graphs[superState.curGraphIndex] && superState.graphs[superState.curGraphIndex].instance) {
+        if (superState.curGraphInstance) {
             setHistoryList([
-                ...superState.graphs[superState.curGraphIndex].instance.actionArr
+                ...superState.curGraphInstance.actionArr
                     .slice().reverse().map((action, i) => ({ ...action, i })),
             ]);
             setcurState(
-                superState.graphs[superState.curGraphIndex].instance.actionArr.length
-                - superState.graphs[superState.curGraphIndex].instance.curActionIndex,
+                superState.curGraphInstance.actionArr.length
+                - superState.curGraphInstance.curActionIndex,
             );
         }
-    }, [superState.viewHistory, superState.graphs, superState.curGraphIndex, curState]);
+    }, [superState.viewHistory, superState.graphs, superState.curGraphInstance, curState]);
 
     const stringifyAction = (equivalent) => {
         const par = equivalent.parameters;
@@ -76,11 +76,11 @@ const HistoryModal = ({ superState, dispatcher }) => {
         if (window.confirm('Are you sure to restore the selected state?')) {
             let tempCurState = curState;
             while (index > tempCurState) {
-                superState.graphs[superState.curGraphIndex].instance.undoSingleAction();
+                superState.curGraphInstance.undoSingleAction();
                 tempCurState += 1;
             }
             while (index < tempCurState) {
-                superState.graphs[superState.curGraphIndex].instance.redoSingleAction();
+                superState.curGraphInstance.redoSingleAction();
                 tempCurState -= 1;
             }
             setcurState(tempCurState);
