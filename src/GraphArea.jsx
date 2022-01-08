@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from 'react';
-import { useState } from 'react/cjs/react.development';
+import React, { useEffect, useRef, useState } from 'react';
 import path from 'path';
 import { edgeValidator, nodeValidator } from './config/defaultValidators';
 import MyGraph from './graph-builder';
