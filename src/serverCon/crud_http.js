@@ -3,7 +3,10 @@ import ec from './config';
 function getGraph(serverID) {
     return new Promise((resolve, reject) => {
         fetch(`${ec.baseURL + ec.getGraph(serverID)}`).then((x) => {
-            resolve(x.text());
+            x.text().then((v) => {
+                if (x.status === 200) resolve(v);
+                else reject(v);
+            });
         }).catch((e) => reject(e));
     });
 }
@@ -15,9 +18,13 @@ function getGraphWithHashCheck(serverID, latestHash) {
                 'X-Latest-Hash': latestHash,
             },
         }).then((x) => {
-            if (x.status === 200) resolve(x.text());
-            else reject(x.text());
-        }).catch((e) => reject(e));
+            x.text().then((v) => {
+                if (x.status === 200) resolve(v);
+                else reject(v);
+            });
+        }).catch((e) => {
+            reject(e);
+        });
     });
 }
 
@@ -31,7 +38,10 @@ function postGraph(graphml) {
             body: graphml,
 
         }).then((x) => {
-            resolve(x.text());
+            x.text().then((v) => {
+                if (x.status === 200) resolve(v);
+                else reject(v);
+            });
         }).catch((e) => reject(e));
     });
 }
@@ -45,7 +55,10 @@ function updateGraph(serverID, graphml) {
             },
             body: graphml,
         }).then((x) => {
-            resolve(x.text());
+            x.text().then((v) => {
+                if (x.status === 200) resolve(v);
+                else reject(v);
+            });
         }).catch((e) => reject(e));
     });
 }
@@ -59,7 +72,10 @@ function forceUpdateGraph(serverID, graphml) {
             },
             body: graphml,
         }).then((x) => {
-            resolve(x.text());
+            x.text().then((v) => {
+                if (x.status === 200) resolve(v);
+                else reject(v);
+            });
         }).catch((e) => reject(e));
     });
 }

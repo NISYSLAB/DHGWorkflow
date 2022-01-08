@@ -1,6 +1,7 @@
 import React, { useReducer } from 'react';
 import './App.css';
 import ReactTooltip from 'react-tooltip';
+import { ToastContainer } from 'react-toastify';
 import GraphWorkspace from './GraphWorkspace';
 import GraphCompDetails from './component/modals/GraphCompDetails';
 import { Header } from './component/Header';
@@ -10,11 +11,24 @@ import ShareModal from './component/modals/ShareModal';
 import SettingsModal from './component/modals/Settings';
 import FileDragDrop from './component/File-drag-drop';
 import HistoryModal from './component/modals/History';
+import 'react-toastify/dist/ReactToastify.css';
 
 const app = () => {
     const [superState, dispatcher] = useReducer(reducer, initialState);
     return (
         <div className="container">
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
             <ProjectDetails superState={superState} dispatcher={dispatcher} />
             <ShareModal superState={superState} dispatcher={dispatcher} />
             <SettingsModal superState={superState} dispatcher={dispatcher} />
