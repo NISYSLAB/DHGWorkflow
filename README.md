@@ -56,4 +56,20 @@ This project requires building a graph with some special kind of hyperedges.
 
 If we create our instance of the graph with `tailored-graph-builder`, we will get graph builder which will have hyperedges specialized for this project requirement whereas creating the instance from `graph-core` will result in a generic graph builder with simple edges.
 
-  
+# Deploy site.
+
+If you fork DHGWorkflow, follow the below steps to deploy the DHGWorkflow in GitHub.
+
+Go to https://github.com/YOUR-FORK/DHGWorkflow/settings/pages
+
+For "Source," select "Deploy from a branch."
+
+For "Branch," select "gh-pages" and "/root."
+
+Save.
+ 
+It should say,
+
+ Your site is live at https://YOUR-FORK.github.io/DHGWorkflow/ 
+ 
+ Now, you should be able to use DHGWorkflow from https://YOUR-FORK.github.io/DHGWorkflow/
