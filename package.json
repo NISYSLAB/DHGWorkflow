@@ -24,7 +24,7 @@
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",
     "react-modal": "^3.13.1",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^4.0.3",
     "react-toastify": "^8.1.0",
     "react-tooltip": "^4.2.21",
     "web-vitals": "^0.2.4",
@@ -44,7 +44,8 @@
     "zealit": "^2.4.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "export NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
+    "start:windows": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
     "build": "react-scripts build",
     "build-localhost": "PUBLIC_URL=/ react-scripts build",
     "test": "react-scripts test",
